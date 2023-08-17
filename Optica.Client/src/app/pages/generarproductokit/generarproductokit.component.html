@@ -1,0 +1,148 @@
+<section class="content-header">
+    <h1>
+        Generar Producto Kit
+        <small>módulo de registro y edición de generar producto kit</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li><a href="#">Procesos</a></li>
+        <li class="active">Generar Producto Kit</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <form #userForm="ngForm" (ngSubmit)="onGenerar(userForm, $event)" novalidate>
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Generar Producto Kit</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label>Cantidad <span class="text-danger">*</span></label>
+                                    <input name="cantidad" #cantidadProd="ngModel" type="text" class="form-control" placeholder="Cantidad" [(ngModel)]="model.Cantidad" (change)="OnUpdateTotal($event)" [ngClass]="{'form-control-danger': cantidadProd.invalid && (cantidadProd.dirty || cantidadProd.touched || (userForm.submitted && !userForm.valid)),
+                                    'form-control-success': cantidadProd.valid && (cantidadProd.dirty || cantidadProd.touched)}" required>
+                                </div>
+                                <div *ngIf="cantidadProd.invalid && (cantidadProd.dirty || cantidadProd.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                    <span class="messages" *ngIf="cantidadProd.errors">
+                                                                      <small class="text-danger error">Cantidad es requerido.</small>
+                                                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-8"></div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label for="nombre">Fecha <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="yyyy-mm-dd" name="fechaGen" [(ngModel)]="model.SelectedDate" ngbDatepicker #fecha="ngbDatepicker" #fechaGen="ngModel" (dateSelect)="onFechaChanged($event)" required>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" (click)="fecha.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="fechaGen.invalid && (fechaGen.dirty || fechaGen.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                    <span class="messages" *ngIf="fechaGen.errors">
+                                                    <small class="text-danger error">Fecha es requerido.</small>
+                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>Producto <span class="text-danger">*</span></label>
+                                    <ng-select name="producto" [items]="productos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" [searchFn]="customSearchFn" placeholder="Seleccionar producto..." [(ngModel)]="model.ID_Producto" #producto="ngModel" (change)="onProductoChanged($event)"
+                                        required>
+                                        <ng-template ng-label-tmp let-item="item">
+                                            <span>{{item.Clave}} - {{item.Descripcion}}</span>
+                                        </ng-template>
+                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                            <span [ngOptionHighlight]="search">{{item.Clave}} - {{item.Descripcion}}</span>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                                <div *ngIf="producto.invalid && (producto.dirty || producto.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                    <span class="messages" *ngIf="producto.errors">
+                                                    <small class="text-danger error">Producto es requerido.</small>
+                                            </span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="font-weight-bold">Almacen <span class="text-danger">*</span></label>
+                                    <ng-select name="almacen" [items]="almacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Almacen..." [(ngModel)]="model.ID_Almacen" #almacen="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
+                                        required>
+                                    </ng-select>
+                                </div>
+                                <div *ngIf="almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                    <span class="messages" *ngIf="almacen.errors">
+                                                    <small class="text-danger error">Almacen es requerido.</small>
+                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Observaciones </label>
+                                    <textarea name="observaciones" #observaciones="ngModel" rows="5" class="form-control" placeholder="Observaciones" [(ngModel)]="model.Observaciones"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 5%">#</th>
+                                            <th>Clave</th>
+                                            <th>Descripcion</th>
+                                            <th>Cantidad Unitaria</th>
+                                            <th>Cantidad Total</th>
+                                            <th>Cantidad Disponible</th>
+                                            <th>Costo Unitario</th>
+                                            <th>Costo Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of detalles; let i=index;">
+                                            <td>{{ i + 1 }}</td>
+                                            <td>{{ item.Clave }}</td>
+                                            <td>{{ item.Descripcion }}</td>
+                                            <td>{{ item.Cantidad }}</td>
+                                            <td>{{ item.CantidadTotal }}</td>
+                                            <td>{{ item.Existencia }}</td>
+                                            <td>{{ item.Costo | number:'1.4-4' }}</td>
+                                            <td>{{ item.Total | number:'1.4-4' }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6" class="text-right">
+                                                TOTAL
+                                            </td>
+                                            <td colspan="2">{{ onGetSubTotal() | number:'1.4-4'}}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" class="btn btn-default pull-left" (click)="onCerrar()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary pull-right">Generar</button>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </form>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>

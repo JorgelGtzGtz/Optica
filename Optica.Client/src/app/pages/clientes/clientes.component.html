@@ -1,0 +1,424 @@
+<section class="content-header">
+    <h1>
+        Clientes
+        <small>módulo de registro y edición de clientes</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li><a href="#">Catalogos</a></li>
+        <li class="active">Clientes</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Lista de Clientes</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" [(ngModel)]="modelFilter" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group text-right">
+                                <br>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre</th>
+                                <th>Sucursal</th>
+                                <th>Zona</th>
+                                <th>Fecha Registro</th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col mt-2">
+                                            Acciones
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of lista; let i=index;">
+                                <td>{{ item.ID }}</td>
+                                <td>{{ item.Nombre }}</td>
+                                <td>{{ item.Sucursal }}</td>
+                                <td>{{ item.Zona }}</td>
+                                <td>{{ item.FechaCreacion }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                                    <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<ng-template #template>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+        <div class="modal-header modal-info-custom">
+            <h4 class="modal-title pull-left">Cliente</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                    <div class="form-group">
+                        <label for="nombre">Folio</label>
+                        <input type="text" class="form-control" placeholder="Folio" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="switch pull-right">
+                        <label>Inactivo
+                                                    <input type="checkbox" checked="" [(ngModel)]="model.Estatus" [ngModelOptions]="{standalone: true}"><span class="lever switch-col-light-blue"></span>Activo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label>Nombre <span class="text-danger">*</span></label>
+                        <input name="Nombre" #Nombre="ngModel" type="text" class="form-control" placeholder="Nombre" [(ngModel)]="model.Nombre" [ngClass]="{'form-control-danger': Nombre.invalid && (Nombre.dirty || Nombre.touched || (userForm.submitted && !userForm.valid)),
+                        'form-control-success': Nombre.valid && (Nombre.dirty || Nombre.touched)}" required>
+                    </div>
+                    <div *ngIf="Nombre.invalid && (Nombre.dirty || Nombre.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="Nombre.errors">
+                                                          <small class="text-danger error">Nombre es requerido.</small>
+                                                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Sucursal <span class="text-danger">*</span></label>
+                        <ng-select name="sucursal" [items]="sucursales" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Sucursal..." [(ngModel)]="model.ID_Sucursal" #sucursal="ngModel" [ngClass]="{'form-control-danger': sucursal.invalid && (sucursal.dirty || sucursal.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="sucursal.invalid && (sucursal.dirty || sucursal.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="sucursal.errors">
+                                                <small class="text-danger error">Sucursal es requerido.</small>
+                                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label>Fecha Nacimiento  <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model.SelectedDate" ngbDatepicker #fecha="ngbDatepicker" [minDate]="{year: 1950, month: 1, day: 1}" (dateSelect)="onStartChanged($event)">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="fecha.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Cobrador <span class="text-danger">*</span></label>
+                        <ng-select name="cobrador" [items]="cobradores" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Cobrador..." [(ngModel)]="model.ID_Usuario" #cobrador="ngModel" [ngClass]="{'form-control-danger': cobrador.invalid && (cobrador.dirty || cobrador.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="cobrador.invalid && (cobrador.dirty || cobrador.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="cobrador.errors">
+                                                        <small class="text-danger error">Cobrador es requerido.</small>
+                                                </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Zona <span class="text-danger">*</span></label>
+                        <ng-select name="zona" [items]="zonas" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Zona..." [(ngModel)]="model.ID_Zona" #zona="ngModel" [ngClass]="{'form-control-danger': zona.invalid && (zona.dirty || zona.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="zona.invalid && (zona.dirty || zona.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="zona.errors">
+                                                                <small class="text-danger error">Zona es requerido.</small>
+                                                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Dirección</label>
+                        <input type="text" class="form-control" id="Dirección" placeholder="Dirección" [(ngModel)]="model.Direccion" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Referencia</label>
+                        <input type="text" class="form-control" id="Referencia" placeholder="Referencia" [(ngModel)]="model.Referencia" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Colonia</label>
+                        <input type="text" class="form-control" id="Colonia" placeholder="Colonia" [(ngModel)]="model.Colonia" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Ciudad</label>
+                        <input type="text" class="form-control" id="Ciudad" placeholder="Ciudad" [(ngModel)]="model.Ciudad" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Estado</label>
+                        <input type="text" class="form-control" id="Estado" placeholder="Estado" [(ngModel)]="model.Estado" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Numero Interior</label>
+                        <input type="text" class="form-control" placeholder="Numero Interior" [(ngModel)]="model.NumeroInt" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Numero Exterior</label>
+                        <input type="text" class="form-control" placeholder="Numero Exterior" [(ngModel)]="model.NumeroExt" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Código Postal</label>
+                        <input type="text" class="form-control" id="CP" placeholder="CP" [(ngModel)]="model.CodigoPostal" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Teléfono</label>
+                        <input type="text" class="form-control" placeholder="Teléfono" [(ngModel)]="model.Telefono" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Celular</label>
+                        <input type="text" class="form-control" placeholder="Celular" [(ngModel)]="model.Celular" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">RFC</label>
+                        <input type="text" class="form-control" id="RFC" placeholder="RFC" [(ngModel)]="model.Rfc" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Email</label>
+                        <input type="text" class="form-control" id="Email" placeholder="Email" [(ngModel)]="model.Email" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="descripcion">Dirección Credencial Frente</label>
+                        <input type="text" class="form-control" placeholder="Dirección Credencial Frente" [(ngModel)]="model.DireccionCredencialFrente" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="descripcion">Dirección Credencial Atras</label>
+                        <input type="text" class="form-control" placeholder="Dirección Credencial Atras" [(ngModel)]="model.DireccionCredencialAtras" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Subir</label>
+                        <button type="button" class="btn btn-info ml-2 mr-2" (click)="onShowIneF(templateIneF)"><i class="fa fa-plus"></i> INE F</button>
+                        <button type="button" class="btn btn-info" (click)="onShowIneR(templateIneR)"><i class="fa fa-plus"></i> INE R</button>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Foto</label>
+                        <button type="button" class="btn btn-info ml-2 mr-2" (click)="onShowFoto(templateFoto)"><i class="fa fa-plus"></i> Foto</button>
+                        <button type="button" class="btn btn-info" (click)="onShowCasa(templateCasa)"><i class="fa fa-plus"></i> Casa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea rows="5" class="form-control" placeholder="Observaciones" [(ngModel)]="model.Observaciones" [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #templateIneF>
+    <div class="modal-header modal-info-custom">
+        <h4 class="modal-title pull-left">INE FRENTE</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalIneFRef.hide()">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <img [src]="imgIneF" *ngIf="imgIneF" class="img-thumbnail rounded mx-auto d-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input hidden #file type="file" accept='image/*' (change)="previewIneF(file.files)" />
+                <button type="button" (click)="file.click()" class="btn btn-info mt-2"><i class="fa fa-upload"></i> Agregar Imagen</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalIneFRef.hide()">Cerrar</button>
+    </div>
+</ng-template>
+
+<ng-template #templateIneR>
+    <div class="modal-header modal-info-custom">
+        <h4 class="modal-title pull-left">INE ATRAS</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalIneRRef.hide()">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <img [src]="imgIneR" *ngIf="imgIneR" class="img-thumbnail rounded mx-auto d-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input hidden #file type="file" accept='image/*' (change)="previewIneR(file.files)" />
+                <button type="button" (click)="file.click()" class="btn btn-info mt-2"><i class="fa fa-upload"></i> Agregar Imagen</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalIneRRef.hide()">Cerrar</button>
+    </div>
+</ng-template>
+
+<ng-template #templateFoto>
+    <div class="modal-header modal-info-custom">
+        <h4 class="modal-title pull-left">FOTO CLIENTE</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalClienteRef.hide()">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <img [src]="imgCliente" *ngIf="imgCliente" class="img-thumbnail rounded mx-auto d-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input hidden #file type="file" accept='image/*' (change)="previewCliente(file.files)" />
+                <button type="button" (click)="file.click()" class="btn btn-info mt-2"><i class="fa fa-upload"></i> Agregar Imagen</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalClienteRef.hide()">Cerrar</button>
+    </div>
+</ng-template>
+
+<ng-template #templateCasa>
+    <div class="modal-header modal-info-custom">
+        <h4 class="modal-title pull-left">FOTO CASA</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalCasaRef.hide()">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <img [src]="imgCasa" *ngIf="imgCasa" class="img-thumbnail rounded mx-auto d-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input hidden #file type="file" accept='image/*' (change)="previewCasa(file.files)" />
+                <button type="button" (click)="file.click()" class="btn btn-info mt-2"><i class="fa fa-upload"></i> Agregar Imagen</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalCasaRef.hide()">Cerrar</button>
+    </div>
+</ng-template>

@@ -1,0 +1,298 @@
+<section class="content-header">
+    <h1>
+        Diagnosticos
+        <small>módulo de registro y edición de diagnosticos</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li><a href="#">Procesos</a></li>
+        <li class="active">Diagnosticos</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Lista de Diagnosticos</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label for="nombre">De</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="from" ngbDatepicker #f="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="f.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label for="nombre">Al</label>
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="to" ngbDatepicker #t="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Pacientes</label>
+                                <ng-select name="paciente" [items]="pacientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Paciente..." [(ngModel)]="paciente">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Proveedor</label>
+                                <ng-select name="optometrista" [items]="optometristas" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Optometrista..." [(ngModel)]="optometrista">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label>Folio</label>
+                                <div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" [(ngModel)]="folio" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group text-right">
+                                <br>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Fecha</th>
+                                <th>Paciente</th>
+                                <th>Optometrista</th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col mt-2">
+                                            Acciones
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of lista; let i=index;">
+                                <td>{{ item.ID }}</td>
+                                <td>{{ item.Fecha | date:'MM/dd/yyyy' }}</td>
+                                <td>{{ item.Paciente }}</td>
+                                <td>{{ item.Optometrista }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<ng-template #template>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+        <div class="modal-header modal-info-custom">
+            <h4 class="modal-title pull-left">Diagnostico</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="nombre">Folio</label>
+                        <input type="text" class="form-control" placeholder="Folio" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+                <div class="col-8"></div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="nombre">Fecha <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="fechafactura" [(ngModel)]="model.SelectedDate" ngbDatepicker #fecha="ngbDatepicker" #fechafactura="ngModel" (dateSelect)="onFechaFacturaChanged($event)" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="fecha.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="fechafactura.invalid && (fechafactura.dirty || fechafactura.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="fechafactura.errors">
+                                        <small class="text-danger error">Fecha es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Paciente <span class="text-danger">*</span></label>
+                        <ng-select name="pacienteSE" [items]="pacientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Proveedor..." [(ngModel)]="model.ID_Paciente" #pacienteSE="ngModel" [ngClass]="{'form-control-danger': pacienteSE.invalid && (pacienteSE.dirty || pacienteSE.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="pacienteSE.invalid && (pacienteSE.dirty || pacienteSE.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="pacienteSE.errors">
+                                        <small class="text-danger error">Paciente es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Optometrista <span class="text-danger">*</span></label>
+                        <ng-select name="optometrista" [items]="optometristas" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Optometrista..." [(ngModel)]="model.ID_Optometrista" #optometrista="ngModel" [ngClass]="{'form-control-danger': optometrista.invalid && (optometrista.dirty || optometrista.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="optometrista.invalid && (optometrista.dirty || optometrista.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="optometrista.errors">
+                                        <small class="text-danger error">Optometrista es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>Observaciones </label>
+                        <textarea name="observaciones" #observaciones="ngModel" rows="5" class="form-control" placeholder="Observaciones" [(ngModel)]="model.Observaciones"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>OJO</th>
+                                <th>ESFERA</th>
+                                <th>CILINDRO</th>
+                                <th>EJE</th>
+                                <th>ADICION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>O.D.</td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OD_esfera" [ngModelOptions]="{standalone: true}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OD_cilindro" [ngModelOptions]="{standalone: true}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OD_eje" [ngModelOptions]="{standalone: true}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OD_adicion" [ngModelOptions]="{standalone: true}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>O.I.</td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OI_esfera" [ngModelOptions]="{standalone: true}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.IO_cilindro" [ngModelOptions]="{standalone: true}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OI_eje" [ngModelOptions]="{standalone: true}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]="model.OI_adicion" [ngModelOptions]="{standalone: true}">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="nombre">Distancia Interpupilar</label>
+                        <input type="text" class="form-control" placeholder="Distancia Interpupilar" [(ngModel)]="model.Dist_interpupilar" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label for="nombre">Altura Oblea</label>
+                        <input type="text" class="form-control" placeholder="Altura Oblea" [(ngModel)]="model.Altura_oblea" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Tipo de lente <span class="text-danger">*</span></label>
+                        <ng-select name="tipolente" [items]="tiposlente" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tipo de lente..." [(ngModel)]="model.ID_TipoLente" #tipolente="ngModel" [ngClass]="{'form-control-danger': tipolente.invalid && (tipolente.dirty || tipolente.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="tipolente.invalid && (tipolente.dirty || tipolente.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="tipolente.errors">
+                                        <small class="text-danger error">Tipo de lente es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Material <span class="text-danger">*</span></label>
+                        <ng-select name="material" [items]="materiales" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Material..." [(ngModel)]="model.ID_Material" #material="ngModel" [ngClass]="{'form-control-danger': material.invalid && (material.dirty || material.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="material.invalid && (material.dirty || material.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="material.errors">
+                                        <small class="text-danger error">Material es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Color de lente <span class="text-danger">*</span></label>
+                        <ng-select name="colorlente" [items]="coloreslente" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Color de lente..." [(ngModel)]="model.ID_ColorLente" #colorlente="ngModel" [ngClass]="{'form-control-danger': colorlente.invalid && (colorlente.dirty || colorlente.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="colorlente.invalid && (colorlente.dirty || colorlente.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="colorlente.errors">
+                                        <small class="text-danger error">Color de lente es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</ng-template>

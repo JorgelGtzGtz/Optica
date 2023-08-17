@@ -1,0 +1,148 @@
+<section class="content-header">
+    <h1>
+        Almacenes
+        <small>módulo de registro y edición de almacenes</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li class="active">Almacenes</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Lista de Almacenes</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Almacen</label>
+                                <div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" [(ngModel)]="almacenFilter" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group text-right">
+                                <br>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre</th>
+                                <th>Sucursal</th>
+                                <th>Prefijo</th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col mt-2">
+                                            Acciones
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of almacenes; let i=index;">
+                                <td>{{ item.ID }}</td>
+                                <td>{{ item.Nombre }}</td>
+                                <td>{{ item.Sucursal }}</td>
+                                <td>{{ item.Prefijo }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                                    <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<ng-template #template>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+        <div class="modal-header modal-info-custom">
+            <h4 class="modal-title pull-left">Almacen</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                    <div class="form-group">
+                        <label for="nombre">Folio</label>
+                        <input type="text" class="form-control" placeholder="Folio" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                    <div class="form-group">
+                        <label>Nombre <span class="text-danger">*</span></label>
+                        <input name="Nombre" #Nombre="ngModel" type="text" class="form-control" placeholder="Nombre" [(ngModel)]="model.Nombre" [ngClass]="{'form-control-danger': Nombre.invalid && (Nombre.dirty || Nombre.touched || (userForm.submitted && !userForm.valid)),
+                        'form-control-success': Nombre.valid && (Nombre.dirty || Nombre.touched)}" required>
+                    </div>
+                    <div *ngIf="Nombre.invalid && (Nombre.dirty || Nombre.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="Nombre.errors">
+                                      <small class="text-danger error">Nombre es requerido.</small>
+                                    </span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Sucursal <span class="text-danger">*</span></label>
+                        <ng-select name="sucursal" [items]="sucursales" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Sucursal..." [(ngModel)]="model.ID_Sucursal" #sucursal="ngModel" [ngClass]="{'form-control-danger': sucursal.invalid && (sucursal.dirty || sucursal.touched || userForm.submitted)}"
+                            required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="sucursal.invalid && (sucursal.dirty || sucursal.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="sucursal.errors">
+                                        <small class="text-danger error">Sucursal es requerido.</small>
+                                </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label>Prefijo <span class="text-danger">*</span></label>
+                        <input name="Prefijo" #Prefijo="ngModel" type="text" class="form-control" maxlength="2" size="2" placeholder="Prefijo" [(ngModel)]="model.Prefijo" [ngClass]="{'form-control-danger': Prefijo.invalid && (Prefijo.dirty || Prefijo.touched || (userForm.submitted && !userForm.valid)),
+                        'form-control-success': Prefijo.valid && (Prefijo.dirty || Prefijo.touched)}" required>
+                    </div>
+                    <div *ngIf="Prefijo.invalid && (Prefijo.dirty || Prefijo.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="Prefijo.errors">
+                                          <small class="text-danger error">Prefijo es requerido.</small>
+                                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</ng-template>

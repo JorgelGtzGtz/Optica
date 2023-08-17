@@ -1,0 +1,408 @@
+<section class="content-header">
+    <h1>
+        Productos
+        <small>módulo de registro y edición de Productos</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li><a href="#">Catalogos</a></li>
+        <li class="active">Productos</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Lista de Productos</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Descripcion</label>
+                                <div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" [(ngModel)]="modelFilter" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group text-right">
+                                <br>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Clave</th>
+                                <th>Descripcion</th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col mt-2">
+                                            Acciones
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of lista; let i=index;">
+                                <td>{{ item.ID }}</td>
+                                <td>{{ item.Clave }}</td>
+                                <td>{{ item.Descripcion }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                                    <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<ng-template #template>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+        <div class="modal-header modal-info-custom">
+            <h4 class="modal-title pull-left">Producto</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="nombre">Folio</label>
+                                <input type="text" class="form-control" placeholder="Folio" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Clave Alterna</label>
+                                <input type="text" class="form-control" placeholder="Clave Alterna" [(ngModel)]="model.Clave" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Marca</label>
+                                <ng-select name="marcas" [items]="marcas" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar marca..." [(ngModel)]="model.ID_Marca" #marca="ngModel">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Modelo</label>
+                                <ng-select name="modelos" [items]="modelos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar modelo..." [(ngModel)]="model.ID_Modelo" #modelo="ngModel">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="nombre">Imagen</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <img [src]="imgURL" *ngIf="imgURL" class="img-thumbnail rounded mx-auto d-block">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="row">
+                        <div class="col">
+                            <div class="switch pull-right">
+                                <label>Inactivo
+                                        <input type="checkbox" checked="" [(ngModel)]="model.Estatus" [ngModelOptions]="{standalone: true}"><span class="lever switch-col-light-blue"></span>Activo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 100%;">
+                        <div class="col Middle-aling">
+                            <input hidden #file type="file" accept='image/*' (change)="preview(file.files)" />
+                            <button type="button" (click)="file.click()" class="btn btn-info"><i class="fa fa-upload"></i> Agregar Imagen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Color</label>
+                        <ng-select name="colores" [items]="colores" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar color..." [(ngModel)]="model.ID_Color" #color="ngModel">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Tipo</label>
+                        <ng-select name="tipos" [items]="tipos" [hideSelected]="true" bindLabel="Name" bindValue="Name" [searchable]="true" placeholder="Seleccionar tipo..." [(ngModel)]="model.Tipo" #tipo="ngModel" (change)="onTipoChanged($event)">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="" [(ngModel)]="model.Serie" [ngModelOptions]="{standalone: true}">
+                    <label for="basic_checkbox_2" style="margin-top: 22px;">Serie</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Material</label>
+                        <ng-select name="material" [items]="materialfilter" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar material..." [(ngModel)]="model.ID_MaterialLente" #color="ngModel" [disabled]="model.Tipo !== 'Armazón' && model.Tipo !== 'Mica'">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <input type="text" class="form-control" placeholder="Descripción" [(ngModel)]="model.Descripcion" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="text" class="form-control" placeholder="Cantidad" [(ngModel)]="model.Cantidad" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Costo Promedio</label>
+                        <input type="text" class="form-control" placeholder="Costo" [(ngModel)]="model.Costo" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Precio</label>
+                        <input type="text" class="form-control" placeholder="Precio" [(ngModel)]="model.Precio" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Precio Proto Pago</label>
+                        <input type="text" class="form-control" placeholder="Precio" [(ngModel)]="model.PrecioPP" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Precio Credito</label>
+                        <input type="text" class="form-control" placeholder="Precio" [(ngModel)]="model.PrecioCred" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Iva</label>
+                        <input type="text" class="form-control" placeholder="Iva" [(ngModel)]="model.Iva" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Ultimo Costo</label>
+                        <input type="text" class="form-control" placeholder="Ultimo Costo" [(ngModel)]="model.UltimoCosto" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="model.Tipo === 'Mica'">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Tipo Mica</label>
+                        <ng-select name="tiposlente" [items]="tiposlente" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tipo Mica..." [(ngModel)]="model.ID_TipoLente" #tipolente="ngModel">
+                        </ng-select>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Material Lente</label>
+                        <ng-select name="materials" [items]="material" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar material de lente..." [(ngModel)]="model.ID_MaterialLente">
+                        </ng-select>
+                    </div>
+                </div> -->
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Tratamiento Mica</label>
+                        <ng-select name="colorslente" [items]="colorlente" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tratamiento Mica..." [(ngModel)]="model.ID_ColorLente">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="model.Tipo === 'Mica'">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Mica Ojo</label>
+                        <ng-select name="micaojos" [items]="micaojo" [hideSelected]="true" bindLabel="Name" bindValue="Name" [searchable]="true" placeholder="Seleccionar mica ojo..." [(ngModel)]="model.MicaOjo">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label>Mica Esfera</label>
+                        <ng-select name="MicaEsfera" [items]="micaesferavalues" [hideSelected]="true" bindLabel="Value" bindValue="Value" [searchable]="true" placeholder="Seleccionar Mica Esfera..." [(ngModel)]="model.MicaEsfera" [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label>Mica Adicion</label>
+                        <ng-select name="MicaAdicion" [items]="micaadicionvalues" [hideSelected]="true" bindLabel="Value" bindValue="Value" [searchable]="true" placeholder="Seleccionar Mica Adicion..." [(ngModel)]="model.MicaAdicion" [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label>Mica Cilindro</label>
+                        <ng-select name="MicaCilindro" [items]="micacilindrovalues" [hideSelected]="true" bindLabel="Value" bindValue="Value" [searchable]="true" placeholder="Seleccionar Mica Cilindro..." [(ngModel)]="model.MicaCilindro" [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <input type="checkbox" id="basic_checkbox_3" class="filled-in" checked="" [(ngModel)]="model.Kit" [ngModelOptions]="{standalone: true}">
+                    <label for="basic_checkbox_3" style="margin-top: 22px;">Kit</label>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary" (click)="onShowKits(templateLista)" style="margin-top: 21px;" [disabled]="!model.Kit"> <i class="fa fa-plus"></i> Productos kit</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea rows="5" class="form-control" placeholder="Observaciones" [(ngModel)]="model.Observaciones" [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #templateLista>
+    <div class="modal-header modal-info-custom">
+        <h4 class="modal-title pull-left">Agregar Componentes Producto Kit</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalListaKitsRef.hide()">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">Folio</th>
+                            <th>Clave Interna</th>
+                            <th>Descripción</th>
+                            <th style="width: 20%">
+                                <div class="row">
+                                    <div class="col mt-2">
+                                        Acciones
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShowDetalle(null, templateAgregar)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Agregar</span> </button>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of kits; let i=index;">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ item.Clave }}</td>
+                            <td>{{ item.Descripcion }}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShowDetalle(item, templateAgregar)"><i class="fa fa-edit"></i> Editar</button>
+                                <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDeleteDetalle(item)"><i class="fa fa-trash"></i> Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalListaKitsRef.hide()">Cerrar</button>
+    </div>
+</ng-template>
+
+<ng-template #templateAgregar>
+    <form #detalleForm="ngForm" (ngSubmit)="onSubmitDetalle(detalleForm, $event)" novalidate>
+        <div class="modal-header modal-info-custom">
+            <h4 class="modal-title pull-left">Agregar Detalle</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalAgregarKitRef.hide()">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Producto <span class="text-danger">*</span></label>
+                        <ng-select name="producto" [items]="productos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar producto..." [(ngModel)]="modelKit.ID_Producto" #producto="ngModel" (change)="onProductoChanged($event)"
+                            [ngClass]="{'form-control-danger': producto.invalid && (producto.dirty || producto.touched || userForm.submitted)}" required>
+                        </ng-select>
+                    </div>
+                    <div *ngIf="producto.invalid && (producto.dirty || producto.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="producto.errors">
+                                                                                  <small class="text-danger error">Producto es requerido.</small>
+                                                                          </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelKit.Cantidad" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="modalAgregarKitRef.hide()">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+    </form>
+</ng-template>

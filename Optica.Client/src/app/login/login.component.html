@@ -1,0 +1,49 @@
+<div class="login-box">
+    <div class="login-logo">
+        <a><b>Credi-</b>Opti Cajeme</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">Inicia sesión para comenzar</p>
+
+        <form #loginForm="ngForm" (ngSubmit)="!loginForm.form.invalid && onSubmit()">
+            <div class="row">
+                <div class="form-group has-feedback col-xs-12" style="margin-bottom: 0.4rem;">
+                    <input type="email" class="form-control" placeholder="Usuario" [(ngModel)]="user.user" name="UserName" #UserName="ngModel" required>
+                    <span class="glyphicon glyphicon-user form-control-feedback" style="line-height: 26px !important;right: 12px !important;"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched || loginForm.submitted)" class="col-xs-12" style="margin-top: -4px;margin-bottom: 0.4rem;">
+                    <span class="messages" *ngIf="UserName?.errors.required">
+                                      <small class="text-danger error">Usuario es requerido.</small>
+                                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group has-feedback col-xs-12" style="margin-bottom: 0.4rem;">
+                    <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="user.password" name="Password" #Password="ngModel" required>
+                    <span class="glyphicon glyphicon-lock form-control-feedback" style="line-height: 26px !important;right: 12px !important;"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngIf="Password.invalid && (Password.dirty || Password.touched || loginForm.submitted)" class="col-xs-12" style="margin-top: -4px;margin-bottom: 0.4rem;">
+                    <span class="messages" *ngIf="Password?.errors.required">
+                                      <small class="text-danger error">Contraseña es requerido.</small>
+                                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <!-- /.col -->
+                <div class="col-xs-12">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat waves-effect waves-light">
+                        Ingresar <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="isSing"></span>
+                    </button>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+    </div>
+    <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->

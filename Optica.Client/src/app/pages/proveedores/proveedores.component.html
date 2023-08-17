@@ -1,0 +1,250 @@
+<section class="content-header">
+    <h1>
+        Proveedores
+        <small>módulo de registro y edición de Proveedores</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li><a href="#">Catalogos</a></li>
+        <li class="active">Proveedores</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Lista de Proveedores</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <div>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" [(ngModel)]="modelFilter" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="form-group text-right">
+                                <br>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre</th>
+                                <th>Fecha Registro</th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col mt-2">
+                                            Acciones
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of lista; let i=index;">
+                                <td>{{ item.ID }}</td>
+                                <td>{{ item.NombreComercial }}</td>
+                                <td>{{ item.FechaCreacion }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                                    <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<ng-template #template>
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+        <div class="modal-header modal-info-custom">
+            <h4 class="modal-title pull-left">Proveedor</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                    <div class="form-group">
+                        <label>Folio</label>
+                        <input type="text" class="form-control" placeholder="Folio" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="switch pull-right">
+                        <label>Inactivo
+                                            <input type="checkbox" checked="" [(ngModel)]="model.Estatus" [ngModelOptions]="{standalone: true}"><span class="lever switch-col-light-blue"></span>Activo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label for="nombre">Clave <span class="text-danger">*</span></label>
+                        <input name="Clave" #Clave="ngModel" type="text" class="form-control" placeholder="Clave" [(ngModel)]="model.Clave" [ngClass]="{'form-control-danger': Clave.invalid && (Clave.dirty || Clave.touched || (userForm.submitted && !userForm.valid)),
+                                'form-control-success': Clave.valid && (Clave.dirty || Clave.touched)}" required>
+                    </div>
+                    <div *ngIf="Clave.invalid && (Clave.dirty || Clave.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="Clave.errors">
+                                                              <small class="text-danger error">Clave es requerido.</small>
+                                                            </span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Comercial <span class="text-danger">*</span></label>
+                        <input name="NombreComercial" #NombreComercial="ngModel" type="text" class="form-control" placeholder="Nombre Comercial" [(ngModel)]="model.NombreComercial" [ngClass]="{'form-control-danger': NombreComercial.invalid && (NombreComercial.dirty || NombreComercial.touched || (userForm.submitted && !userForm.valid)),
+                        'form-control-success': NombreComercial.valid && (NombreComercial.dirty || NombreComercial.touched)}" required>
+                    </div>
+                    <div *ngIf="NombreComercial.invalid && (NombreComercial.dirty || NombreComercial.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="NombreComercial.errors">
+                                                      <small class="text-danger error">Nombre Comercial es requerido.</small>
+                                                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Razón Social <span class="text-danger">*</span></label>
+                        <input name="RazonSocial" #RazonSocial="ngModel" type="text" class="form-control" placeholder="Razón Social" [(ngModel)]="model.RazonSocial" [ngClass]="{'form-control-danger': RazonSocial.invalid && (RazonSocial.dirty || RazonSocial.touched || (userForm.submitted && !userForm.valid)),
+                        'form-control-success': RazonSocial.valid && (RazonSocial.dirty || RazonSocial.touched)}" required>
+                    </div>
+                    <div *ngIf="RazonSocial.invalid && (RazonSocial.dirty || RazonSocial.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="RazonSocial.errors">
+                                                          <small class="text-danger error">Razón Social es requerido.</small>
+                                                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label>Contacto <span class="text-danger">*</span></label>
+                        <input name="Contacto" #Contacto="ngModel" type="text" class="form-control" placeholder="Contacto" [(ngModel)]="model.Contacto" [ngClass]="{'form-control-danger': Contacto.invalid && (Contacto.dirty || Contacto.touched || (userForm.submitted && !userForm.valid)),
+                        'form-control-success': Contacto.valid && (Contacto.dirty || Contacto.touched)}" required>
+                    </div>
+                    <div *ngIf="Contacto.invalid && (Contacto.dirty || Contacto.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="Contacto.errors">
+                                                              <small class="text-danger error">Contacto es requerido.</small>
+                                                            </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="nombre">Email Contacto</label>
+                        <input type="text" class="form-control" placeholder="Email Contacto" [(ngModel)]="model.eMail" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="nombre">Teléfono</label>
+                        <input type="text" class="form-control" placeholder="Teléfono" [(ngModel)]="model.Telefono" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="nombre">Celular</label>
+                        <input type="text" class="form-control" placeholder="Celular" [(ngModel)]="model.Celular" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Dirección</label>
+                        <input type="text" class="form-control" id="Dirección" placeholder="Dirección" [(ngModel)]="model.Direccion" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Referencia</label>
+                        <input type="text" class="form-control" id="Referencia" placeholder="Referencia" [(ngModel)]="model.Referencia" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Colonia</label>
+                        <input type="text" class="form-control" id="Colonia" placeholder="Colonia" [(ngModel)]="model.Colonia" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Ciudad</label>
+                        <input type="text" class="form-control" id="Ciudad" placeholder="Ciudad" [(ngModel)]="model.Ciudad" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Estado</label>
+                        <input type="text" class="form-control" id="Estado" placeholder="Estado" [(ngModel)]="model.Estado" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Numero Interior</label>
+                        <input type="text" class="form-control" placeholder="Numero Interior" [(ngModel)]="model.NumeroInt" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Numero Exterior</label>
+                        <input type="text" class="form-control" placeholder="Numero Exterior" [(ngModel)]="model.NumeroExt" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="form-group">
+                        <label for="descripcion">Código Postal</label>
+                        <input type="text" class="form-control" id="CP" placeholder="CP" [(ngModel)]="model.CodigoPostal" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea rows="5" class="form-control" placeholder="Observaciones" [(ngModel)]="model.Observaciones" [ngModelOptions]="{standalone: true}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</ng-template>

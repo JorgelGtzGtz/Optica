@@ -1,0 +1,29 @@
+export class Producto {
+  ID: number;
+  Clave: string;
+  Descripcion: string;
+  Cantidad?: number;
+  Costo?: number;
+  Precio?: number;
+  PrecioPP?: number;
+  PrecioCred?: number;
+  Iva?: number;
+  Observaciones: string;
+  Serie?: boolean;
+  Inventariable?: boolean;
+  Tipo: string;
+  Kit?: boolean;
+  Estatus?: boolean;
+  ID_Marca?: number;
+  ID_Modelo?: number;
+  ID_Color?: number;
+  ID_TipoLente?: number;
+  ID_MaterialLente?: number;
+  ID_ColorLente?: number;
+  MicaOjo: string;
+  MicaEsfera: string;
+  MicaAdicion: string;
+  Imagen: string;
+  UltimoCosto?: number;
+  MicaCilindro: string;
+}
