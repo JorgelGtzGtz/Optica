@@ -34,6 +34,8 @@ import { ComprasComponent } from './compras/compras.component';
 import { GenerarProductoKitComponent } from './generarproductokit/generarproductokit.component';
 import { DiagnosticosComponent } from './diagnosticos/diagnosticos.component';
 import { VentasComponent } from './ventas/ventas.component';
+import { EntradasComponent } from './entradas/entradas.component';
+import { SalidasComponent } from './salidas/salidas.component';
 
 
 @NgModule({
@@ -60,6 +62,8 @@ import { VentasComponent } from './ventas/ventas.component';
         DiagnosticosComponent,
         VentasComponent,
         DatepickerToggleDirective,
+        EntradasComponent,
+        SalidasComponent,
         // ClientesComponent,
         // ModelosComponent,
         // ProductosComponent,

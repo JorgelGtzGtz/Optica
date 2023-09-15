@@ -21,6 +21,8 @@ import { ComprasComponent } from './compras/compras.component';
 import { GenerarProductoKitComponent } from './generarproductokit/generarproductokit.component';
 import { DiagnosticosComponent } from './diagnosticos/diagnosticos.component';
 import { VentasComponent } from './ventas/ventas.component';
+import { EntradasComponent } from './entradas/entradas.component';
+import { SalidasComponent } from './salidas/salidas.component';
 
 const routes: Routes = [
   {
@@ -107,6 +109,14 @@ const routes: Routes = [
     path: 'ventas',
     component: VentasComponent
   },
+  {
+     path: 'entradas',
+     component: EntradasComponent
+  },
+  {
+    path: 'salidas',
+    component: SalidasComponent
+  },
   // {
   //   path: 'clientes',
   //   component: ClientesComponent
@@ -171,14 +181,6 @@ const routes: Routes = [
   // {
   //   path: 'recepciontraspaso',
   //   component: RecepcionTraspasosComponent
-  // },
-  // {
-  //   path: 'entradas',
-  //   component: EntradasComponent
-  // },
-  // {
-  //   path: 'salidas',
-  //   component: SalidasComponent
   // },
   // {
   //   path: 'tiposes',
