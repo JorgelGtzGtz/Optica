@@ -34,6 +34,7 @@ namespace Optica.Core.Services
         List<Almacene> GetAlmacenesDeSucursal(int id);
         List<Paciente> GetPacientes();
         List<MetodosPago> GetMetodosPago();
+        List<TiposEntradaSalida> GetTiposEntradaSalidas();
     }
 
     public class ListaCombosService : IListaCombosService
@@ -54,8 +55,9 @@ namespace Optica.Core.Services
         private readonly IAlmacenRepository _almacenRepository;
         private readonly IPacientesRepository _pacientesRepository;
         private readonly IMetodosPagoRepository _metodosPagoRepository;
+        private readonly ITiposEntradaSalidaRepository _tipoEntradaSalidaRepository;
 
-        public ListaCombosService(ISucursalRepository sucursalRepository, IZonasRepository zonasRepository, IUsuarioRepository usuarioRepository, 
+        public ListaCombosService(ITiposEntradaSalidaRepository tipoEntradaSalidaRepository, ISucursalRepository sucursalRepository, IZonasRepository zonasRepository, IUsuarioRepository usuarioRepository, 
             IClienteRepository clienteRepository, IMarcasRepository marcasRepository, IModelosRepository modelosRepository, IColorRepository colorRepository,
             ITiposLenteRepository tiposLenteRepository, ITipoUsuarioRepository tipoUsuarioRepository, IMaterialeRepository MaterialeRepository,
             IColorLenteRepository colorLenteRepository, IProductosRepository productosRepository, IProveedoresRepository proveedoresRepository,
@@ -77,6 +79,7 @@ namespace Optica.Core.Services
             _almacenRepository = almacenRepository;
             _pacientesRepository = pacientesRepository;
             _metodosPagoRepository = metodosPagoRepository;
+            _tipoEntradaSalidaRepository = tipoEntradaSalidaRepository;
         }
 
         public List<Sucursale> GetSucursales()
@@ -84,6 +87,12 @@ namespace Optica.Core.Services
             Sql query = new Sql()
                 .Select("*").From("Sucursales");
             return _sucursalRepository.GetByFilter(query);
+        }
+
+        public List<TiposEntradaSalida> GetTiposEntradaSalidas()
+        {
+            Sql query = new Sql().Select("*").From("tiposentradasalida where tipo = 'Entrada'");
+            return _tipoEntradaSalidaRepository.GetByFilter(query);
         }
 
         public List<Sucursale> GetSucursalesUsuario(int id)

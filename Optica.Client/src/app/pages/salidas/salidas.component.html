@@ -1,3 +1,182 @@
-<p>
-  salidas works!
-</p>
+<section class="content-header">
+  <h1>
+      Salidas
+      <small>módulo de registro y edición de salidas</small>
+  </h1>
+  <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+      <li><a href="#">Procesos</a></li>
+      <li class="active">Salidas</li>
+  </ol>
+</section>
+
+
+<section class="content">
+  <div class="row">
+      <div class="col-xs-12">
+          <div class="box">
+              <div class="box-header">
+                  <h3 class="box-title">Lista de salidas</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <div class="row">
+                      <div class="col-lg-4">
+                          <div class="form-group">
+                              <label>Movimiento</label>
+                              <div>
+                                  <div class="input-group">
+                                      <input type="text" class="form-control" [(ngModel)]="modelFilter" [ngModelOptions]="{standalone: true}">
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-8">
+                          <div class="form-group text-right">
+                              <br>
+                              <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                          </div>
+                      </div>
+                  </div>
+                  <table class="table table-bordered table-hover">
+                      <thead>
+                          <tr>
+                              <th>Folio</th>
+                              <th>Fecha</th>
+                              <th>Movimiento</th>
+                              <th>Status</th>
+                              <th>
+                                  <div class="row">
+                                      <div class="col mt-2">
+                                          Acciones
+                                      </div>
+                                      <div class="col">
+                                          <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                      </div>
+                                  </div>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let item of salidas; let i=index;">
+                              <td>{{ item.ID }}</td>
+                              <td>{{ item.Fecha | date: 'dd-MM-yyyy' }}</td>
+                              <td>{{ item.Movimiento }}</td>
+                              <td>
+                                <span *ngIf="item.Estatus === 'G'" class="label label-success label-rounded">Guardado</span>
+                                <span *ngIf="item.Estatus === 'P'" class="label label-primary label-rounded">Procesado</span>
+                                <span *ngIf="item.Estatus === 'C'" class="label label-danger label-rounded">Cancelado</span>
+                              </td>
+                              <td>
+                                <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-primary btn-xs m-lg-1" (click)="onProcesar(item.ID)"><i class="fa fa-trash"></i> Procesar</button>
+                                <button type="button" *ngIf="item.Estatus === 'C' || item.Estatus === 'P'" class="btn btn-info btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-eye"></i> Mostrar</button>
+                                <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                                <button type="button" *ngIf="item.Estatus === 'G' || item.Estatus === 'P'" class="btn btn-danger btn-xs m-lg-1" (click)="onCancelar(item)"><i class="fa fa-trash"></i> Cancelar</button>
+                                <button type="button" class="btn label-inverse btn-xs m-lg-1" (click)="onImprimir(item.ID)"><i class="fa fa-print"></i> Imprimir</button>
+                              </td>
+                          </tr>
+                      </tbody>
+                      <tfoot>
+                      </tfoot>
+                  </table>
+              </div>
+              <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+      </div>
+      <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+
+<ng-template #template>
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+      <div class="modal-header modal-info-custom">
+          <h4 class="modal-title pull-left">Entrada</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                      <div class="form-group">
+                          <label for="nombre">Folio</label>
+                          <input type="text" class="form-control" placeholder="Folio" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                      <div class="form-group">
+                          <label for="nombre">Fecha</label>
+                          <input type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}">
+                      </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <div class="form-group">
+                          <label class="font-weight-bold">Almacen <span class="text-danger">*</span></label>
+                          <ng-select name="almacen" [items]="cmbAlmacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Almacen..." [(ngModel)]="model.ID_Almacen" #almacen="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
+                              required>
+                          </ng-select>
+                      </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                      <label for="nombre">Observaciones</label>
+                      <textarea name="observaciones" #observaciones="ngModel" rows="5" class="form-control" placeholder="Observaciones..." [(ngModel)]="model.Observaciones"></textarea>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                      <label class="font-weight-bold">Tipo entrada <span class="text-danger">*</span></label>
+                      <ng-select name="TipoEntrada" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tipo Entrada..." [(ngModel)]="model.ID_TipoEntradaSalida" #TipoEntrada="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
+                          required>
+                      </ng-select>
+                  </div>
+              </div>
+          </div>
+      
+          <div class="row mt-5">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                      <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Agregar Detalle</button>
+                  </div>
+              </div>
+          </div>
+      <div class="row mt-2">
+          <div class="col">
+              <table class="table table-bordered table-hover">
+                  <thead>
+                      <tr>
+                          <th>Folio</th>
+                          <th>Descripcion</th>
+                          <th>Cantidad</th>
+                          <th>Total</th>
+                          <th>Acciones</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let item of productos; let i=index;">
+                          <td>{{ item.ID }}</td>
+                          <td>{{ item.Descripcion }}</td>
+                          <td>{{ item.Cantidad }}</td>
+                          <td>{{ item.CostoTotal }}</td>
+                          <td>
+                              <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                              <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
+                          </td>
+                      </tr>
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
+</form>
+</ng-template>

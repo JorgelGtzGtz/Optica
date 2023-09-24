@@ -6690,6 +6690,11 @@ namespace PetaPoco
             {
                 return _sql.Append("ON " + onClause, args);
             }
+
+            internal Sql Where(string v, int id)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 

@@ -412,7 +412,7 @@ namespace Optica.Api.Areas.HelpPage
                     return formatter.CanWriteType(type);
             }
             return false;
-        }
+        } 
 
         private IEnumerable<KeyValuePair<HelpPageSampleKey, object>> GetAllActionSamples(string controllerName, string actionName, IEnumerable<string> parameterNames, SampleDirection sampleDirection)
         {

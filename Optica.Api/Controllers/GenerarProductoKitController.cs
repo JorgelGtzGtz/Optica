@@ -109,7 +109,7 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var productos = _listaCombosService.GetProductosKit();
+                    var productos = _listaCombosService.GetProductos();
                     var almacenes = _listaCombosService.GetAlmacenesDeSucursal(UserLogged.SucursalID);
 
                     response = request.CreateResponse(HttpStatusCode.OK, new { productos, almacenes });

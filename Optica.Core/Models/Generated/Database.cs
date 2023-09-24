@@ -486,7 +486,7 @@ namespace dbconnection
 		[Column] public decimal CostoTotal { get; set; }
 		[Column] public int ID_OtraEntradasSalidas { get; set; }
 		[Column] public int ID_Producto { get; set; }
-	}
+    }
     
 	[TableName("dbo.Pacientes")]
 	[PrimaryKey("ID")]

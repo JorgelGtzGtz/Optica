@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+import { SalidaService } from 'src/app/services/salidas/salidas..service';
+import { Salida } from 'src/app/models/Salida';
+import { Entrada } from 'src/app/models/Entrada';
 
 @Component({
   selector: 'app-salidas',
@@ -6,10 +14,78 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./salidas.component.css']
 })
 export class SalidasComponent implements OnInit {
+  @ViewChild('editModal') editModal: ModalDirective;
+  modalRef: BsModalRef;
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+  };
+  salidas: any[] = [];
+  cmbProductos: any[] = [];
+  cmbAlmacenes: any[] = [];
+  cmbTipoEntradaSalida: any[] = [];
+  model: Entrada = new Entrada();
+  productos: any[] = [];
+  modelFecha = {
+    Fecha: ''
+  }
+  
+  constructor(private modalService: BsModalService, private _salidaService: SalidaService, private toastr: ToastrService) { }
 
-  constructor() { }
 
   ngOnInit() {
+    this.getCombos();
+    this.onBuscar();
+  }
+
+  onBuscar() {
+    this._salidaService.getLista().
+    subscribe(
+      (data: any) => {
+        this.salidas = data;
+      },
+      (error) => {
+        Swal.fire({
+          title: 'Error!',
+          text: String(error.message),
+          type: 'error',
+          focusConfirm: false,
+          focusCancel: false,
+          allowEnterKey: false
+        });
+      }
+    );
+  }
+
+  onShow(id: number, template: TemplateRef<any>) {
+    this.model = new Entrada();
+    this.productos = [];
+    if (id <= 0) {
+      this.modalRef = this.modalService.show(template, this.config);
+    } else {
+      this._salidaService.getEntrada(id)
+    .subscribe(
+      data => {
+        console.log(data)
+        this.model = data.model;
+        const fechaDividida = data.model.Fecha.split('T')[0];
+        this.modelFecha.Fecha = fechaDividida;
+        this.productos = data.detalles;
+        this.modalRef = this.modalService.show(template, this.config);
+      },
+      error => this.toastr.error(error.message, 'Error!') );
+    }
+  }
+
+  getCombos() {
+    this._salidaService.getCombos()
+      .subscribe(
+        data => {
+          this.cmbProductos = data.productos;
+          this.cmbAlmacenes = data.almacenes;
+          this.cmbTipoEntradaSalida = data.tipoEntradaSalida;
+        },
+        error => this.toastr.error(error.message, 'Error!') );
   }
 
 }

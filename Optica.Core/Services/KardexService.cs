@@ -15,6 +15,7 @@ namespace Optica.Core.Services
     {
         bool ProcesarCompra(int id, int idUsuario, out string Message);
         bool ProcesarVenta(int id, int idUsuario, out string Message);
+        bool ProcesarEntrada(int id, int idUsuario, out string Message);
     }
 
     public class KardexService : IKardexService
@@ -23,16 +24,14 @@ namespace Optica.Core.Services
         private readonly ICompraDetalleRepository _compraProductoDetalleRepository;
         private readonly IVentaRepository _ventaRepository;
         private readonly IVentaDetalleRepository _ventaDetalleRepository;
-
         private readonly IKardexProductosRepository _kardexProductosRepository;
         private readonly IExistenciasAlmacenRepository _existenciasAlmacenRepository;
         private readonly IProductosRepository _productosRepository;
-
+        private readonly IOtrasEntradasSalidasDetallesRepository _otrasEntradasSalidasDetallesRepository;
+        private readonly IOtrasEntradasSalidasRepository _otrasEntradasSalidasRepository;
         private readonly ILogRepository _logRepository;
 
-        
-
-        public KardexService(ICompraRepository compraProductoRepository, ICompraDetalleRepository compraProductoDetalleRepository, ILogRepository logRepository,
+        public KardexService(ICompraRepository compraProductoRepository, IOtrasEntradasSalidasRepository otrasEntradasSalidasRepository, IOtrasEntradasSalidasDetallesRepository otrasEntradasSalidasDetallesRepository, ICompraDetalleRepository compraProductoDetalleRepository, ILogRepository logRepository,
             IKardexProductosRepository kardexProductosRepository, IExistenciasAlmacenRepository existenciasAlmacenRepository, IProductosRepository productosRepository,
             IVentaRepository ventaRepository, IVentaDetalleRepository ventaDetalleRepository) {
             _compraProductoRepository = compraProductoRepository;
@@ -41,9 +40,30 @@ namespace Optica.Core.Services
             _existenciasAlmacenRepository = existenciasAlmacenRepository;
             _productosRepository = productosRepository;
             _logRepository = logRepository;
-
             _ventaRepository = ventaRepository;
+            _otrasEntradasSalidasDetallesRepository = otrasEntradasSalidasDetallesRepository;
+            _otrasEntradasSalidasRepository = otrasEntradasSalidasRepository;
             _ventaDetalleRepository = ventaDetalleRepository;
+        }
+
+        public bool ProcesarEntrada(int id, int idUsuario, out string Message)
+        {
+            Message = string.Empty;
+            bool result = false;
+            var entrada = _otrasEntradasSalidasRepository.Get(id);
+            Sql query = new Sql().Select("*").From("OtrasEntradasSalidasDetalles").Where("ID_OtraEntradasSalidas = @0", id);
+            List<OtrasEntradasSalidasDetalle> detalles = _otrasEntradasSalidasDetallesRepository.GetByFilter(query);
+
+            foreach (var detalle in detalles)
+            {
+                Sql queryProd = new Sql("SELECT * FROM [dbo].[Productos] with(nolock) where [ID] = @0", detalle.ID_Producto);
+                var producto = _productosRepository.Get(queryProd);
+            }
+            entrada.Estatus = "P";
+
+            _otrasEntradasSalidasRepository.InsertOrUpdate<int>(entrada);
+            result = true;
+            return result;
         }
 
         public bool ProcesarCompra(int id, int idUsuario, out string Message)
