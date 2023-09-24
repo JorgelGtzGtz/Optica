@@ -16,6 +16,7 @@ namespace Optica.Core.Services
         bool ProcesarCompra(int id, int idUsuario, out string Message);
         bool ProcesarVenta(int id, int idUsuario, out string Message);
         bool ProcesarEntrada(int id, int idUsuario, out string Message);
+        bool ProcesarSalida(int id, int idUsuario, out string Message);
     }
 
     public class KardexService : IKardexService
@@ -58,7 +59,117 @@ namespace Optica.Core.Services
             {
                 Sql queryProd = new Sql("SELECT * FROM [dbo].[Productos] with(nolock) where [ID] = @0", detalle.ID_Producto);
                 var producto = _productosRepository.Get(queryProd);
+
+                Sql queryExi = new Sql("SELECT * FROM [dbo].[ExistenciasAlmacen] with(nolock) where [ID_Almacen] = @0 and [ID_Producto] = @1", entrada.ID_Almacen, detalle.ID_Producto);
+                var existencia = _existenciasAlmacenRepository.Get(queryExi);
+
+                KardexProducto kardexProducto = new KardexProducto();
+                kardexProducto.Fecha = entrada.Fecha;
+                kardexProducto.ID_Producto = detalle.ID_Producto;
+                kardexProducto.ID_Almacen = entrada.ID_Almacen;
+                kardexProducto.ID_EntradaSalida = 1;
+                kardexProducto.ID_TipoEntradaSalida = entrada.ID_TipoEntradaSalida;
+                kardexProducto.ID_Movimiento = detalle.ID;
+                kardexProducto.Cantidad = detalle.Cantidad;
+                kardexProducto.CantidadTotal = (producto?.Cantidad ?? 0) + detalle.Cantidad;
+                kardexProducto.CantidadTotalAlmacen = existencia != null ? existencia.Cantidad + detalle.Cantidad : detalle.Cantidad;
+                kardexProducto.CantidadDisponibleTotal = (producto?.Disponible ?? 0) + detalle.Cantidad;
+                kardexProducto.CantidadDisponibleAlmacen = existencia != null ? existencia.Disponible + detalle.Cantidad : detalle.Cantidad;
+                kardexProducto.Costo = detalle.Costo;
+                kardexProducto.CostoPromedio = ((producto?.Cantidad ?? 0) * (producto?.Costo ?? 0) + detalle.Cantidad * detalle.Costo) / (detalle.Cantidad + (producto?.Cantidad ?? 0));
+                kardexProducto.Referencia = string.Empty;
+                kardexProducto.Observaciones = string.Empty;
+                _kardexProductosRepository.InsertOrUpdate<int>(kardexProducto);
+
+                producto.Cantidad = kardexProducto.CantidadTotal;
+                producto.Disponible = kardexProducto.CantidadDisponibleTotal;
+                producto.Costo = kardexProducto.CostoPromedio;
+
+                _productosRepository.InsertOrUpdate<int>(producto);
+
+                if (existencia != null)
+                {
+                    existencia.Cantidad = kardexProducto.CantidadTotalAlmacen;
+                    existencia.Disponible = kardexProducto?.CantidadDisponibleAlmacen ?? 0;
+                    _existenciasAlmacenRepository.InsertOrUpdate<int>(existencia);
+                }
+                else
+                {
+                    ExistenciasAlmacen existenciasAlmacen = new ExistenciasAlmacen();
+                    existenciasAlmacen.Cantidad = kardexProducto.CantidadTotalAlmacen;
+                    existenciasAlmacen.Disponible = kardexProducto?.CantidadDisponibleAlmacen ?? 0;
+                    existenciasAlmacen.ID_Almacen = entrada.ID_Almacen;
+                    existenciasAlmacen.ID_Producto = detalle.ID_Producto;
+                    _existenciasAlmacenRepository.InsertOrUpdate<int>(existenciasAlmacen);
+                }
+
             }
+
+            entrada.Estatus = "P";
+
+            _otrasEntradasSalidasRepository.InsertOrUpdate<int>(entrada);
+            result = true;
+            return result;
+        }
+
+        public bool ProcesarSalida(int id, int idUsuario, out string Message)
+        {
+            Message = string.Empty;
+            bool result = false;
+            var entrada = _otrasEntradasSalidasRepository.Get(id);
+            Sql query = new Sql().Select("*").From("OtrasEntradasSalidasDetalles").Where("ID_OtraEntradasSalidas = @0", id);
+            List<OtrasEntradasSalidasDetalle> detalles = _otrasEntradasSalidasDetallesRepository.GetByFilter(query);
+
+            foreach (var detalle in detalles)
+            {
+                Sql queryProd = new Sql("SELECT * FROM [dbo].[Productos] with(nolock) where [ID] = @0", detalle.ID_Producto);
+                var producto = _productosRepository.Get(queryProd);
+
+                Sql queryExi = new Sql("SELECT * FROM [dbo].[ExistenciasAlmacen] with(nolock) where [ID_Almacen] = @0 and [ID_Producto] = @1", entrada.ID_Almacen, detalle.ID_Producto);
+                var existencia = _existenciasAlmacenRepository.Get(queryExi);
+
+                KardexProducto kardexProducto = new KardexProducto();
+                kardexProducto.Fecha = entrada.Fecha;
+                kardexProducto.ID_Producto = detalle.ID_Producto;
+                kardexProducto.ID_Almacen = entrada.ID_Almacen;
+                kardexProducto.ID_EntradaSalida = 2;
+                kardexProducto.ID_TipoEntradaSalida = entrada.ID_TipoEntradaSalida;
+                kardexProducto.ID_Movimiento = detalle.ID;
+                kardexProducto.Cantidad = detalle.Cantidad;
+                kardexProducto.CantidadTotal = (producto?.Cantidad ?? 0) - detalle.Cantidad;
+                kardexProducto.CantidadTotalAlmacen = existencia != null ? existencia.Cantidad - detalle.Cantidad : detalle.Cantidad;
+                kardexProducto.CantidadDisponibleTotal = (producto?.Disponible ?? 0) - detalle.Cantidad;
+                kardexProducto.CantidadDisponibleAlmacen = existencia != null ? existencia.Disponible - detalle.Cantidad : detalle.Cantidad;
+                kardexProducto.Costo = detalle.Costo;
+                kardexProducto.CostoPromedio = ((producto?.Cantidad ?? 0) * (producto?.Costo ?? 0) - detalle.Cantidad * detalle.Costo) / (detalle.Cantidad - (producto?.Cantidad ?? 0));
+                kardexProducto.Referencia = string.Empty;
+                kardexProducto.Observaciones = string.Empty;
+                _kardexProductosRepository.InsertOrUpdate<int>(kardexProducto);
+
+                producto.Cantidad = kardexProducto.CantidadTotal;
+                producto.Disponible = kardexProducto.CantidadDisponibleTotal;
+                producto.Costo = kardexProducto.CostoPromedio;
+
+                _productosRepository.InsertOrUpdate<int>(producto);
+
+                if (existencia != null)
+                {
+                    existencia.Cantidad = kardexProducto.CantidadTotalAlmacen;
+                    existencia.Disponible = kardexProducto?.CantidadDisponibleAlmacen ?? 0;
+                    _existenciasAlmacenRepository.InsertOrUpdate<int>(existencia);
+                }
+                else
+                {
+                    ExistenciasAlmacen existenciasAlmacen = new ExistenciasAlmacen();
+                    existenciasAlmacen.Cantidad = kardexProducto.CantidadTotalAlmacen;
+                    existenciasAlmacen.Disponible = kardexProducto?.CantidadDisponibleAlmacen ?? 0;
+                    existenciasAlmacen.ID_Almacen = entrada.ID_Almacen;
+                    existenciasAlmacen.ID_Producto = detalle.ID_Producto;
+                    _existenciasAlmacenRepository.InsertOrUpdate<int>(existenciasAlmacen);
+                }
+
+            }
+
             entrada.Estatus = "P";
 
             _otrasEntradasSalidasRepository.InsertOrUpdate<int>(entrada);

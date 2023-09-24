@@ -12,8 +12,8 @@ namespace Optica.Core.Services
 {
     public interface IEntradaService
     {
-        int InsertUpdateEntrada(OtrasEntradasSalida Entrada, out string Message);
-        List<dynamic> GetOtraEntradaSalidaFiltro();
+        int InsertUpdateEntrada(OtrasEntradasSalida EntradaSalida, List<OtrasEntradasSalidasDetalle> detalles, out string Message);
+        List<dynamic> GetOtraEntradaSalidaFiltro(int tipo = 1);
         bool EliminarEntrada(int id, out string Message);
         public OtrasEntradasSalida GetEntrada(int id);
         public List<dynamic> GetCompraDetalles(int id);
@@ -33,21 +33,41 @@ namespace Optica.Core.Services
             _otrasEntradasSalidasDetallesRepository = otrasEntradasSalidasDetallesRepository;
         }
 
-        public List<dynamic> GetOtraEntradaSalidaFiltro()
+        public List<dynamic> GetOtraEntradaSalidaFiltro(int tipo = 1)
         {
 
-            Sql query = new Sql(@"select oes.*, tes.Descripcion as Movimiento from otrasentradassalidas oes inner join tiposentradasalida tes on oes.ID_TipoEntradaSalida = tes.ID;");
+            Sql query = new Sql(@"select oes.*, tes.Descripcion as Movimiento from otrasentradassalidas oes inner join tiposentradasalida tes on oes.ID_TipoEntradaSalida = tes.ID where ID_EntradaSalida = @0;", tipo);
             return _otrasEntradasSalidasRepository.GetByDynamicFilter(query);
         }
 
-        public int InsertUpdateEntrada(OtrasEntradasSalida Entrada, out string Message) 
+        public int InsertUpdateEntrada(OtrasEntradasSalida EntradaSalida, List<OtrasEntradasSalidasDetalle> detalles, out string Message) 
         {
 
             Message = string.Empty;
             int result = 0;
             try
             {
-                result = _otrasEntradasSalidasRepository.InsertOrUpdate<int>(Entrada);
+                result = _otrasEntradasSalidasRepository.InsertOrUpdate<int>(EntradaSalida);
+                var _EntradaSalida = _otrasEntradasSalidasRepository.Get(result);
+                decimal costo = 0, total = 0;
+                foreach (var item in detalles)
+                {
+                    if (result != 0)
+                    {
+                        OtrasEntradasSalidasDetalle otrasEntradaDetalles = new OtrasEntradasSalidasDetalle();
+
+                        otrasEntradaDetalles.Cantidad = item.Cantidad;
+                        otrasEntradaDetalles.Costo = item.Costo;
+                        otrasEntradaDetalles.CostoTotal = item.Cantidad * item.Costo;
+                        otrasEntradaDetalles.ID_Producto = item.ID_Producto;
+                        otrasEntradaDetalles.ID_OtraEntradasSalidas = result;
+                        total += otrasEntradaDetalles.CostoTotal;
+                        _otrasEntradasSalidasDetallesRepository.InsertOrUpdate<int>(otrasEntradaDetalles);
+                    }
+                }
+                _EntradaSalida.Total = total;
+                result = _otrasEntradasSalidasRepository.InsertOrUpdate<int>(_EntradaSalida);
+
                 Message = "Entrada guardada con exito";
             }
             catch (Exception ex)

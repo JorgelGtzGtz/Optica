@@ -4,6 +4,7 @@ using PetaPoco;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace Optica.Core.Services
         List<Almacene> GetAlmacenesDeSucursal(int id);
         List<Paciente> GetPacientes();
         List<MetodosPago> GetMetodosPago();
-        List<TiposEntradaSalida> GetTiposEntradaSalidas();
+        List<TiposEntradaSalida> GetTiposEntradaSalidas(string tipo = "Entrada");
     }
 
     public class ListaCombosService : IListaCombosService
@@ -89,9 +90,9 @@ namespace Optica.Core.Services
             return _sucursalRepository.GetByFilter(query);
         }
 
-        public List<TiposEntradaSalida> GetTiposEntradaSalidas()
+        public List<TiposEntradaSalida> GetTiposEntradaSalidas(string tipo = "Entrada")
         {
-            Sql query = new Sql().Select("*").From("tiposentradasalida where tipo = 'Entrada'");
+            Sql query = new Sql("SELECT * FROM [dbo].[tiposentradasalida] with(nolock) where [tipo] = @0", tipo);
             return _tipoEntradaSalidaRepository.GetByFilter(query);
         }
 

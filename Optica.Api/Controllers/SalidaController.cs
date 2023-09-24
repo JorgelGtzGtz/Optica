@@ -17,8 +17,8 @@ using System.Web.Http;
 
 namespace Optica.Api.Controllers
 {
-    [RoutePrefix("api/Entrada")]
-    public class EntradaController : BaseApiController
+    [RoutePrefix("api/Salida")]
+    public class SalidaController : BaseApiController
     {
         private readonly IProductosService _productoService;
         private readonly IListaCombosService _listaCombosService;
@@ -26,7 +26,7 @@ namespace Optica.Api.Controllers
         private readonly IOtrasEntradasSalidasDetallesRepository _otrasEntradasSalidasDetallesRepository;
         private readonly IKardexService _kardexService;
 
-        public EntradaController(IKardexService kardexService, IOtrasEntradasSalidasDetallesRepository otrasEntradasSalidasDetallesRepository, IListaCombosService listaCombosService, IProductosService productoService, IEntradaService otrasEntradasSalidasService)
+        public SalidaController(IKardexService kardexService, IOtrasEntradasSalidasDetallesRepository otrasEntradasSalidasDetallesRepository, IListaCombosService listaCombosService, IProductosService productoService, IEntradaService otrasEntradasSalidasService)
         {
             _listaCombosService = listaCombosService;
             _productoService = productoService;
@@ -45,7 +45,7 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro();
+                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro(2);
 
                     response = request.CreateResponse(HttpStatusCode.OK, item);
                 }
@@ -103,7 +103,7 @@ namespace Optica.Api.Controllers
             });
         }
 
-        [Route("GetEntrada/{id:int=0}/")]
+        [Route("GetSalida/{id:int=0}/")]
         [HttpGet]
         public async Task<HttpResponseMessage> GetCompra(HttpRequestMessage request, int id)
         {
@@ -141,7 +141,7 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var result = _kardexService.ProcesarEntrada(id, UserLogged.UserID, out message);
+                    var result = _kardexService.ProcesarSalida(id, UserLogged.UserID, out message);
                     if (result)
                     {
                         response = request.CreateResponse(HttpStatusCode.OK, new { ID = result });
@@ -185,7 +185,7 @@ namespace Optica.Api.Controllers
                     var entrada = data["data"].ToObject<OtrasEntradasSalida>();
                     var detalles = data["detalles"].ToObject<List<OtrasEntradasSalidasDetalle>>();
                     entrada.ID_Usuario = UserLogged.UserID;
-                    int result = _otrasEntradasSalidasService.InsertUpdateEntrada(entrada, detalles, out message);
+                    var result = _otrasEntradasSalidasService.InsertUpdateEntrada(entrada, detalles, out message);
                     if (result != 0)
                     {
                         response = request.CreateResponse(HttpStatusCode.OK);
@@ -255,7 +255,7 @@ namespace Optica.Api.Controllers
                 {
                     var productos = _listaCombosService.GetProductos();
                     var almacenes = _listaCombosService.GetAlmacenesDeSucursal(UserLogged.SucursalID);
-                    var tipoEntradaSalida = _listaCombosService.GetTiposEntradaSalidas();
+                    var tipoEntradaSalida = _listaCombosService.GetTiposEntradaSalidas("Salida");
                     response = request.CreateResponse(HttpStatusCode.OK, new { productos, almacenes, tipoEntradaSalida});
                 }
                 catch (Exception ex)

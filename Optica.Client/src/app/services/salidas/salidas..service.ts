@@ -11,12 +11,12 @@ import { catchError, map, tap } from 'rxjs/operators';
   })
 export class SalidaService {
 
-  private _url = `${AppSettings.API_ENDPOINT}/Entrada`;
+  private _url = `${AppSettings.API_ENDPOINT}/Salida`;
   private _getLista = `${this._url}/Lista`;
   private _guardar = `${this._url}/Guardar`;
   private _eliminar = `${this._url}/Eliminar`;
   private _procesar = `${this._url}/Procesar`;
-  private _getEntrada = `${this._url}/GetEntrada`;
+  private _getSalida = `${this._url}/GetSalida`;
   private _getCombos = `${this._url}/Combos`;
 
   constructor(public _http: HttpClient, private _userService: UsersService) {
@@ -54,8 +54,8 @@ export class SalidaService {
   );
 }
 
-  getEntrada(id: number): Observable<any>  {
-    return this._http.get<any>(`${this._getEntrada}/${id}`, { headers: this._userService.header})
+  getSalida(id: number): Observable<any>  {
+    return this._http.get<any>(`${this._getSalida}/${id}`, { headers: this._userService.header})
       .pipe(
         tap(data => data),
         catchError(this.handleError)
