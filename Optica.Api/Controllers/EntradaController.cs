@@ -171,6 +171,46 @@ namespace Optica.Api.Controllers
             });
         }
 
+        [HttpPost]
+        [Route("Cancelar/{id}")]
+        public async Task<HttpResponseMessage> Cancelar(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var result = _otrasEntradasSalidasService.CancelarEntradaSalida(id, UserLogged.UserID, out message);
+                    if (result)
+                    {
+                        response = request.CreateResponse(HttpStatusCode.OK, new { ID = result });
+                    }
+                    else
+                    {
+                        response = request.CreateResponse(HttpStatusCode.BadRequest,
+                        new
+                        {
+                            error = "ERROR",
+                            message = message
+                        });
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
 
         [HttpPost]
         [Route("Guardar")]

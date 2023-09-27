@@ -16,6 +16,7 @@ export class EntradasService {
   private _guardar = `${this._url}/Guardar`;
   private _eliminar = `${this._url}/Eliminar`;
   private _procesar = `${this._url}/Procesar`;
+  private _cancelar = `${this._url}/Cancelar`;
   private _getEntrada = `${this._url}/GetEntrada`;
   private _getCombos = `${this._url}/Combos`;
 
@@ -30,6 +31,12 @@ export class EntradasService {
       catchError(this.handleError)
     );
   }
+  cancelar(id: number) {
+    return this._http.post(`${this._cancelar}/${id}`, null, { headers: this._userService.header}).pipe(
+    tap(data => data),
+    catchError(this.handleError)
+  );
+}
 
   getCombos(): Observable<any> {
     return this._http.get<any>(this._getCombos, { params: null, headers: this._userService.header})
