@@ -112,10 +112,55 @@ export class SalidasComponent implements OnInit {
     }
   }
 
+  onCancelar(modelDetalle: any) {
+    Swal.fire({
+      title: 'Esta seguro?',
+      text: 'Esta seguro que quiere cancelar entrada, no se podra revertir!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Eliminar!',
+      focusConfirm: false,
+      focusCancel: false,
+      allowEnterKey: false
+    }).then((result) => {
+      if (result.value) {
+        const model = {
+          id: modelDetalle.ID
+        };
+
+        this._salidaService.cancelar(modelDetalle.ID)
+        .subscribe(
+          success => {
+            if (modelDetalle.Estatus === 'P') {
+              Swal.fire({
+                title: 'Cancelada!',
+                text: 'Compra a sido cancelada con exito. Reprocese para reflejar los cambios.',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            } else {
+              Swal.fire({
+                title: 'Cancelada!',
+                text: 'Compra a sido cancelada con exito.',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+            this.onBuscar();
+          },
+          error => {
+            this.toastr.error(error.message, 'Error!');
+          });
+      }
+    });
+  }
+
   onProcesar(id: number) {
     Swal.fire({
       title: 'Esta seguro?',
-      text: 'Esta seguro que quiere procesar compra, no se podra revertir!',
+      text: 'Esta seguro que quiere procesar salida, no se podra revertir!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -131,7 +176,7 @@ export class SalidasComponent implements OnInit {
           success => {
             Swal.fire({
               title: 'Procesada!',
-              text: 'Compra a sido procesada con exito.',
+              text: 'Salida a sido procesada con exito.',
               type: 'success',
               confirmButtonText: 'Aceptar'
             });

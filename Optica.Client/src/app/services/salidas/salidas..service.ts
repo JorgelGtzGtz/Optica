@@ -17,6 +17,7 @@ export class SalidaService {
   private _eliminar = `${this._url}/Eliminar`;
   private _procesar = `${this._url}/Procesar`;
   private _getSalida = `${this._url}/GetSalida`;
+  private _cancelar = `${this._url}/Cancelar`;
   private _getCombos = `${this._url}/Combos`;
 
   constructor(public _http: HttpClient, private _userService: UsersService) {
@@ -28,6 +29,13 @@ export class SalidaService {
     .pipe(
       tap(data => data),
       catchError(this.handleError)
+    );
+  }
+  
+  cancelar(id: number) {
+    return this._http.post(`${this._cancelar}/${id}`, null, { headers: this._userService.header}).pipe(
+    tap(data => data),
+    catchError(this.handleError)
     );
   }
 

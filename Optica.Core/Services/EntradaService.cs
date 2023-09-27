@@ -15,6 +15,7 @@ namespace Optica.Core.Services
         int InsertUpdateEntrada(OtrasEntradasSalida EntradaSalida, List<OtrasEntradasSalidasDetalle> detalles, out string Message);
         List<dynamic> GetOtraEntradaSalidaFiltro(int tipo = 1);
         bool EliminarEntrada(int id, out string Message);
+        bool CancelarEntradaSalida(int id, int usuario, out string Message);
         public OtrasEntradasSalida GetEntrada(int id);
         public List<dynamic> GetCompraDetalles(int id);
 
@@ -121,6 +122,41 @@ namespace Optica.Core.Services
                 Message = "Entrada No pudo ser eliminada Error: " + ex.Message;
             }
             return result;
+        }
+
+        public bool CancelarEntradaSalida(int id, int idUsuario, out string Message)
+        {
+            Message = string.Empty;
+            bool result = false;
+            try
+            {
+                var entrada = _otrasEntradasSalidasRepository.Get(id);
+                List<OtrasEntradasSalidasDetalle> detalles = GetEntradasDetalles(id);
+
+                foreach (var detalle in detalles)
+                {
+                    _otrasEntradasSalidasDetallesRepository.Remove(detalle);
+                }
+               
+                entrada.Estatus = "C";
+
+                _otrasEntradasSalidasRepository.InsertOrUpdate<int>(entrada);
+
+                Message = "Entrada cancelada con exito";
+                result = true;
+            }
+            catch (Exception ex)
+            {
+
+                Message = "Entrada No pudo ser cancelada Error: " + ex.Message;
+            }
+            return result;
+        }
+
+        public List<OtrasEntradasSalidasDetalle> GetEntradasDetalles(int id)
+        {
+            Sql query = new Sql(@"select * from otrasentradassalidasdetalles where ID_OtraEntradasSalidas = " + id);
+            return _otrasEntradasSalidasDetallesRepository.GetByFilter(query);
         }
 
     }

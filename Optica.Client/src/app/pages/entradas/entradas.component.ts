@@ -63,6 +63,51 @@ export class EntradasComponent implements OnInit {
     );
   }
 
+  onCancelar(modelDetalle: any) {
+    Swal.fire({
+      title: 'Esta seguro?',
+      text: 'Esta seguro que quiere cancelar entrada, no se podra revertir!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Eliminar!',
+      focusConfirm: false,
+      focusCancel: false,
+      allowEnterKey: false
+    }).then((result) => {
+      if (result.value) {
+        const model = {
+          id: modelDetalle.ID
+        };
+
+        this._entradaService.cancelar(modelDetalle.ID)
+        .subscribe(
+          success => {
+            if (modelDetalle.Estatus === 'P') {
+              Swal.fire({
+                title: 'Cancelada!',
+                text: 'Entrada a sido cancelada con exito. Reprocese para reflejar los cambios.',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            } else {
+              Swal.fire({
+                title: 'Cancelada!',
+                text: 'Entrada a sido cancelada con exito.',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+            this.onBuscar();
+          },
+          error => {
+            this.toastr.error(error.message, 'Error!');
+          });
+      }
+    });
+  }
+
   onProcesar(id: number) {
     Swal.fire({
       title: 'Esta seguro?',
