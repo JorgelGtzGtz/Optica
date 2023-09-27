@@ -111,7 +111,7 @@ export class EntradasComponent implements OnInit {
   onProcesar(id: number) {
     Swal.fire({
       title: 'Esta seguro?',
-      text: 'Esta seguro que quiere procesar compra, no se podra revertir!',
+      text: 'Esta seguro que quiere procesar entrada, no se podra revertir!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
