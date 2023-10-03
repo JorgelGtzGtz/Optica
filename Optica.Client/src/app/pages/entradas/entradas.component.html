@@ -152,7 +152,7 @@
                             <th>Descripcion</th>
                             <th>Cantidad</th>
                             <th>Total</th>
-                            <th>Acciones</th>
+                            <!-- <th>Acciones</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -161,10 +161,10 @@
                             <td>{{ item.Descripcion }}</td>
                             <td>{{ item.Cantidad }}</td>
                             <td>{{ item.CostoTotal }}</td>
-                            <td>
+                            <!-- <td>
                                 <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
                                 <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                     <tfoot>
@@ -213,7 +213,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <div class="form-group">
                         <label for="nombre">Total</label>
-                        <input type="number" class="form-control" placeholder="0.00" [(ngModel)]="modelProducto.Total" [ngModelOptions]="{standalone: true}" disabled>
+                        <input type="number" class="form-control" placeholder="0.00" [(ngModel)]="modelProducto.CostoTotal" [ngModelOptions]="{standalone: true}" disabled>
                     </div>
                 </div>
             </div>

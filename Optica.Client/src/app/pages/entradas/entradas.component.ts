@@ -66,7 +66,7 @@ export class EntradasComponent implements OnInit {
   onCancelar(modelDetalle: any) {
     Swal.fire({
       title: 'Esta seguro?',
-      text: 'Esta seguro que quiere cancelar entrada, no se podra revertir!',
+      text: 'Esta seguro que quiere cancelar entrada, se tendra que reprocesar',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -207,7 +207,7 @@ export class EntradasComponent implements OnInit {
           this.toastr.success('Producto guardado con exito.', 'Guardado!');
           FormData.resetForm();
           this.modalRef.hide();
-
+          this.onBuscar();
         },
         error => {
           this.toastr.error(error.message, 'Error!');

@@ -84,6 +84,7 @@ namespace Optica.Core.Services
                 producto.Cantidad = kardexProducto.CantidadTotal;
                 producto.Disponible = kardexProducto.CantidadDisponibleTotal;
                 producto.Costo = kardexProducto.CostoPromedio;
+                producto.UltimoCosto = kardexProducto.Costo;
 
                 _productosRepository.InsertOrUpdate<int>(producto);
 

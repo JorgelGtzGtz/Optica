@@ -139,6 +139,7 @@ namespace Optica.Core.Services
                 }
                
                 entrada.Estatus = "C";
+                entrada.Total = 0;
 
                 _otrasEntradasSalidasRepository.InsertOrUpdate<int>(entrada);
 

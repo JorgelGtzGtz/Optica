@@ -23,6 +23,7 @@ import { DiagnosticosComponent } from './diagnosticos/diagnosticos.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { SalidasComponent } from './salidas/salidas.component';
+import { InventarioComponent } from './inventario/inventario.component';
 
 const routes: Routes = [
   {
@@ -116,6 +117,10 @@ const routes: Routes = [
   {
     path: 'salidas',
     component: SalidasComponent
+  },
+  {
+    path: 'inventario',
+    component: InventarioComponent
   },
   // {
   //   path: 'clientes',

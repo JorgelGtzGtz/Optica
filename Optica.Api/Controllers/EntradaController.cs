@@ -171,6 +171,8 @@ namespace Optica.Api.Controllers
             });
         }
 
+
+
         [HttpPost]
         [Route("Cancelar/{id}")]
         public async Task<HttpResponseMessage> Cancelar(HttpRequestMessage request, int id)

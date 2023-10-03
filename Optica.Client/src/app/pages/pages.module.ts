@@ -36,6 +36,7 @@ import { DiagnosticosComponent } from './diagnosticos/diagnosticos.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { SalidasComponent } from './salidas/salidas.component';
+import { InventarioComponent } from './inventario/inventario.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { SalidasComponent } from './salidas/salidas.component';
         DatepickerToggleDirective,
         EntradasComponent,
         SalidasComponent,
+        InventarioComponent,
         // ClientesComponent,
         // ModelosComponent,
         // ProductosComponent,

@@ -1,0 +1,138 @@
+<section class="content-header">
+  <h1>
+      Inventario
+  </h1>
+  <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+      <li><a href="#">Inventario</a></li>
+  </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+      <div class="col-xs-12">
+          <div class="box">
+              <div class="box-header">
+                  <h3 class="box-title">Lista de inventario</h3>
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body">
+                  <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label>Producto <span class="text-danger">*</span></label>
+                          <ng-select name="producto" [items]="productos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" [searchFn]="customSearchFn" placeholder="Seleccionar producto..." [(ngModel)]="model.ID_Producto" #producto="ngModel" (change)="onProductoChanged($event)"
+                              required>
+                              <ng-template ng-label-tmp let-item="item">
+                                  <span>{{item.Clave}} - {{item.Descripcion}}</span>
+                              </ng-template>
+                              <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                  <span [ngOptionHighlight]="search">{{item.Clave}} - {{item.Descripcion}}</span>
+                              </ng-template>
+                          </ng-select>
+                        </div>
+                      </div>
+                  </div>
+                  <div *ngIf="productoSelect" class="row my-4">
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>Producto</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.Nombre}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>Existencia</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.Existencia}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>Disponible</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.Disponible}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>Costo promedio</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.CostoPromedio}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>Costo último</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.CostoUltimo}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>Precio</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.Precio}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-1">
+                        <div class="col">
+                            <div class="row justify-content-center">
+                                <h4>IVA</h4>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h6>{{itemProductselect.IVA}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <table class="table table-bordered table-hover">
+                      <thead>
+                          <tr>
+                              <th>Producto</th>
+                              <th>Sucursal</th>
+                              <th>Almacen</th>
+                              <th>Existencia</th>
+                              <th>Disponible</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let item of inventario; let i=index;">
+                              <td>{{ item.Descripcion }}</td>
+                              <td>{{ item.Sucursal}}</td>
+                              <td>{{ item.Almacen }}</td>
+                              <td>{{ item.Cantidad }}</td>
+                              <td>{{ item.Disponible }}</td>
+                          </tr>
+                      </tbody>
+                      <tfoot>
+                      </tfoot>
+                  </table>
+              </div>
+              <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+      </div>
+      <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>

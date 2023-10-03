@@ -16,6 +16,7 @@ namespace Optica.Core.Services
         Producto GetProducto(int id);
         List<Producto> GetProductos();
         List<Producto> GetProductosFiltro(string nombre = null);
+        List<dynamic> GetProductosInventario(int id);
         bool InsertUpdateProducto(Producto model, out string Message, List<ProductosDetalleKit> productoKits = null);
         bool EliminarProducto(int id, out string Message);
         List<ProductosDetalleKit> GetProductosKit(int id);
@@ -65,6 +66,18 @@ namespace Optica.Core.Services
 
             Sql query = new Sql(@"select * from Productos " + (!string.IsNullOrEmpty(nombre) ? filter : ""));
             return _productosRepository.GetByFilter(query);
+        }
+
+        public List<dynamic> GetProductosInventario(int id)
+        {
+            Sql query = new Sql(@"select 
+            ea.*, a.Nombre as Almacen, s.Nombre as Sucursal, p.Descripcion 
+                from existenciasAlmacen ea 
+            inner join almacenes a on ea.ID_Almacen = a.ID 
+            inner join Sucursales s on s.ID = a.ID_Sucursal 
+            inner join Productos p on p.ID = ea.ID_Producto 
+                where ea.ID_Producto = @id;", new { id });
+            return _otrasEntradasSalidasRepository.GetByDynamicFilter(query);
         }
 
         public bool InsertUpdateProducto(Producto model, out string Message, List<ProductosDetalleKit> productoKits = null)
