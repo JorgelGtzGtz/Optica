@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { EntradasService } from 'src/app/services/entradas/entradas.service';
 import Swal from 'sweetalert2';
 import { DetalleEntrada } from 'src/app/models/DetalleEntrada';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-entradas',
@@ -27,25 +28,38 @@ export class EntradasComponent implements OnInit {
   modelProducto: DetalleEntrada = new DetalleEntrada();
   lista: any[] = [];
   detalles: any[] = [];
-  movimientos: any[] = ["Entrada por cancelacion", "Entrada por devolucion", "Salida por venta punto venta"];
   cmbAlmacenes: any[] = [];
   cmbTipoEntradaSalida: any[] = [];
+  movimientos: any[] = [];
+  almacenes: any[] = [];
+  estados: any[] = ["Generado", "Procesado", "Cancelado"];
   movimiento: any;
   entradas: any[] = [];
   modelFecha = {
     Fecha: ''
   }
+  from: NgbDateStruct;
+  to: NgbDateStruct;
+  idMovimiento: any;
+  idAlmacen: any;
+  status = "";
 
   constructor(private modalService: BsModalService, private _entradaService: EntradasService, private toastr: ToastrService) { }
 
   ngOnInit() {
-    this.getCombos();
     this.onBuscar();
-
+    this.getCombos();
   }
 
   onBuscar() {
-    this._entradaService.getLista().
+    let from = '';
+    let to = ''; 
+    if (this.from !== undefined && this.to !== undefined) {
+      from = `${this.from.year}-${this.from.month}-${this.from.day}`;
+      to = `${this.to.year}-${this.to.month}-${this.to.day}`;
+    }
+
+    this._entradaService.getLista(from, to, this.idMovimiento, this.idAlmacen, this.status).
     subscribe(
       (data: any) => {
         this.entradas = data;
@@ -179,6 +193,9 @@ export class EntradasComponent implements OnInit {
           this.cmbProductos = data.productos;
           this.cmbAlmacenes = data.almacenes;
           this.cmbTipoEntradaSalida = data.tipoEntradaSalida;
+          this.movimientos = data.tipoEntradaSalida;
+          this.almacenes = data.almacenes;
+          console.log(this.almacenes);
         },
         error => this.toastr.error(error.message, 'Error!') );
   }
@@ -199,7 +216,6 @@ export class EntradasComponent implements OnInit {
         data: entrada,
         detalles: this.productos
       }
-      console.log(data)
 
       this._entradaService.guardar(data).
       subscribe(

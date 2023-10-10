@@ -21,7 +21,9 @@ export class SalidasComponent implements OnInit {
     backdrop: true,
     ignoreBackdropClick: true,
   };
+  movimiento: any;
   salidas: any[] = [];
+  test: any[] = [1,1,2];
   cmbProductos: any[] = [];
   cmbAlmacenes: any[] = [];
   cmbTipoEntradaSalida: any[] = [];
@@ -209,6 +211,7 @@ export class SalidasComponent implements OnInit {
           this.cmbProductos = data.productos;
           this.cmbAlmacenes = data.almacenes;
           this.cmbTipoEntradaSalida = data.tipoEntradaSalida;
+          console.log(this.cmbTipoEntradaSalida)
         },
         error => this.toastr.error(error.message, 'Error!') );
   }

@@ -19,66 +19,99 @@
               </div>
               <!-- /.box-header -->
               <div class="box-body">
-                  <div class="row">
-                      <div class="col-lg-4">
-                          <div class="form-group">
-                              <label>Movimiento</label>
-                              <div>
-                                  <div class="input-group">
-                                      <input type="text" class="form-control" [(ngModel)]="modelFilter" [ngModelOptions]="{standalone: true}">
-                                  </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Movimiento</label>
+                            <ng-select name="movimiento" [items]="movimientos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="idMovimiento">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col">
+                      <div class="form-group">
+                          <label for="nombre">De</label>
+                          <div class="input-group">
+                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="from" ngbDatepicker #f="ngbDatepicker">
+                              <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary" (click)="f.toggle()" type="button"><i class="fa fa-calendar"></i></button>
                               </div>
                           </div>
                       </div>
-                      <div class="col-lg-8">
-                          <div class="form-group text-right">
-                              <br>
-                              <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                  </div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="nombre">Al</label>
+                          <div class="input-group">
+                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="to" ngbDatepicker #t="ngbDatepicker">
+                              <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                              </div>
                           </div>
                       </div>
                   </div>
-                  <table class="table table-bordered table-hover">
-                      <thead>
-                          <tr>
-                              <th>Folio</th>
-                              <th>Fecha</th>
-                              <th>Movimiento</th>
-                              <th>Status</th>
-                              <th>
-                                  <div class="row">
-                                      <div class="col mt-2">
-                                          Acciones
-                                      </div>
-                                      <div class="col">
-                                          <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
-                                      </div>
-                                  </div>
-                              </th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr *ngFor="let item of entradas; let i=index;">
-                              <td>{{ item.ID }}</td>
-                              <td>{{ item.Fecha | date: 'dd-MM-yyyy' }}</td>
-                              <td>{{ item.Movimiento }}</td>
-                              <td>
-                                <span *ngIf="item.Estatus === 'G'" class="label label-success label-rounded">Guardado</span>
-                                <span *ngIf="item.Estatus === 'P'" class="label label-primary label-rounded">Procesado</span>
-                                <span *ngIf="item.Estatus === 'C'" class="label label-danger label-rounded">Cancelado</span>
-                              </td>
-                              <td>
-                                <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-primary btn-xs m-lg-1" (click)="onProcesar(item.ID)"><i class="fa fa-trash"></i> Procesar</button>
-                                <button type="button" *ngIf="item.Estatus === 'C' || item.Estatus === 'P'" class="btn btn-info btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-eye"></i> Mostrar</button>
-                                <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
-                                <button type="button" *ngIf="item.Estatus === 'G' || item.Estatus === 'P'" class="btn btn-danger btn-xs m-lg-1" (click)="onCancelar(item)"><i class="fa fa-trash"></i> Cancelar</button>
-                                <button type="button" class="btn label-inverse btn-xs m-lg-1" (click)="onImprimir(item.ID)"><i class="fa fa-print"></i> Imprimir</button>
-                              </td>
-                          </tr>
-                      </tbody>
-                      <tfoot>
-                      </tfoot>
-                  </table>
-              </div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label class="font-weight-bold">Almacen</label>
+                          <ng-select name="almacen" [items]="almacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                          </ng-select>
+                      </div>
+                  </div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label class="font-weight-bold">Status</label>
+                          <ng-select name="status" [items]="estados"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
+                          </ng-select>
+                      </div>
+                  </div>
+                    <div class="col-lg-4">
+                        <div class="form-group text-right">
+                            <br>
+                            <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Fecha</th>
+                            <th>Movimiento</th>
+                            <th>Status</th>
+                            <th>
+                                <div class="row">
+                                    <div class="col mt-2">
+                                        Acciones
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of entradas; let i=index;">
+                            <td>{{ item.ID }}</td>
+                            <td>{{ item.Fecha | date: 'dd-MM-yyyy' }}</td>
+                            <td>{{ item.Movimiento }}</td>
+                            <td>
+                              <span *ngIf="item.Estatus === 'G'" class="label label-success label-rounded">Guardado</span>
+                              <span *ngIf="item.Estatus === 'P'" class="label label-primary label-rounded">Procesado</span>
+                              <span *ngIf="item.Estatus === 'C'" class="label label-danger label-rounded">Cancelado</span>
+                            </td>
+                            <td>
+                              <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-primary btn-xs m-lg-1" (click)="onProcesar(item.ID)"><i class="fa fa-trash"></i> Procesar</button>
+                              <button type="button" *ngIf="item.Estatus === 'C' || item.Estatus === 'P'" class="btn btn-info btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-eye"></i> Mostrar</button>
+                              <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                              <button type="button" *ngIf="item.Estatus === 'G' || item.Estatus === 'P'" class="btn btn-danger btn-xs m-lg-1" (click)="onCancelar(item)"><i class="fa fa-trash"></i> Cancelar</button>
+                              <button type="button" class="btn label-inverse btn-xs m-lg-1" (click)="onImprimir(item.ID)"><i class="fa fa-print"></i> Imprimir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
               <!-- /.box-body -->
           </div>
           <!-- /.box -->
@@ -107,15 +140,28 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <div class="form-group">
                             <label for="nombre">Fecha</label>
-                            <input type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}">
+                            <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}"
+                            [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),
+                                        'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
+                        </div>
+                        <div *ngIf="Fecha.invalid && (Fecha.dirty || Fecha.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                            <span class="messages" *ngIf="Fecha.errors">
+                                            <small class="text-danger error">Fecha es requerido.</small>
+                                    </span>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div class="form-group">
                             <label class="font-weight-bold">Almacen <span class="text-danger">*</span></label>
-                            <ng-select name="almacen" [items]="cmbAlmacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Almacen..." [(ngModel)]="model.ID_Almacen" #almacen="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
-                                required>
+                            <ng-select #Almacen="ngModel" name="almacen" [items]="cmbAlmacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Almacen..." [(ngModel)]="model.ID_Almacen" #almacen="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
+                                        [ngClass]="{'form-control-danger': Almacen.invalid && (Almacen.dirty || Almacen.touched || (userForm.submitted && !userForm.valid)),
+                                                    'form-control-success': Almacen.valid && (Almacen.dirty || Almacen.touched)}" required>
                             </ng-select>
+                        </div>
+                        <div *ngIf="Almacen.invalid && (Almacen.dirty || Almacen.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                            <span class="messages" *ngIf="Almacen.errors">
+                                            <small class="text-danger error">Almacen es requerido.</small>
+                                    </span>
                         </div>
                 </div>
             </div>
@@ -129,9 +175,15 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         <label class="font-weight-bold">Tipo entrada <span class="text-danger">*</span></label>
-                        <ng-select name="TipoEntrada" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tipo Entrada..." [(ngModel)]="model.ID_TipoEntradaSalida" #TipoEntrada="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
-                            required>
+                        <ng-select  #TipoEntrada="ngModel" name="TipoEntrada" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tipo Entrada..." [(ngModel)]="model.ID_TipoEntradaSalida" #TipoEntrada="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
+                        [ngClass]="{'form-control-danger': TipoEntrada.invalid && (TipoEntrada.dirty || TipoEntrada.touched || (userForm.submitted && !userForm.valid)),
+                                    'form-control-success': TipoEntrada.valid && (TipoEntrada.dirty || TipoEntrada.touched)}" required>
                         </ng-select>
+                    </div>
+                    <div *ngIf="TipoEntrada.invalid && (TipoEntrada.dirty || TipoEntrada.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="TipoEntrada.errors">
+                                        <small class="text-danger error">Tipo Entrada es requerido.</small>
+                                </span>
                     </div>
                 </div>
             </div>
@@ -193,16 +245,18 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         <label>Producto <span class="text-danger">*</span></label>
-                        <ng-select name="producto" [items]="cmbProductos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar producto..." [(ngModel)]="modelProducto.ID" #producto="ngModel" (change)="onProductoChanged($event)"required></ng-select>
+                        <ng-select #Producto="ngModel" name="producto" [items]="cmbProductos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar producto..." [(ngModel)]="modelProducto.ID" #producto="ngModel" (change)="onProductoChanged($event)"required></ng-select>
                     </div>
+                    
                 </div>
             </div>
             <div class="row my-5">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <div class="form-group">
                         <label for="nombre">Cantidad</label>
-                        <input [min]="1" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" (change)="onCantidadChanged($event)">
+                        <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" (change)="onCantidadChanged($event)" required>
                     </div>
+                    
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <div class="form-group">

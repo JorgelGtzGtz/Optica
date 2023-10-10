@@ -37,6 +37,7 @@ import { VentasComponent } from './ventas/ventas.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { SalidasComponent } from './salidas/salidas.component';
 import { InventarioComponent } from './inventario/inventario.component';
+import { ContratosComponent } from './contratos/contratos.component';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { InventarioComponent } from './inventario/inventario.component';
         EntradasComponent,
         SalidasComponent,
         InventarioComponent,
+        ContratosComponent,
         // ClientesComponent,
         // ModelosComponent,
         // ProductosComponent,

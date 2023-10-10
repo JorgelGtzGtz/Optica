@@ -1,4 +1,5 @@
 ﻿using dbconnection;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json.Linq;
 using Optica.Api.Models;
 using Optica.Core.Entities.Dto;
@@ -36,8 +37,8 @@ namespace Optica.Api.Controllers
         }
 
         [HttpGet]
-        [Route("Lista/{otraentradasalida?}/")]
-        public async Task<HttpResponseMessage> GetSucurles(HttpRequestMessage request, string otraentradasalida = null)
+        [Route("Lista/{from?}/{to?}/{movimiento:int=0}/{almacen:int=0}/{status?}")]
+        public async Task<HttpResponseMessage> GetSucurles(HttpRequestMessage request, string from, string to, int? movimiento, int? almacen, string status = "")
         {
             return await CreateHttpResponseAsync(request, async () =>
             {
@@ -45,7 +46,7 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro();
+                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro(from, to, movimiento, almacen, status);
 
                     response = request.CreateResponse(HttpStatusCode.OK, item);
                 }
