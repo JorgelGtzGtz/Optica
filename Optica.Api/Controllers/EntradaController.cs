@@ -46,7 +46,8 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro(from, to, movimiento, almacen, status);
+                    int tipo = 1;
+                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro(tipo, from, to, movimiento, almacen, status);
 
                     response = request.CreateResponse(HttpStatusCode.OK, item);
                 }

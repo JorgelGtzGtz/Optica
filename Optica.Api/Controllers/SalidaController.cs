@@ -37,7 +37,7 @@ namespace Optica.Api.Controllers
 
         [HttpGet]
         [Route("Lista/{otraentradasalida?}/")]
-        public async Task<HttpResponseMessage> GetSucurles(HttpRequestMessage request, string otraentradasalida = null)
+        public async Task<HttpResponseMessage> GetSucurles(HttpRequestMessage request, string from, string to, int? movimiento, int? almacen, string status = "")
         {
             return await CreateHttpResponseAsync(request, async () =>
             {
@@ -45,8 +45,9 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    //var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro(2);
-                    var item = 1;
+                    int tipo = 2;
+                    var item = _otrasEntradasSalidasService.GetOtraEntradaSalidaFiltro(tipo, from, to, movimiento, almacen, status);
+                    
                     response = request.CreateResponse(HttpStatusCode.OK, item);
                 }
                 catch (Exception ex)

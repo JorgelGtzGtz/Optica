@@ -8,6 +8,7 @@ import { SalidaService } from 'src/app/services/salidas/salidas..service';
 import { Salida } from 'src/app/models/Salida';
 import { Entrada } from 'src/app/models/Entrada';
 import { DetalleEntrada } from 'src/app/models/DetalleEntrada';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-salidas',
@@ -34,6 +35,11 @@ export class SalidasComponent implements OnInit {
   modelFecha = {
     Fecha: ''
   }
+  from: NgbDateStruct;
+  to: NgbDateStruct;
+  idMovimiento: any;
+  idAlmacen: any;
+  status = "";
   
   constructor(private modalService: BsModalService, private _salidaService: SalidaService, private toastr: ToastrService) { }
 
@@ -44,7 +50,14 @@ export class SalidasComponent implements OnInit {
   }
 
   onBuscar() {
-    this._salidaService.getLista().
+    let from = '';
+    let to = ''; 
+    if (this.from !== undefined && this.to !== undefined) {
+      from = `${this.from.year}-${this.from.month}-${this.from.day}`;
+      to = `${this.to.year}-${this.to.month}-${this.to.day}`;
+    }
+
+    this._salidaService.getLista(from, to, this.idMovimiento, this.idAlmacen, this.status).
     subscribe(
       (data: any) => {
         this.salidas = data;

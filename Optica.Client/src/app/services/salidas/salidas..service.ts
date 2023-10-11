@@ -24,8 +24,14 @@ export class SalidaService {
     this._userService.loadStorage();
   }
 
-  getLista(): Observable<any[]> {
-    return this._http.get<any[]>(this._getLista, { params: null, headers: this._userService.header})
+  getLista(from: String, to: String, movimiento: number, almacen: number, status: String): Observable<any[]> {
+    const params = new HttpParams()
+    .set('from', from.toString())
+    .set('to', to.toString())
+    .set('movimiento', String(movimiento))
+    .set('almacen', String(almacen))
+    .set('status', String(status));
+    return this._http.get<any[]>(this._getLista, { params: params, headers: this._userService.header})
     .pipe(
       tap(data => data),
       catchError(this.handleError)

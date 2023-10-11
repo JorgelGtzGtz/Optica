@@ -24,7 +24,7 @@
                       <div class="col">
                         <div class="form-group">
                             <label class="font-weight-bold">Movimiento</label>
-                            <ng-select name="proveedor" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="NombreComercial" bindValue="ID" [searchable]="true" placeholder="Seleccionar Movimiento..." [(ngModel)]="movimiento" #Mmovimiento="ngModel" >
+                            <ng-select name="movimiento" [items]="movimientos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="idMovimiento">
                             </ng-select>
                         </div>
                       </div>
@@ -53,14 +53,14 @@
                     <div class="col">
                         <div class="form-group">
                             <label class="font-weight-bold">Almacen</label>
-                            <ng-select name="proveedor" [items]="proveedores" [hideSelected]="true" bindLabel="NombreComercial" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="proveedor" #proveedorF="ngModel">
+                            <ng-select name="almacen" [items]="almacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
                             </ng-select>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label class="font-weight-bold">Status</label>
-                            <ng-select name="proveedor" [items]="proveedores" [hideSelected]="true" bindLabel="NombreComercial" bindValue="ID" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="proveedor" #proveedorF="ngModel">
+                            <ng-select name="status" [items]="estados"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
                             </ng-select>
                         </div>
                     </div>

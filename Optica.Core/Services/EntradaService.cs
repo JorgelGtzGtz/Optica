@@ -13,7 +13,7 @@ namespace Optica.Core.Services
     public interface IEntradaService
     {
         int InsertUpdateEntrada(OtrasEntradasSalida EntradaSalida, List<OtrasEntradasSalidasDetalle> detalles, out string Message);
-        List<dynamic> GetOtraEntradaSalidaFiltro(string from, string to, int? movimiento, int? almacen = null, string status = null);
+        List<dynamic> GetOtraEntradaSalidaFiltro(int tipo, string from, string to, int? movimiento, int? almacen = null, string status = null);
         bool EliminarEntrada(int id, out string Message);
         bool CancelarEntradaSalida(int id, int usuario, out string Message);
         public OtrasEntradasSalida GetEntrada(int id);
@@ -34,13 +34,14 @@ namespace Optica.Core.Services
             _otrasEntradasSalidasDetallesRepository = otrasEntradasSalidasDetallesRepository;
         }
 
-        public List<dynamic> GetOtraEntradaSalidaFiltro(string from, string to, int? movimiento, int? almacen, string status = null)
+        public List<dynamic> GetOtraEntradaSalidaFiltro(int tipo,string from, string to, int? movimiento, int? almacen, string status = null)
         {
             string filter = string.Empty;
 
             if (movimiento != null || almacen != null || !string.IsNullOrEmpty(status) || !string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
             {
-                filter = " where ";
+                if (status != "null")
+                    filter = " where ";
             }
 
             if (!string.IsNullOrEmpty(from) && !string.IsNullOrEmpty(to))
@@ -49,20 +50,19 @@ namespace Optica.Core.Services
             }
             if (movimiento != null)
             {
-                filter += string.Format("{1} OES.ID_TipoEntradaSalida = '{0}' ", movimiento, (filter.Length > 0 ? "and" : ""));
+                filter += string.Format(" {1} OES.ID_TipoEntradaSalida = {0} ", movimiento, (filter.Length > 0 ? "and" : ""));
             }
             if (almacen != null)
             {
-                filter += string.Format(" {1} OES.ID_Almacen = {0}", almacen, (filter.Length > 0 ? "aNd" : ""));
+                filter += string.Format(" {1} OES.ID_Almacen = {0}", almacen, (filter.Length > 0 ? "and" : ""));
             }
             if (!string.IsNullOrEmpty(status))
             {
                 if (status != "null")
-                filter += string.Format(" and OES.Estatus like '{0}'", status.Substring(0, 1), (filter.Length > 0 ? "and" : ""));
+                filter += string.Format(" {1} OES.Estatus like '{0}'", status.Substring(0, 1), (filter.Length > 0 ? "and" : ""));
             }
             Sql query = new Sql(@"select OES.*, tes.Descripcion as Movimiento from otrasentradassalidas OES
-                                    inner join tiposentradasalida tes on OES.ID_TipoEntradaSalida = tes.ID " + (filter.Length > 0 ? filter : "")+
-                                    "and OES.ID_EntradaSalida = 1");
+                                    inner join tiposentradasalida tes on OES.ID_TipoEntradaSalida = tes.ID " + (filter.Length > 0 ? filter + "and OES.ID_EntradaSalida ="+tipo : "where OES.ID_EntradaSalida ="+tipo));
                                     
             return _otrasEntradasSalidasRepository.GetByDynamicFilter(query);
         }
