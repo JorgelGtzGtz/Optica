@@ -1,7 +1,8 @@
 <section class="content-header">
   <h1>
-      Contrato
-  </h1>
+      Nuevo contrato
+      <small>módulo de registro y edición de contrato</small>
+    </h1>
   <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
       <li><a href="#">Contrato</a></li>
@@ -13,129 +14,220 @@
       <div class="col-xs-12">
           <div class="box">
               <div class="box-header">
-                  <h3 class="box-title">Lista de contratos</h3>
+                  <h3 class="box-title">Nuevo contratos</h3>
               </div>
               <!-- /.box-header -->
-              <div class="box-body">
+            <div class="box-body">
+                <form #contratosFrom="ngForm" (ngSubmit)="onSubmit(contratosFrom)" novalidate>
+                    <div class="row">
+                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                 <label for="nombre">Contrato</label>
+                                <input type="text" class="form-control" placeholder="Contrato" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label for="nombre">Fecha</label>
+                                <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.Fecha" [ngModelOptions]="{standalone: true}" 
+                                       [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (contratosFrom.submitted && !contratosFrom.valid)),
+                                                 'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
+                            </div>
+                            <div *ngIf="Fecha.invalid && (Fecha.dirty || Fecha.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                <span class="messages" *ngIf="Fecha.errors">
+                                    <small class="text-danger error">Fecha es requerido.</small>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Sucursal <span class="text-danger">*</span></label>
+                                <ng-select #Sucursal="ngModel" [(ngModel)]="model.ID_Sucursal" [items]="sucursales" name="sucursal" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Sucursal..." 
+                                            [ngClass]="{'form-control-danger': Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || (contratosFrom.submitted && !contratosFrom.valid)),
+                                                      'form-control-success': Sucursal.valid && (Sucursal.dirty || Sucursal.touched)}" required>
+                                </ng-select>
+                            </div>
+                            <div *ngIf="Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                <span class="messages" *ngIf="Sucursal.errors">
+                                    <small class="text-danger error">Sucursal es requerido.</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="row">
-                  <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="font-weight-bold">Cliente</label>
-                        <ng-select name="proveedor" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="NombreComercial" bindValue="ID" [searchable]="true" placeholder="Seleccionar Movimiento..." [(ngModel)]="movimiento" #Mmovimiento="ngModel" >
-                        </ng-select>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                          <div class="form-group">
+                            <label for="basic_checkbox_2" >Folio interno</label>
+                            <input type="text" class="form-control"  [(ngModel)]="model.ID_Alterno" [ngModelOptions]="{standalone: true}" >
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <input type="text" value="Vigente" name="status" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Clientes <span class="text-danger">*</span></label>
+                                <ng-select (ngModelChange)="($event != null) ? this.clienteDisabled = false : this.clienteDisabled = true" #Clientes="ngModel" [(ngModel)]="model.ID_Cliente" [items]="clientes" name="sucursal" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Cliente..." 
+                                            [ngClass]="{'form-control-danger': Clientes.invalid && (Clientes.dirty || Clientes.touched || (contratosFrom.submitted && !contratosFrom.valid)),
+                                                      'form-control-success': Clientes.valid && (Clientes.dirty || Clientes.touched)}" required>
+                                </ng-select>
+                            </div>
+                            <div *ngIf="Clientes.invalid && (Clientes.dirty || Clientes.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                <span class="messages" *ngIf="Clientes.errors">
+                                    <small class="text-danger error">Cliente es requerido.</small>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="font-weight-bold">Status</label>
-                        <ng-select name="proveedor" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="NombreComercial" bindValue="ID" [searchable]="true" placeholder="Seleccionar Movimiento..." [(ngModel)]="movimiento" #Mmovimiento="ngModel" >
-                        </ng-select>
-                    </div>
-                  </div>
-                  <div class="col-lg-8">
-                      <div class="form-group text-right">
-                          <br>
-                          <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onShow(0, template)"> <i class="fa fa-search "></i> <span> Agregar</span> </button>
-                      </div>
-                  </div>
-              </div>
 
-                  <div *ngIf="productoSelect" class="row my-4">
-                    <div class="col-md-12 col-xl-1">
-                        <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>Producto</h4>
-                            </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.Nombre}}</h6>
+                    <div class="row mt-3">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)" [disabled]="clienteDisabled">Agregar Detalle</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-xl-1">
+
+                    <div class="row mb-5">
                         <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>Existencia</h4>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Clave</th>
+                                        <th>Descripcion</th>
+                                        <th>P. Contado</th>
+                                        <th>P. Credito</th>
+                                        <th>Paciente</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of detalles; let i=index;">
+                                        <td>{{ item.Clave }}</td>
+                                        <td>{{ item.Descripcion }}</td>
+                                        <td>{{ item.PContado }}</td>
+                                        <td>{{ item.PCredito }}</td>
+                                        <td>{{ item.Paciente }}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="false" [(ngModel)]="anticipoDisabled" [ngModelOptions]="{standalone: true}">
+                                <label for="basic_checkbox_2" style="font-size: 10px;">Requiere anticipo</label>
+                                <input type="text" class="form-control"  [(ngModel)]="model.Anticipo" [ngModelOptions]="{standalone: true}" [disabled]="!anticipoDisabled">
                             </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.Existencia}}</h6>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <input type="checkbox" id="basic_checkbox_3" class="filled-in" checked="false" [(ngModel)]="contraEntregaDisabled" [ngModelOptions]="{standalone: true}" >
+                                <label for="basic_checkbox_3" style="font-size: 10px;">Requiere contraentrega</label>
+                                <input type="text" class="form-control"  [(ngModel)]="model.Contraentrega" [ngModelOptions]="{standalone: true}" [disabled]="!contraEntregaDisabled">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-xl-1">
-                        <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>Disponible</h4>
+                    
+
+                    <!-- <div class="row my-2">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label for="basic_checkbox_2" >Total</label>
+                                <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
                             </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.Disponible}}</h6>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label for="basic_checkbox_2" >Importe prestado</label>
+                                <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                            <label for="basic_checkbox_2" >Periodos</label>
+                            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
+                            </div>
+                        </div> 
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                            <label for="basic_checkbox_2" >Importe del pago</label>
+                            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="basic_checkbox_2" >Fecha inicial del pago</label>
+                                <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
+                            </div>
+                        </div>
+                     </div>
+
+                     <div class="row my-2">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                            <label for="basic_checkbox_2" >Fecha inicial</label>
+                            <input  type="date" class="form-control" placeholder="Fecha" [(ngModel)]="a" [ngModelOptions]="{standalone: true}"
+                                         required>
+                          </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="basic_checkbox_2" >Dia de la semana</label>
+                                <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-xl-1">
-                        <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>Costo promedio</h4>
-                            </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.CostoPromedio}}</h6>
+
+                    <div class="row mt-5">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Calcular</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-xl-1">
+
+                    <div class="row mt-2">
                         <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>Costo último</h4>
-                            </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.CostoUltimo}}</h6>
-                            </div>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Importe</th>
+                                        <th>Saldo</th>
+                                        <th>Descripcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of productos; let i=index;">
+                                        <td>{{ item.ID }}</td>
+                                        <td>{{ item.Descripcion }}</td>
+                                        <td>{{ item.Cantidad }}</td>
+                                        <td>{{ item.CostoTotal }}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success">Aceptar</button>
                         </div>
                     </div>
-                    <div class="col-md-12 col-xl-1">
-                        <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>Precio</h4>
-                            </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.Precio}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-xl-1">
-                        <div class="col">
-                            <div class="row justify-content-center">
-                                <h4>IVA</h4>
-                            </div>
-                            <div class="row justify-content-center">
-                                <h6>{{itemProductselect.IVA}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-                  <table class="table table-bordered table-hover">
-                      <thead>
-                          <tr>
-                              <th>ID</th>
-                              <th>Clave</th>
-                              <th>Cliente</th>
-                              <th>Status</th>
-                              <th>Acciones</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr *ngFor="let item of inventario; let i=index;">
-                              <td>{{ item.Descripcion }}</td>
-                              <td>{{ item.Sucursal}}</td>
-                              <td>{{ item.Almacen }}</td>
-                              <td>{{ item.Cantidad }}</td>
-                              <td>{{ item.Disponible }}</td>
-                          </tr>
-                      </tbody>
-                      <tfoot>
-                      </tfoot>
-                  </table>
-              </div>
+                </form>
+            </div>
               <!-- /.box-body -->
           </div>
           <!-- /.box -->
@@ -144,236 +236,6 @@
   </div>
   <!-- /.row -->
 </section>
-
-<ng-template #template>
-  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
-      <div class="modal-header modal-info-custom">
-          <h4 class="modal-title pull-left">Contrato</h4>
-          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-              <span aria-hidden="true">&times;</span>
-          </button>
-      </div>
-          <div class="modal-body">
-              <div class="row">
-                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                      <div class="form-group">
-                          <label for="nombre">Contrato</label>
-                          <input type="text" class="form-control" placeholder="Contrato" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
-                      </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="form-group">
-                        <label for="nombre">Fecha</label>
-                        <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}"
-                        [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),
-                                    'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
-                    </div>
-                    <div *ngIf="Fecha.invalid && (Fecha.dirty || Fecha.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
-                        <span class="messages" *ngIf="Fecha.errors">
-                                        <small class="text-danger error">Fecha es requerido.</small>
-                                </span>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        <label class="font-weight-bold">Sucursal <span class="text-danger">*</span></label>
-                        <ng-select #Almacen="ngModel" name="almacen" [items]="cmbAlmacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Almacen..." [(ngModel)]="model.ID_Almacen" #almacen="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
-                                    [ngClass]="{'form-control-danger': Almacen.invalid && (Almacen.dirty || Almacen.touched || (userForm.submitted && !userForm.valid)),
-                                                'form-control-success': Almacen.valid && (Almacen.dirty || Almacen.touched)}" required>
-                        </ng-select>
-                    </div>
-                    <div *ngIf="Almacen.invalid && (Almacen.dirty || Almacen.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
-                        <span class="messages" *ngIf="Almacen.errors">
-                                        <small class="text-danger error">Almacen es requerido.</small>
-                                </span>
-                    </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                <div class="form-group">
-                  <label for="basic_checkbox_2" >Folio interno</label>
-                  <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                <div class="form-group">
-                  <label for="basic_checkbox_2" >Status</label>
-                  <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-                </div>
-            </div>
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <div class="form-group">
-                    <label class="font-weight-bold">Cliente<span class="text-danger">*</span></label>
-                    <ng-select  #TipoEntrada="ngModel" name="TipoEntrada" [items]="cmbTipoEntradaSalida" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Tipo Entrada..." [(ngModel)]="model.ID_TipoEntradaSalida" #TipoEntrada="ngModel" [ngClass]="{'form-control-danger': almacen.invalid && (almacen.dirty || almacen.touched || userForm.submitted)}"
-                    [ngClass]="{'form-control-danger': TipoEntrada.invalid && (TipoEntrada.dirty || TipoEntrada.touched || (userForm.submitted && !userForm.valid)),
-                                'form-control-success': TipoEntrada.valid && (TipoEntrada.dirty || TipoEntrada.touched)}" required>
-                    </ng-select>
-                </div>
-                <div *ngIf="TipoEntrada.invalid && (TipoEntrada.dirty || TipoEntrada.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
-                    <span class="messages" *ngIf="TipoEntrada.errors">
-                                    <small class="text-danger error">Tipo Entrada es requerido.</small>
-                            </span>
-                </div>
-              </div>
-          </div>
-      
-      <div class="row mt-3">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-              <div class="form-group">
-                  <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Agregar Detalle</button>
-              </div>
-          </div>
-      </div>
-      <div class="row mb-5">
-          <div class="col">
-              <table class="table table-bordered table-hover">
-                  <thead>
-                      <tr>
-                          <th>Clave</th>
-                          <th>Descripcion</th>
-                          <th>P. Contado</th>
-                          <th>P. Credito</th>
-                          <th>Paciente</th>
-                          <!-- <th>Acciones</th> -->
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of productos; let i=index;">
-                          <td>{{ item.ID }}</td>
-                          <td>{{ item.Descripcion }}</td>
-                          <td>{{ item.Cantidad }}</td>
-                          <td>{{ item.CostoTotal }}</td>
-                          <td>{{ item.CostoTotal }}</td>
-                          <!-- <td>
-                              <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
-                              <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
-                          </td> -->
-                      </tr>
-                  </tbody>
-                  <tfoot>
-                  </tfoot>
-              </table>
-          </div>
-      </div>
-      <div class="row my-2">
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-          <div class="form-group">
-            <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="" [(ngModel)]="model.Serie" [ngModelOptions]="{standalone: true}">
-            <label for="basic_checkbox_2" style="font-size: 10px;">Requiere anticipo</label>
-          </div>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="form-group">
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-          </div>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="form-group">
-          <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="" [(ngModel)]="model.Serie" [ngModelOptions]="{standalone: true}">
-          <label for="basic_checkbox_2" style="font-size: 10px;">Requiere contraentrega</label>
-        </div>
-      </div> 
-      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-        <div class="form-group">
-          <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-        </div>
-      </div> 
-      </div>
-      <div class="row my-2">
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-          <div class="form-group">
-            <label for="basic_checkbox_2" >Total</label>
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
-          </div>
-      </div>
-      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <div class="form-group">
-            <label for="basic_checkbox_2" >Importe prestado</label>
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-          </div>
-      </div>
-      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <div class="form-group">
-          <label for="basic_checkbox_2" >Periodos</label>
-          <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-        </div>
-      </div> 
-      </div>
-      <div class="row my-2">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
-            <label for="basic_checkbox_2" >Importe del pago</label>
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
-          </div>
-      </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <div class="form-group">
-            <label for="basic_checkbox_2" >Fecha inicial del pago</label>
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-          </div>
-      </div>
-      </div>
-      <div class="row my-2">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-          <div class="form-group">
-            <label for="basic_checkbox_2" >Fecha inicial</label>
-            <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}"
-                        [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),
-                                    'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
-          </div>
-      </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <div class="form-group">
-            <label for="basic_checkbox_2" >Dia de la semana</label>
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}">
-          </div>
-      </div>
-      </div>
-      <div class="row mt-5">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Calcular</button>
-            </div>
-        </div>
-      </div>
-      <div class="row mt-2">
-          <div class="col">
-              <table class="table table-bordered table-hover">
-                  <thead>
-                      <tr>
-                          <th>Dia</th>
-                          <th>Importe</th>
-                          <th>Saldo</th>
-                          <th>Descripcion</th>
-                          <!-- <th>Acciones</th> -->
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let item of productos; let i=index;">
-                          <td>{{ item.ID }}</td>
-                          <td>{{ item.Descripcion }}</td>
-                          <td>{{ item.Cantidad }}</td>
-                          <td>{{ item.CostoTotal }}</td>
-                          <!-- <td>
-                              <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
-                              <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onDelete(item.ID)"><i class="fa fa-trash"></i> Eliminar</button>
-                          </td> -->
-                      </tr>
-                  </tbody>
-                  <tfoot>
-                  </tfoot>
-              </table>
-          </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <button type="submit" class="btn btn-success">Imprimir</button>
-    </div>
-</form>
-</ng-template>
 
 <ng-template #templateProd>
   <form #productForm="ngForm" (ngSubmit)="onSubmitDetalle(productForm, $event)" novalidate>
@@ -388,7 +250,7 @@
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="form-group">
                   <label>Paciente <span class="text-danger">*</span></label>
-                  <ng-select name="producto" [items]="cmbProductos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar producto..." [(ngModel)]="modelProducto.ID" #producto="ngModel" (change)="onProductoChanged($event)"required></ng-select>
+                  <ng-select (ngModelChange)="newPaciente($event)" name="producto" [items]="pacientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Paciente..." [(ngModel)]="modelProducto.ID_Paciente" #producto="ngModel" required></ng-select>
               </div>
           </div>
       </div>
@@ -396,7 +258,7 @@
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <div class="form-group">
                       <label>Producto <span class="text-danger">*</span></label>
-                      <ng-select name="producto" [items]="cmbProductos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar producto..." [(ngModel)]="modelProducto.ID" #producto="ngModel" (change)="onProductoChanged($event)"required></ng-select>
+                      <ng-select (ngModelChange)="newProducto($event)" name="producto" [items]="productos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="modelProducto.ID_Producto" #producto="ngModel" required></ng-select>
                   </div>
               </div>
           </div>
@@ -404,9 +266,8 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="form-group">
                     <label>Diagnostico <span class="text-danger">*</span></label>
-                    <ng-select name="producto" [items]="cmbProductos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar producto..." [(ngModel)]="modelProducto.ID" #producto="ngModel" (change)="onProductoChanged($event)"required></ng-select>
+                    <ng-select name="diagnosticos" [items]="diagnosticos" [hideSelected]="true" bindLabel="Fecha" bindValue="ID" [searchable]="true" placeholder="Seleccionar Diagnostico..." [(ngModel)]="modelProducto.ID_Diagnostico" #diagnostico="ngModel" required [disabled]="diagnosticoDisabled"></ng-select>
                 </div>
-                
             </div>
         </div>
         <div class="row justify-content-center">
@@ -421,7 +282,7 @@
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
               <label for="basic_checkbox_2" >Precio contado</label>
-              <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
+              <input type="text" class="form-control"  [(ngModel)]="modelProducto.PContado" [ngModelOptions]="{standalone: true}" placeholder="Precio Contado..." disabled>
             </div>
               
           </div>
@@ -430,7 +291,7 @@
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
           <div class="form-group">
             <label for="basic_checkbox_2" >Precio credito</label>
-            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
+            <input type="text" class="form-control"  [(ngModel)]="modelProducto.PCredito" [ngModelOptions]="{standalone: true}" placeholder="Precio Credito..." disabled>
           </div>
             
         </div>

@@ -125,6 +125,7 @@
     <Compile Include="Services\ListaCombosService.cs" />
     <Compile Include="Services\MarcasService.cs" />
     <Compile Include="Services\MetodosPagoService.cs" />
+    <Compile Include="Services\ContratoService.cs" />
     <Compile Include="Services\ZonasService.cs" />
     <Compile Include="Services\TipoUsuarioService.cs" />
     <Compile Include="Services\UsuarioService.cs" />

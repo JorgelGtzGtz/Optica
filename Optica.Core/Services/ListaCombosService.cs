@@ -36,11 +36,14 @@ namespace Optica.Core.Services
         List<Paciente> GetPacientes();
         List<MetodosPago> GetMetodosPago();
         List<TiposEntradaSalida> GetTiposEntradaSalidas(string tipo = "Entrada");
+        List<Paciente> GetPacientesDeCliente(int id);
+        List<Diagnostico> GetDiagnosticoDePaciente(int id);
     }
 
     public class ListaCombosService : IListaCombosService
     {
         private readonly ISucursalRepository _sucursalRepository;
+        private readonly IDiagnosticoRepository _diagnosticoRepository;
         private readonly IZonasRepository _zonasRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IClienteRepository _clienteRepository;
@@ -58,7 +61,7 @@ namespace Optica.Core.Services
         private readonly IMetodosPagoRepository _metodosPagoRepository;
         private readonly ITiposEntradaSalidaRepository _tipoEntradaSalidaRepository;
 
-        public ListaCombosService(ITiposEntradaSalidaRepository tipoEntradaSalidaRepository, ISucursalRepository sucursalRepository, IZonasRepository zonasRepository, IUsuarioRepository usuarioRepository, 
+        public ListaCombosService(IDiagnosticoRepository diagnosticoRepository, ITiposEntradaSalidaRepository tipoEntradaSalidaRepository, ISucursalRepository sucursalRepository, IZonasRepository zonasRepository, IUsuarioRepository usuarioRepository, 
             IClienteRepository clienteRepository, IMarcasRepository marcasRepository, IModelosRepository modelosRepository, IColorRepository colorRepository,
             ITiposLenteRepository tiposLenteRepository, ITipoUsuarioRepository tipoUsuarioRepository, IMaterialeRepository MaterialeRepository,
             IColorLenteRepository colorLenteRepository, IProductosRepository productosRepository, IProveedoresRepository proveedoresRepository,
@@ -81,6 +84,7 @@ namespace Optica.Core.Services
             _pacientesRepository = pacientesRepository;
             _metodosPagoRepository = metodosPagoRepository;
             _tipoEntradaSalidaRepository = tipoEntradaSalidaRepository;
+            _diagnosticoRepository = diagnosticoRepository;
         }
 
         public List<Sucursale> GetSucursales()
@@ -217,6 +221,20 @@ namespace Optica.Core.Services
             Sql query = new Sql()
                 .Select("*").From("Productos Where Kit = 1");
             return _productosRepository.GetByFilter(query);
+        }
+
+        public List<Paciente> GetPacientesDeCliente(int id)
+        {
+            Sql query = new Sql(@"select * from [dbo].[Pacientes]
+                                  Where ID_Cliente = @0 ", id);
+            return _pacientesRepository.GetByFilter(query);
+        }
+
+        public List<Diagnostico> GetDiagnosticoDePaciente(int id)
+        {
+            Sql query = new Sql(@"select * from [dbo].[diagnosticos]
+                                  Where ID_Paciente = @0 ", id);
+            return _diagnosticoRepository.GetByFilter(query);
         }
 
         public List<Proveedore> GetProveedores()

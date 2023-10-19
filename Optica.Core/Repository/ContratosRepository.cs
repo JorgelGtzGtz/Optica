@@ -1,6 +1,7 @@
 ﻿using dbconnection;
 using Optica.Core.Entities;
 using Optica.Core.Factories;
+using PetaPoco;
 using System;
 using System.Collections.Generic;
 using System.Linq;

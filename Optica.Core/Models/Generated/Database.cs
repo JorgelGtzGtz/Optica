@@ -240,7 +240,6 @@ namespace dbconnection
 		[Column] public DateTime? Fecha { get; set; }
 		[Column] public int? Plazo { get; set; }
 		[Column] public int? DiaCobro { get; set; }
-		[Column] public string TipoCobro { get; set; }
 		[Column] public decimal? Total { get; set; }
 		[Column] public decimal? Restante { get; set; }
 		[Column] public decimal? Abonos { get; set; }
@@ -248,9 +247,18 @@ namespace dbconnection
 		[Column] public bool? Estatus { get; set; }
 		[Column] public string Observaciones { get; set; }
 		[Column] public int ID_Cliente { get; set; }
-		[Column] public int ID_UsuarioCobrador { get; set; }
 		[Column] public int ID_UsuarioCreacion { get; set; }
 		[Column] public int ID_Sucursal { get; set; }
+		[Column] public bool? ocupaAnticipo { get; set; }
+		[Column] public decimal? anticipo { get; set; }
+		[Column] public bool? ocupaCE { get; set; }
+		[Column] public decimal? contraEntrega { get; set; }
+		[Column] public int? frecuencia { get; set; }
+		[Column] public DateTime? fechaEspEnt { get; set; }
+		[Column] public bool? gastoCob { get; set; }
+		[Column] public decimal? importePrestamo { get; set; }
+		[Column] public decimal? importePago { get; set; }
+		[Column] public DateTime? fechaInicial { get; set; }
 	}
     
 	[TableName("dbo.ContratosDetalle")]
@@ -486,7 +494,7 @@ namespace dbconnection
 		[Column] public decimal CostoTotal { get; set; }
 		[Column] public int ID_OtraEntradasSalidas { get; set; }
 		[Column] public int ID_Producto { get; set; }
-    }
+	}
     
 	[TableName("dbo.Pacientes")]
 	[PrimaryKey("ID")]
