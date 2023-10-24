@@ -805,4 +805,36 @@ namespace dbconnection
 		[Column] public string Descripcion { get; set; }
 		[Column] public bool? Estatus { get; set; }
 	}
+    
+	[TableName("hiram74_sistemas.corridaOriginal")]
+	[PrimaryKey("ID")]
+	[ExplicitColumns]
+    public partial class corridaOriginal : dbconnectionDB.Record<corridaOriginal>  
+    {
+		[Column] public int ID { get; set; }
+		[Column] public int claveContrato { get; set; }
+		[Column] public DateTime fecha { get; set; }
+		[Column] public string Descripcion { get; set; }
+		[Column] public decimal importe { get; set; }
+		[Column] public decimal Saldo { get; set; }
+	}
+    
+	[TableName("hiram74_sistemas.pagares")]
+	[PrimaryKey("ID")]
+	[ExplicitColumns]
+    public partial class pagare : dbconnectionDB.Record<pagare>  
+    {
+		[Column] public int ID { get; set; }
+		[Column] public int? claveContrato { get; set; }
+		[Column] public DateTime fecha { get; set; }
+		[Column] public DateTime? fechaUltimoPago { get; set; }
+		[Column] public string Descripcion { get; set; }
+		[Column] public decimal importeOriginal { get; set; }
+		[Column] public decimal gastoCobranza { get; set; }
+		[Column] public decimal importeTotal { get; set; }
+		[Column] public decimal importePagado { get; set; }
+		[Column] public decimal resta { get; set; }
+		[Column] public decimal Saldo { get; set; }
+		[Column] public int Status { get; set; }
+	}
 }

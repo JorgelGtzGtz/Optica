@@ -26,6 +26,7 @@ import { SalidasComponent } from './salidas/salidas.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { ContratosComponent } from './contratos/contratos.component';
 import { ListContratosComponent } from './list-contratos/list-contratos.component';
+import { PagosComponent } from './pagos/pagos.component';
 
 const routes: Routes = [
   {
@@ -131,6 +132,10 @@ const routes: Routes = [
   {
     path: 'listcontratos',
     component: ListContratosComponent
+  },
+  {
+    path: 'pagos',
+    component: PagosComponent
   },
   // {
   //   path: 'clientes',

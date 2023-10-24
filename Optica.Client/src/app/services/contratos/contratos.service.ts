@@ -17,6 +17,7 @@ export class ContratosService {
   private _getPaciente = `${this._url}/Paciente`;
   private _getDiagnosticos = `${this._url}/Diagnosticos`;
   private _getProducto = `${this._url}/Producto`;
+  private _guardar = `${this._url}/Guardar`;
 
   constructor(public _http: HttpClient, private _userService: UsersService) {
     this._userService.loadStorage();
@@ -24,6 +25,14 @@ export class ContratosService {
 
   getLastContrato(): Observable<any> {
     return this._http.get<any>(this._getLastContrato, { headers: this._userService.header})
+    .pipe(
+      tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+
+  guardar(model: any) {
+    return this._http.post<any>(`${this._guardar}`, model, { headers: this._userService.header})
     .pipe(
       tap(data => data),
       catchError(this.handleError)

@@ -40,26 +40,28 @@
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
                             <div class="form-group">
-                                <label class="font-weight-bold">Sucursal <span class="text-danger">*</span></label>
-                                <ng-select #Sucursal="ngModel" [(ngModel)]="model.ID_Sucursal" [items]="sucursales" name="sucursal" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Sucursal..." 
-                                            [ngClass]="{'form-control-danger': Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || (contratosFrom.submitted && !contratosFrom.valid)),
-                                                      'form-control-success': Sucursal.valid && (Sucursal.dirty || Sucursal.touched)}" required>
+                                <label class="font-weight-bold">Sucursal<span class="text-danger">*</span></label>
+                                <ng-select name="Sucursal" bindLabel="Nombre" bindValue="ID"  [items]="sucursales" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Sucursal..." 
+                                           [(ngModel)]="model.ID_Sucursal" #Sucursal="ngModel" 
+                                           [ngClass]="{'form-control-danger': Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || contratosFrom.submitted)}" required>
                                 </ng-select>
                             </div>
                             <div *ngIf="Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
                                 <span class="messages" *ngIf="Sucursal.errors">
-                                    <small class="text-danger error">Sucursal es requerido.</small>
+                                    <small class="text-danger error">Sucursal es requerida.</small>
                                 </span>
                             </div>
+
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                           <div class="form-group">
-                            <label for="basic_checkbox_2" >Folio interno</label>
-                            <input type="text" class="form-control"  [(ngModel)]="model.ID_Alterno" [ngModelOptions]="{standalone: true}" >
+                            <label for="basic_checkbox_2" >Folio alterno</label>
+                            <input type="text" class="form-control"  [(ngModel)]="model.Clave" [ngModelOptions]="{standalone: true}" >
                           </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -70,15 +72,15 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
-                                <label class="font-weight-bold">Clientes <span class="text-danger">*</span></label>
-                                <ng-select (ngModelChange)="($event != null) ? this.clienteDisabled = false : this.clienteDisabled = true" #Clientes="ngModel" [(ngModel)]="model.ID_Cliente" [items]="clientes" name="sucursal" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Cliente..." 
-                                            [ngClass]="{'form-control-danger': Clientes.invalid && (Clientes.dirty || Clientes.touched || (contratosFrom.submitted && !contratosFrom.valid)),
-                                                      'form-control-success': Clientes.valid && (Clientes.dirty || Clientes.touched)}" required>
+                                <label class="font-weight-bold">Clientes<span class="text-danger">*</span></label>
+                                <ng-select (ngModelChange)="($event != null) ? this.clienteDisabled = false : this.clienteDisabled = true" name="Clientes" bindLabel="Nombre" bindValue="ID"  [items]="clientes" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Cliente..." 
+                                           [(ngModel)]="model.ID_Cliente" #Clientes="ngModel" 
+                                           [ngClass]="{'form-control-danger': Clientes.invalid && (Clientes.dirty || Clientes.touched || contratosFrom.submitted)}" required>
                                 </ng-select>
                             </div>
                             <div *ngIf="Clientes.invalid && (Clientes.dirty || Clientes.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
                                 <span class="messages" *ngIf="Clientes.errors">
-                                    <small class="text-danger error">Cliente es requerido.</small>
+                                    <small class="text-danger error">Clientes es requerido.</small>
                                 </span>
                             </div>
                         </div>
@@ -120,29 +122,168 @@
                     </div>
 
                     <div class="row my-2">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
-                                <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="false" [(ngModel)]="anticipoDisabled" [ngModelOptions]="{standalone: true}">
-                                <label for="basic_checkbox_2" style="font-size: 10px;">Requiere anticipo</label>
-                                <input type="text" class="form-control"  [(ngModel)]="model.Anticipo" [ngModelOptions]="{standalone: true}" [disabled]="!anticipoDisabled">
+                                <label class="font-weight-bold">Frecuencia del pago<span class="text-danger">*</span></label>
+                                <ng-select name="Frecuencia" [items]="frecuenciasPagos" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Dia de la semana..." 
+                                           [(ngModel)]="frecuanciaSelect" #Frecuencia="ngModel" (change)="onFrecuenciaChange()" 
+                                           [ngClass]="{'form-control-danger': Frecuencia.invalid && (Frecuencia.dirty || Frecuencia.touched || contratosFrom.submitted)}" required>
+                                </ng-select>
+                            </div>
+                            <div *ngIf="Frecuencia.invalid && (Frecuencia.dirty || Frecuencia.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                <span class="messages" *ngIf="Frecuencia.errors">
+                                    <small class="text-danger error">Frecuencia del pago es requerido.</small>
+                                </span>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
-                                <input type="checkbox" id="basic_checkbox_3" class="filled-in" checked="false" [(ngModel)]="contraEntregaDisabled" [ngModelOptions]="{standalone: true}" >
-                                <label for="basic_checkbox_3" style="font-size: 10px;">Requiere contraentrega</label>
-                                <input type="text" class="form-control"  [(ngModel)]="model.Contraentrega" [ngModelOptions]="{standalone: true}" [disabled]="!contraEntregaDisabled">
+                                <label for="basic_checkbox_2" >Periodos</label>
+                                <input type="number" (input)="calcularTotal()" class="form-control"  [(ngModel)]="model.Plazo" [ngModelOptions]="{standalone: true}" (input)="limitInput($event)">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Dias de la semana <span class="text-danger">*</span></label>
+                                <ng-select name="diasSemana" [items]="DiasSemana" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Dia de la semana..." 
+                                           [(ngModel)]="diaSemanaSelect" #diasSemana="ngModel" (change)="onDiaSemanaChange()" [disabled]="diaSemanaDisabled" 
+                                           [ngClass]="{'form-control-danger': diasSemana.invalid && (diasSemana.dirty || diasSemana.touched || contratosFrom.submitted)}" required>
+                                </ng-select>
+                            </div>
+                            <div *ngIf="diasSemana.invalid && (diasSemana.dirty || diasSemana.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                <span class="messages" *ngIf="diasSemana.errors">
+                                    <small class="text-danger error">Dia de la semana es requerido.</small>
+                                </span>
                             </div>
                         </div>
                     </div>
-                    
 
+                    <div class="row my-2">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mt-4">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="false" [(ngModel)]="anticipoDisabled" [ngModelOptions]="{standalone: true}">
+                                        <label for="basic_checkbox_2" style="font-size: 10px;">Anticipo</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <br>
+                                        <input (input)="calcularTotal()" type="number" class="form-control"  [(ngModel)]="model.Anticipo" [ngModelOptions]="{standalone: true}" [disabled]="!anticipoDisabled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mt-4">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <input type="checkbox" id="basic_checkbox_4" class="filled-in" checked="false" [(ngModel)]="contraEntregaDisabled" [ngModelOptions]="{standalone: true}" >
+                                        <label for="basic_checkbox_4" style="font-size: 10px;">Contraentrega</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label >Fecha contraentrega</label>
+                                        <input [disabled]="!contraEntregaDisabled" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.fechaEspEnt" [ngModelOptions]="{standalone: true}" required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <input type="checkbox" id="basic_checkbox_5" class="filled-in" checked="false" [(ngModel)]="gastoCobroDisabled" [ngModelOptions]="{standalone: true}" >
+                                        <label for="basic_checkbox_5">Gasto Cobro</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <input (input)="calcularTotal()" type="number" class="form-control"  [(ngModel)]="model.Contraentrega" [ngModelOptions]="{standalone: true}" [disabled]="!contraEntregaDisabled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="nombre">Fecha inicial</label>
+                                        <input #FechaInicial="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.FechaInicial" [ngModelOptions]="{standalone: true}" 
+                                               [ngClass]="{'form-control-danger': FechaInicial.invalid && (FechaInicial.dirty || FechaInicial.touched || (contratosFrom.submitted && !contratosFrom.valid)),
+                                                         'form-control-success': FechaInicial.valid && (FechaInicial.dirty || FechaInicial.touched)}" required>
+                                    </div>
+                                    <div *ngIf="FechaInicial.invalid && (FechaInicial.dirty || FechaInicial.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                        <span class="messages" *ngIf="FechaInicial.errors">
+                                            <small class="text-danger error">Fecha Inicial es requerido.</small>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="basic_checkbox_2" >Importe prestamo</label>
+                                        <input type="number" min="100" step="100" class="form-control"  [(ngModel)]="model.ImportePrestamo" [ngModelOptions]="{standalone: true}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="basic_checkbox_2" >Importe del pago</label>
+                                        <input type="text" class="form-control"  [(ngModel)]="model.ImportePago" [ngModelOptions]="{standalone: true}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="basic_checkbox_2" >Total</label>
+                                        <input type="text" class="form-control"  [(ngModel)]="model.Total" [ngModelOptions]="{standalone: true}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" (click)="calcularCorrido(contratosFrom)">Calcular</button>
+                            </div>
+                        </div>
+                    </div>      
+
+                    <div class="row mt-2">
+                        <div class="col">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Importe</th>
+                                        <th>Saldo</th>
+                                        <th>Descripcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of corrido; let i=index;">
+                                        <td>{{ item.Fecha }}</td>
+                                        <td>{{ item.Importe }}</td>
+                                        <td>{{ item.Saldo }}</td>
+                                        <td>{{ item.Descripcion }}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    
                     <!-- <div class="row my-2">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group">
-                                <label for="basic_checkbox_2" >Total</label>
-                                <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
-                            </div>
+                            
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
@@ -160,26 +301,16 @@
 
                     <div class="row my-2">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                          <div class="form-group">
-                            <label for="basic_checkbox_2" >Importe del pago</label>
-                            <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
-                          </div>
+                          
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label for="basic_checkbox_2" >Fecha inicial del pago</label>
-                                <input type="text" class="form-control"  [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" >
-                            </div>
+                            
                         </div>
                      </div>
 
                      <div class="row my-2">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                          <div class="form-group">
-                            <label for="basic_checkbox_2" >Fecha inicial</label>
-                            <input  type="date" class="form-control" placeholder="Fecha" [(ngModel)]="a" [ngModelOptions]="{standalone: true}"
-                                         required>
-                          </div>
+                          
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
@@ -189,13 +320,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-5">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Calcular</button>
-                            </div>
-                        </div>
-                    </div>
+                    
 
                     <div class="row mt-2">
                         <div class="col">

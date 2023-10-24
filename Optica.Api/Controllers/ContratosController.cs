@@ -41,7 +41,8 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var lastContrato = _contratosService.GetLastContrato();
+                    var result = _contratosService.GetLastContrato();
+                    response = request.CreateResponse(HttpStatusCode.OK, result);
                 }
                 catch (Exception ex)
                 {
@@ -189,5 +190,35 @@ namespace Optica.Api.Controllers
                 return await Task.FromResult(response);
             });
         }
+
+        [Route("Guardar")]
+        public async Task<HttpResponseMessage> Guardar(HttpRequestMessage request, [FromBody] JObject data)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var contrato = data["data"].ToObject<Contrato>();
+                    var detalles = data["detalles"].ToObject<List<corridaOriginal>>();
+                    var result = _contratosService.InsertUpdateContrato(contrato, detalles, out message);
+                    response = request.CreateResponse(HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
     }
+
+
 }

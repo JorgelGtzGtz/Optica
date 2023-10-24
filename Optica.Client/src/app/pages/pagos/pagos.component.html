@@ -1,0 +1,124 @@
+<section class="content-header">
+  <h1>
+      Pagos
+      <small>módulo de registro y edición de pagos</small>
+    </h1>
+  <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+      <li><a href="#">Lista Pagos</a></li>
+  </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+      <div class="col-xs-12">
+          <div class="box">
+              <div class="box-header">
+                  <h3 class="box-title">Lista de Pagos</h3>
+              </div>
+              <!-- /.box-header -->
+            <div class="box-body">
+
+              <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label class="font-weight-bold">Movimiento</label>
+                        <ng-select name="movimiento" [items]="movimientos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="idMovimiento">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                      <label for="nombre">De</label>
+                      <div class="input-group">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="from" ngbDatepicker #f="ngbDatepicker">
+                          <div class="input-group-append">
+                              <button class="btn btn-outline-secondary" (click)="f.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label for="nombre">Al</label>
+                      <div class="input-group">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="to" ngbDatepicker #t="ngbDatepicker">
+                          <div class="input-group-append">
+                              <button class="btn btn-outline-secondary" (click)="t.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label class="font-weight-bold">Almacen</label>
+                      <ng-select name="almacen" [items]="almacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                      </ng-select>
+                  </div>
+              </div>
+              <div class="col">
+                  <div class="form-group">
+                      <label class="font-weight-bold">Status</label>
+                      <ng-select name="status" [items]="estados"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
+                      </ng-select>
+                  </div>
+              </div>
+                <div class="col-lg-4">
+                    <div class="form-group text-right">
+                        <br>
+                        <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Folio</th>
+                        <th>Cliente</th>
+                        <th>Contrato</th>
+                        <th>Descripcion</th>
+                        <th>Importe</th>
+                        <th>
+                            <div class="row">
+                                <div class="col mt-2">
+                                    Acciones
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of entradas; let i=index;">
+                        <td>{{ item.ID }}</td>
+                        <td>{{ item.Fecha | date: 'dd-MM-yyyy' }}</td>
+                        <td>{{ item.Movimiento }}</td>
+                        <td>
+                          <span *ngIf="item.Estatus === 'G'" class="label label-success label-rounded">Guardado</span>
+                          <span *ngIf="item.Estatus === 'P'" class="label label-primary label-rounded">Procesado</span>
+                          <span *ngIf="item.Estatus === 'C'" class="label label-danger label-rounded">Cancelado</span>
+                        </td>
+                        <td>
+                          <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-primary btn-xs m-lg-1" (click)="onProcesar(item.ID)"><i class="fa fa-trash"></i> Procesar</button>
+                          <button type="button" *ngIf="item.Estatus === 'C' || item.Estatus === 'P'" class="btn btn-info btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-eye"></i> Mostrar</button>
+                          <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                          <button type="button" *ngIf="item.Estatus === 'G' || item.Estatus === 'P'" class="btn btn-danger btn-xs m-lg-1" (click)="onCancelar(item)"><i class="fa fa-trash"></i> Cancelar</button>
+                          <button type="button" class="btn label-inverse btn-xs m-lg-1" (click)="onImprimir(item.ID)"><i class="fa fa-print"></i> Imprimir</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+
+            </div>
+              <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+      </div>
+      <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>

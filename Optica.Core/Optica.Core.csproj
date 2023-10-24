@@ -68,6 +68,8 @@
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ColorLenteRepository.cs" />
+    <Compile Include="Repository\PagaresRepository.cs" />
+    <Compile Include="Repository\CorridaRepository.cs" />
     <Compile Include="Repository\VentaDetalleRepository.cs" />
     <Compile Include="Repository\VentaRepository.cs" />
     <Compile Include="Repository\MaterialesLenteRepository.cs" />
