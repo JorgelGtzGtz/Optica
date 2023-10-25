@@ -40,6 +40,7 @@ import { InventarioComponent } from './inventario/inventario.component';
 import { ContratosComponent } from './contratos/contratos.component';
 import { ListContratosComponent } from './list-contratos/list-contratos.component';
 import { PagosComponent } from './pagos/pagos.component';
+import { MetodosPagoComponent } from './metodos-pago/metodos-pago.component';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { PagosComponent } from './pagos/pagos.component';
         InventarioComponent,
         ContratosComponent,
         ListContratosComponent,
-        PagosComponent
+        PagosComponent,
+        MetodosPagoComponent,
         // ClientesComponent,
         // ModelosComponent,
         // ProductosComponent,

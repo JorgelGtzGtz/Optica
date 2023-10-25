@@ -1,0 +1,105 @@
+<section class="content-header">
+  <h1>
+      Métodos de pago
+      <small>módulo de registro y edición de métodos de pago</small>
+    </h1>
+  <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+      <li><a href="#">Métodos de pago</a></li>
+  </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+      <div class="col-xs-12">
+          <div class="box">
+              <div class="box-header">
+                  <h3 class="box-title">Lista de métodos de pago</h3>
+              </div>
+              <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="nombre">Descripcion</label>
+                    <input  #cantidadProd="ngModel" type="text" class="form-control" placeholder="Cantidad" [(ngModel)]="a" [ngModelOptions]="{standalone: true}" required>
+                  </div>
+                </div>
+                <div class="col">
+                    <div class="form-group text-right">
+                        <br>
+                        <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="onBuscar()"> <i class="fa fa-search "></i> <span> Buscar</span> </button>
+                    </div>
+                </div>
+              </div>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Folio</th>
+                        <th>Descripcion</th>
+                        <th>Status</th>
+                        <th>
+                            <div class="row">
+                                <div class="col mt-2">
+                                    Acciones
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary float-right waves-effect waves-light" (click)="onShow(0, template)"> <i class="fa fa-plus-circle m-r-5"></i> <span>Nuevo</span> </button>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of entradas; let i=index;">
+                        <td>{{ item.ID }}</td>
+                        <td>{{ item.descripcion }}</td>
+                        <td>{{ item.estatus }}</td>
+                        <td>
+                          <span *ngIf="item.Estatus === 'G'" class="label label-success label-rounded">Guardado</span>
+                          <span *ngIf="item.Estatus === 'C'" class="label label-danger label-rounded">Cancelado</span>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
+                          <button type="button" class="btn btn-danger btn-xs m-lg-1" (click)="onCancelar(item)"><i class="fa fa-trash"></i> Cancelar</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+
+            </div>
+              <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+      </div>
+      <!-- /.col -->
+  </div>
+  <!-- /.row -->
+</section>
+
+<ng-template #template>
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+      <div class="modal-header modal-info-custom">
+          <h4 class="modal-title pull-left">Metodo de pago</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+          <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="nombre">Descripcion</label>
+                <input #cantidadProd="ngModel" type="text" class="form-control" placeholder="Nombre" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" required>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
+</form>
+</ng-template>

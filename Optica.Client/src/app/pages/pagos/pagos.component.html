@@ -21,13 +21,6 @@
 
               <div class="row">
                 <div class="col">
-                    <div class="form-group">
-                        <label class="font-weight-bold">Movimiento</label>
-                        <ng-select name="movimiento" [items]="movimientos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="idMovimiento">
-                        </ng-select>
-                    </div>
-                </div>
-                <div class="col">
                   <div class="form-group">
                       <label for="nombre">De</label>
                       <div class="input-group">
@@ -51,18 +44,25 @@
               </div>
               <div class="col">
                   <div class="form-group">
-                      <label class="font-weight-bold">Almacen</label>
-                      <ng-select name="almacen" [items]="almacenes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                      <label class="font-weight-bold">Cliente</label>
+                      <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
                       </ng-select>
                   </div>
               </div>
               <div class="col">
                   <div class="form-group">
                       <label class="font-weight-bold">Status</label>
-                      <ng-select name="status" [items]="estados"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
+                      <ng-select name="status" [items]="status"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
                       </ng-select>
                   </div>
               </div>
+              <div class="col">
+                <div class="form-group">
+                    <label class="font-weight-bold">Forma de Pago</label>
+                    <ng-select name="status" [items]="formasPagos"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
+                    </ng-select>
+                </div>
+            </div>
                 <div class="col-lg-4">
                     <div class="form-group text-right">
                         <br>
@@ -122,3 +122,130 @@
   </div>
   <!-- /.row -->
 </section>
+
+<ng-template #template>
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm, $event)" novalidate>
+      <div class="modal-header modal-info-custom">
+          <h4 class="modal-title pull-left">Pago</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                      <div class="form-group">
+                        <label class="font-weight-bold">Cliente</label>
+                          <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                          </ng-select>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                      <label class="font-weight-bold">Forma de pago</label>
+                        <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                        </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                      <label class="font-weight-bold">Contrato</label>
+                        <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                        </ng-select>
+                    </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <div class="form-group">
+                    <label for="nombre">Fecha</label>
+                    <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}"
+                    [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),
+                                'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
+                </div>
+                <div *ngIf="Fecha.invalid && (Fecha.dirty || Fecha.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                    <span class="messages" *ngIf="Fecha.errors">
+                                    <small class="text-danger error">Fecha es requerido.</small>
+                            </span>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <div class="form-group">
+                      <label class="font-weight-bold">Saldo <span class="text-danger">*</span></label>
+                      <input class="form-group" type="text" disabled>
+                  </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
+                <div class="row">
+                  <div class="col d-flex justify-content-center align-items-center">
+                    <div class="form-group">
+                      <input type="checkbox" id="basic_checkbox_4" class="filled-in" checked="false" [(ngModel)]="contraEntregaDisabled" [ngModelOptions]="{standalone: true}" >
+                      <label for="basic_checkbox_4" style="font-size: 10px;">Liquidar Contado</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col d-flex justify-content-center align-items-center">
+                    <div class="form-group">
+                      <input class="form-group" type="text" disabled>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label for="nombre">Importe sugerido</label>
+                <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" disabled required>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label for="nombre">Importe pago</label>
+                <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" (change)="onCantidadChanged($event)" required>
+              </div>
+            </div>
+          </div>
+      
+          <div class="row mt-5">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                      <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Aplicar</button>
+                  </div>
+              </div>
+          </div>
+      <div class="row mt-2">
+          <div class="col">
+              <table class="table table-bordered table-hover">
+                  <thead>
+                      <tr>
+                          <th>ID</th>
+                          <th>Descripcion</th>
+                          <th>Vence</th>
+                          <th>Imp. Restante</th>
+                          <th>Gasto</th>
+                          <th>Total</th>
+                          <th>Resto</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let item of productos; let i=index;">
+                          <td>{{ item.ID }}</td>
+                          <td>{{ item.Descripcion }}</td>
+                          <td>{{ item.Cantidad }}</td>
+                          <td>{{ item.CostoTotal }}</td>
+                      </tr>
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
+</form>
+</ng-template>
