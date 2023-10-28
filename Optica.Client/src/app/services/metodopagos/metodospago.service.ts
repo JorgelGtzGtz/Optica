@@ -14,6 +14,8 @@ export class MetodospagoService {
   private _getLista = `${this._url}/Lista`;
   private _getCombos = `${this._url}/Combos`;
   private _guardar = `${this._url}/Guardar`;
+  private _cancelar = `${this._url}/CancelarMetodoPago`;
+
 
   constructor(public _http: HttpClient, private _userService: UsersService) {
     this._userService.loadStorage();
@@ -32,6 +34,13 @@ export class MetodospagoService {
   guardar(model: any) {
     return this._http.post<any>(`${this._guardar}`, model, { headers: this._userService.header})
     .pipe(
+      tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+
+  cancelar(id: number) {
+    return this._http.post(`${this._cancelar}/${id}`, null, { headers: this._userService.header}).pipe(
       tap(data => data),
       catchError(this.handleError)
     );

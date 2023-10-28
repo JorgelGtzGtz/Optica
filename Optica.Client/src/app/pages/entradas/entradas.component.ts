@@ -195,7 +195,6 @@ export class EntradasComponent implements OnInit {
           this.cmbTipoEntradaSalida = data.tipoEntradaSalida;
           this.movimientos = data.tipoEntradaSalida;
           this.almacenes = data.almacenes;
-          console.log(this.almacenes);
         },
         error => this.toastr.error(error.message, 'Error!') );
   }

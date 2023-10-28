@@ -81,6 +81,34 @@ namespace Optica.Api.Controllers
             });
         }
 
+        [Route("CancelarMetodoPago/{id:int=0}/")]
+        [HttpPost]
+        public async Task<HttpResponseMessage> CancelarMetodoPago(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var model = _metodosPagoService.CancelarMetodoPago(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, model);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
         [HttpPost]
         [Route("Guardar")]
         public async Task<HttpResponseMessage> Guardar(HttpRequestMessage request, MetodosPago data)

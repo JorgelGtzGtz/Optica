@@ -47,6 +47,51 @@ export class MetodosPagoComponent implements OnInit {
     }
   }
 
+  onCancelar(modelDetalle: any) {
+    Swal.fire({
+      title: 'Esta seguro?',
+      text: 'Esta seguro que quiere cancelar metodo de pago',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Eliminar!',
+      focusConfirm: false,
+      focusCancel: false,
+      allowEnterKey: false
+    }).then((result) => {
+      if (result.value) {
+        const model = {
+          id: modelDetalle.ID
+        };
+
+        this._metodosPagoService.cancelar(modelDetalle.ID)
+        .subscribe(
+          success => {
+            if (modelDetalle.Estatus === 'P') {
+              Swal.fire({
+                title: 'Cancelada!',
+                text: 'Metodo de pago a sido cancelada con exito. ',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            } else {
+              Swal.fire({
+                title: 'Cancelada!',
+                text: 'Metodo de pago a sido cancelada con exito.',
+                type: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+            this.onBuscar();
+          },
+          error => {
+            this.toastr.error(error.message, 'Error!');
+          });
+      }
+    });
+  }
+
   onBuscar() {
     console.log(this.descripcion)
     this._metodosPagoService.getLista(this.descripcion).
