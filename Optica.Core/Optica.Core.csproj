@@ -111,6 +111,7 @@
     <Compile Include="Repository\CompraRepository.cs" />
     <Compile Include="Repository\ClienteRepository.cs" />
     <Compile Include="Repository\RepositoryBase.cs" />
+    <Compile Include="Services\PagosService.cs" />
     <Compile Include="Services\EntradaService.cs" />
     <Compile Include="Services\ColorLenteService.cs" />
     <Compile Include="Services\VentasService.cs" />

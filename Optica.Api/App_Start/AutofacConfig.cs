@@ -77,6 +77,7 @@ namespace Optica.Api.App_Start
             builder.RegisterType<CorridaRepository>().As<ICorridaRepository>().AsImplementedInterfaces();
             builder.RegisterType<PagaresRepository>().As<IPagaresRepository>().AsImplementedInterfaces();
 
+            builder.RegisterType<PagosService>().As<IPagosService>().AsImplementedInterfaces();
             builder.RegisterType<EntradaService>().As<IEntradaService>().AsImplementedInterfaces();
             builder.RegisterType<ContratoService>().As<IContratoService>().AsImplementedInterfaces();
             builder.RegisterType<AlmacenService>().As<IAlmacenService>().AsImplementedInterfaces();

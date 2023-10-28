@@ -119,7 +119,7 @@ export class SalidasComponent implements OnInit {
           this.toastr.success('Producto guardado con exito.', 'Guardado!');
           FormData.resetForm();
           this.modalRef.hide();
-
+          this.onBuscar();
         },
         error => {
           this.toastr.error(error.message, 'Error!');

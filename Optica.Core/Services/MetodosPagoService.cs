@@ -35,16 +35,16 @@ namespace Optica.Core.Services
             return _metodosPagoRepository.GetAll("MetodosPago").ToList();
         }
 
-        public List<MetodosPago> GetMetodosPagoFiltro(string nombre = null)
+        public List<MetodosPago> GetMetodosPagoFiltro(string descripcion = null)
         {
             string filter = " Where ";
 
-            if (!string.IsNullOrEmpty(nombre))
+            if (!string.IsNullOrEmpty(descripcion))
             {
-                filter += string.Format("Descripcion like '%{0}%' ", nombre);
+                filter += string.Format("Descripcion like '%{0}%' ", descripcion);
             }
 
-            Sql query = new Sql(@"select * from MetodosPago " + (!string.IsNullOrEmpty(nombre) ? filter : ""));
+            Sql query = new Sql(@"select * from MetodosPago " + (!string.IsNullOrEmpty(descripcion) ? filter : ""));
             return _metodosPagoRepository.GetByFilter(query);
         }
 

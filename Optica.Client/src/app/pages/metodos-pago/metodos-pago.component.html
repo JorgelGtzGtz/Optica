@@ -22,7 +22,7 @@
                 <div class="col">
                   <div class="form-group">
                     <label for="nombre">Descripcion</label>
-                    <input  #cantidadProd="ngModel" type="text" class="form-control" placeholder="Cantidad" [(ngModel)]="a" [ngModelOptions]="{standalone: true}" required>
+                    <input  #cantidadProd="ngModel" type="text" class="form-control" placeholder="Cantidad" [(ngModel)]="descripcion" [ngModelOptions]="{standalone: true}" required>
                   </div>
                 </div>
                 <div class="col">
@@ -51,13 +51,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of entradas; let i=index;">
+                    <tr *ngFor="let item of metodospago; let i=index;">
                         <td>{{ item.ID }}</td>
-                        <td>{{ item.descripcion }}</td>
-                        <td>{{ item.estatus }}</td>
+                        <td>{{ item.Descripcion }}</td>
                         <td>
-                          <span *ngIf="item.Estatus === 'G'" class="label label-success label-rounded">Guardado</span>
-                          <span *ngIf="item.Estatus === 'C'" class="label label-danger label-rounded">Cancelado</span>
+                          <span *ngIf="item.Estatus" class="label label-success label-rounded">Guardado</span>
                         </td>
                         <td>
                           <button type="button" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
@@ -92,7 +90,12 @@
             <div class="col">
               <div class="form-group">
                 <label for="nombre">Descripcion</label>
-                <input #cantidadProd="ngModel" type="text" class="form-control" placeholder="Nombre" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" required>
+                <input #descripcion="ngModel" type="text" class="form-control" placeholder="Nombre" [(ngModel)]="model.Descripcion" [ngModelOptions]="{standalone: true}" required>
+              </div>
+              <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                <span class="messages" *ngIf="descripcion.errors">
+                  <small class="text-danger error">descripcion es requerido.</small>
+                </span>
               </div>
             </div>
           </div>
