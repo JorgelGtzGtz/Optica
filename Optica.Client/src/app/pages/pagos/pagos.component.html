@@ -59,7 +59,7 @@
               <div class="col">
                 <div class="form-group">
                     <label class="font-weight-bold">Forma de Pago</label>
-                    <ng-select name="status" [items]="formasPagos"  [hideSelected]="true" [searchable]="true" placeholder="Seleccionar status..." [(ngModel)]="status">
+                    <ng-select name="status" [items]="formasPago"  [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar forma de pago..." [(ngModel)]="status">
                     </ng-select>
                 </div>
             </div>
@@ -136,21 +136,21 @@
                   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                       <div class="form-group">
                         <label class="font-weight-bold">Cliente</label>
-                          <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                          <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar cliente..." [(ngModel)]="model.Usuario">
                           </ng-select>
                       </div>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="form-group">
                       <label class="font-weight-bold">Forma de pago</label>
-                        <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                        <ng-select name="almacen" [items]="formasPago" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar forma de pago..." [(ngModel)]="model.FormaPago">
                         </ng-select>
                     </div>
                   </div>
                   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                       <label class="font-weight-bold">Contrato</label>
-                        <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                        <ng-select name="almacen" [items]="contratos" [hideSelected]="true" bindLabel="ClaveContrato" bindValue="ID" [searchable]="true" placeholder="Seleccionar contrato..." [(ngModel)]="model.Contrato">
                         </ng-select>
                     </div>
               </div>
@@ -159,7 +159,7 @@
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                   <div class="form-group">
                     <label for="nombre">Fecha</label>
-                    <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="modelFecha.Fecha" [ngModelOptions]="{standalone: true}"
+                    <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.Fecha" [ngModelOptions]="{standalone: true}"
                     [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),
                                 'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
                 </div>
@@ -171,15 +171,15 @@
               </div>
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                   <div class="form-group">
-                      <label class="font-weight-bold">Saldo <span class="text-danger">*</span></label>
-                      <input class="form-group" type="text" disabled>
+                    <label for="nombre">Saldo</label>
+                    <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Saldo" [(ngModel)]="model.Importe" [ngModelOptions]="{standalone: true}" disabled required>
                   </div>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 ">
                 <div class="row">
                   <div class="col d-flex justify-content-center align-items-center">
                     <div class="form-group">
-                      <input type="checkbox" id="basic_checkbox_4" class="filled-in" checked="false" [(ngModel)]="contraEntregaDisabled" [ngModelOptions]="{standalone: true}" >
+                      <input type="checkbox" id="basic_checkbox_4" class="filled-in" checked="false" [(ngModel)]="liquidarContratoDisabled" [ngModelOptions]="{standalone: true}" >
                       <label for="basic_checkbox_4" style="font-size: 10px;">Liquidar Contado</label>
                     </div>
                   </div>
@@ -187,7 +187,7 @@
                 <div class="row">
                   <div class="col d-flex justify-content-center align-items-center">
                     <div class="form-group">
-                      <input class="form-group" type="text" disabled>
+                      <input class="form-group" type="text" [disabled]="!liquidarContratoDisabled">
                     </div>
                   </div>
                 </div>
@@ -197,13 +197,13 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="form-group">
                 <label for="nombre">Importe sugerido</label>
-                <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" disabled required>
+                <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="importesugerido" [ngModelOptions]="{standalone: true}" disabled required>
               </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
               <div class="form-group">
                 <label for="nombre">Importe pago</label>
-                <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" (change)="onCantidadChanged($event)" required>
+                <input [min]="1" #cantidadProd="ngModel" type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="model.Importe" [ngModelOptions]="{standalone: true}" (change)="onCantidadChanged($event)" required>
               </div>
             </div>
           </div>

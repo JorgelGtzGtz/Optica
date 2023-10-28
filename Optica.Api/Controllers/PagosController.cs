@@ -42,7 +42,9 @@ namespace Optica.Api.Controllers
                     var productos = _listaCombosService.GetProductos();
                     var sucursales = _listaCombosService.GetSucursales();
                     var clientes = _listaCombosService.GetClientes();
-                    response = request.CreateResponse(HttpStatusCode.OK, new { productos, sucursales, clientes });
+                    var metodospago = _listaCombosService.GetMetodosPago();
+                    var contratos = _listaCombosService.GetContratos();
+                    response = request.CreateResponse(HttpStatusCode.OK, new { productos, sucursales, clientes, metodospago, contratos });
                 }
                 catch (Exception ex)
                 {
