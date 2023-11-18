@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Optica.Core.Repository
 {
-    public interface IContratosRepository : IRepositoryBase<Contrato>
+    public interface IPagaresRepository : IRepositoryBase<pagare>
     {
         public List<dynamic> GetByDynamicFilter(Sql sql);
     }
 
-    public class ContratosRepository : RepositoryBase<Contrato>, IContratosRepository
+    public class PagaresRepository : RepositoryBase<pagare>, IPagaresRepository
     {
-        public ContratosRepository(IDbFactory dbFactory) : base(dbFactory)
+        public PagaresRepository(IDbFactory dbFactory) : base(dbFactory)
         {
 
         }

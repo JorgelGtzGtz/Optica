@@ -73,9 +73,13 @@ namespace Optica.Api.App_Start
             builder.RegisterType<MetodosPagoRepository>().As<IMetodosPagoRepository>().AsImplementedInterfaces();
             builder.RegisterType<VentaRepository>().As<IVentaRepository>().AsImplementedInterfaces();
             builder.RegisterType<VentaDetalleRepository>().As<IVentaDetalleRepository>().AsImplementedInterfaces();
+            builder.RegisterType<ContratosRepository>().As<IContratosRepository>().AsImplementedInterfaces();
+            builder.RegisterType<CorridaRepository>().As<ICorridaRepository>().AsImplementedInterfaces();
+            builder.RegisterType<PagaresRepository>().As<IPagaresRepository>().AsImplementedInterfaces();
 
+            builder.RegisterType<PagosService>().As<IPagosService>().AsImplementedInterfaces();
             builder.RegisterType<EntradaService>().As<IEntradaService>().AsImplementedInterfaces();
-
+            builder.RegisterType<ContratoService>().As<IContratoService>().AsImplementedInterfaces();
             builder.RegisterType<AlmacenService>().As<IAlmacenService>().AsImplementedInterfaces();
             builder.RegisterType<ClienteService>().As<IClienteService>().AsImplementedInterfaces();
             builder.RegisterType<ColorLenteService>().As<IColorLenteService>().AsImplementedInterfaces();
