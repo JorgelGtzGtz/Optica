@@ -22,12 +22,10 @@ namespace Optica.Api.Controllers
     public class PagosController : BaseApiController
     {
         private readonly IListaCombosService _listaCombosService;
-        private readonly IPagosService _pagosService;
 
-        public PagosController(IListaCombosService listaCombosService, IPagosService pagosService)
+        public PagosController(IListaCombosService listaCombosService)
         {
             _listaCombosService = listaCombosService;
-            _pagosService = pagosService;
         }
 
         [Route("Combos")]

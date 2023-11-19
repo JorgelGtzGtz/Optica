@@ -6,7 +6,7 @@
 // 
 //     Connection String Name: `dbconnection`
 //     Provider:               `System.Data.SqlClient`
-//     Connection String:      `Data Source=198.38.83.33;Initial Catalog=hiram74_OpticaV2;Integrated Security=false;user ID=hiram74_sistemas;password=**zapped**;Connection Timeout=0`
+//     Connection String:      `Data Source=198.38.83.33;Initial Catalog=hiram74_opticav2;Integrated Security=false;user ID=hiram74_sistemas;password=**zapped**;Connection Timeout=0`
 //     Schema:                 ``
 //     Include Views:          `False`
 
@@ -537,6 +537,8 @@ namespace dbconnection
 		[Column] public bool Estatus { get; set; }
 		[Column] public int ID_UsuarioCobrador { get; set; }
 		[Column] public int ID_Contrato { get; set; }
+		[Column] public int? FormaPago { get; set; }
+		[Column] public int? ID_Sucursal { get; set; }
 	}
     
 	[TableName("dbo.PagosDetalle")]
@@ -548,6 +550,10 @@ namespace dbconnection
 		[Column] public decimal Importe { get; set; }
 		[Column] public int ID_Contrato { get; set; }
 		[Column] public int ID_Pago { get; set; }
+		[Column] public int? ID_Pagare { get; set; }
+		[Column] public decimal? importePagare { get; set; }
+		[Column] public decimal? importeGasto { get; set; }
+		[Column] public bool? Status { get; set; }
 	}
     
 	[TableName("dbo.Productos")]
@@ -694,6 +700,7 @@ namespace dbconnection
 		[Column] public string Observaciones { get; set; }
 		[Column] public bool? Estatus { get; set; }
 		[Column] public int? ID_Vendedor { get; set; }
+		[Column] public decimal ImpCobranza { get; set; }
 	}
     
 	[TableName("dbo.TiposEntradaSalida")]
@@ -825,7 +832,7 @@ namespace dbconnection
     public partial class pagare : dbconnectionDB.Record<pagare>  
     {
 		[Column] public int ID { get; set; }
-		[Column] public int? claveContrato { get; set; }
+		[Column] public int claveContrato { get; set; }
 		[Column] public DateTime fecha { get; set; }
 		[Column] public DateTime? fechaUltimoPago { get; set; }
 		[Column] public string Descripcion { get; set; }

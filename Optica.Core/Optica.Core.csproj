@@ -70,6 +70,7 @@
     <Compile Include="Repository\ColorLenteRepository.cs" />
     <Compile Include="Repository\PagaresRepository.cs" />
     <Compile Include="Repository\CorridaRepository.cs" />
+    <Compile Include="Repository\PagosDetalleRepository.cs" />
     <Compile Include="Repository\VentaDetalleRepository.cs" />
     <Compile Include="Repository\VentaRepository.cs" />
     <Compile Include="Repository\MaterialesLenteRepository.cs" />

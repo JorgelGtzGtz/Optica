@@ -55,6 +55,7 @@ namespace Optica.Api.App_Start
             builder.RegisterType<ModelosRepository>().As<IModelosRepository>().AsImplementedInterfaces();
             builder.RegisterType<PacientesRepository>().As<IPacientesRepository>().AsImplementedInterfaces();
             builder.RegisterType<PagosRepository>().As<IPagosRepository>().AsImplementedInterfaces();
+            builder.RegisterType<PagosDetalleRepository>().As<IPagosDetalleRepository>().AsImplementedInterfaces();
             builder.RegisterType<ProductoSeriesRepository>().As<IProductoSeriesRepository>().AsImplementedInterfaces();
             builder.RegisterType<ProductosKitRepository>().As<IProductosKitRepository>().AsImplementedInterfaces();
             builder.RegisterType<ProductosDetalleKitRepository>().As<IProductosDetalleKitRepository>().AsImplementedInterfaces();

@@ -4,6 +4,7 @@ using Optica.Core.Repository;
 using PetaPoco;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Optica.Core.Services
         public Producto GetProductoSelected(int id);
         int InsertUpdateContrato(Contrato Contrato, List<corridaOriginal> corrida, out string Message);
         public Paciente GetPacienteSelected(int id);
+        public Contrato GetContrato(int id);
     }
 
     public class ContratoService : IContratoService
@@ -66,12 +68,12 @@ namespace Optica.Core.Services
                     _CorridaRepository.InsertOrUpdate<int>(item);
                 }
 
-                Message = "Entrada guardada con exito";
+                Message = "Contrato guardado con exito";
             }
             catch (Exception ex)
             {
 
-                Message = "Entrada No pudo ser guardada Error: " + ex.Message;
+                Message = "Contrato No pudo ser guardada Error: " + ex.Message;
             }
 
             return result;
@@ -82,6 +84,11 @@ namespace Optica.Core.Services
             Sql query = new Sql(@"select top 1 ID from contratos order by ID DESC;");
             var res = _ContratosRepository.GetByDynamicFilter(query);
             return res[0].ID;
+        }
+
+        public Contrato GetContrato(int id)
+        {
+            return _ContratosRepository.Get(id);
         }
 
         public Producto GetProductoSelected(int id)
