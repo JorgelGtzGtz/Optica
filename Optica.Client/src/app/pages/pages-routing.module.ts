@@ -25,9 +25,9 @@ import { EntradasComponent } from './entradas/entradas.component';
 import { SalidasComponent } from './salidas/salidas.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { ContratosComponent } from './contratos/contratos.component';
-import { ListContratosComponent } from './list-contratos/list-contratos.component';
 import { PagosComponent } from './pagos/pagos.component';
 import { MetodosPagoComponent } from './metodos-pago/metodos-pago.component';
+import { ControlContratosPagosComponent } from './control-contratos-pagos/control-contratos-pagos.component';
 
 const routes: Routes = [
   {
@@ -131,8 +131,8 @@ const routes: Routes = [
     component: ContratosComponent
   },
   {
-    path: 'listcontratos',
-    component: ListContratosComponent
+    path: 'control',
+    component: ControlContratosPagosComponent
   },
   {
     path: 'pagos',

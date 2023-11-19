@@ -38,9 +38,10 @@ import { EntradasComponent } from './entradas/entradas.component';
 import { SalidasComponent } from './salidas/salidas.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { ContratosComponent } from './contratos/contratos.component';
-import { ListContratosComponent } from './list-contratos/list-contratos.component';
 import { PagosComponent } from './pagos/pagos.component';
 import { MetodosPagoComponent } from './metodos-pago/metodos-pago.component';
+import { ControlContratosPagosComponent } from './control-contratos-pagos/control-contratos-pagos.component';
+import { TabsComponent } from './control-contratos-pagos/tabs/tabs.component';
 
 
 @NgModule({
@@ -71,9 +72,10 @@ import { MetodosPagoComponent } from './metodos-pago/metodos-pago.component';
         SalidasComponent,
         InventarioComponent,
         ContratosComponent,
-        ListContratosComponent,
         PagosComponent,
         MetodosPagoComponent,
+        ControlContratosPagosComponent,
+        TabsComponent,
         // ClientesComponent,
         // ModelosComponent,
         // ProductosComponent,
