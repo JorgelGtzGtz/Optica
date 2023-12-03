@@ -139,7 +139,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group">
                                 <label for="basic_checkbox_2" >Periodos</label>
-                                <input type="number" (input)="calcularTotal()" class="form-control"  [(ngModel)]="model.Plazo" [ngModelOptions]="{standalone: true}" (input)="limitInput($event)">
+                                <input type="number" (change)="handlePeriodos()" (input)="calcularTotal()" class="form-control"  [(ngModel)]="model.Plazo" [ngModelOptions]="{standalone: true}" (input)="limitInput($event)">
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -211,7 +211,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="form-group">
                                         <label for="nombre">Fecha inicial</label>
-                                        <input #FechaInicial="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.FechaInicial" [ngModelOptions]="{standalone: true}" 
+                                        <input #FechaInicial="ngModel" (change)="handlePeriodos()" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.FechaInicial" [ngModelOptions]="{standalone: true}" 
                                                [ngClass]="{'form-control-danger': FechaInicial.invalid && (FechaInicial.dirty || FechaInicial.touched || (contratosFrom.submitted && !contratosFrom.valid)),
                                                          'form-control-success': FechaInicial.valid && (FechaInicial.dirty || FechaInicial.touched)}" required>
                                     </div>

@@ -134,39 +134,40 @@
           <div class="modal-body">
               <div class="row">
                   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group">
+                      <label for="nombre">Fecha</label>
+                      <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.Fecha" [ngModelOptions]="{standalone: true}"
+                              [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
+                    </div>
+                    <div *ngIf="Fecha.invalid && (Fecha.dirty || Fecha.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                        <span class="messages" *ngIf="Fecha.errors">
+                                        <small class="text-danger error">Fecha es requerido.</small>
+                                </span>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                       <div class="form-group">
                         <label class="font-weight-bold">Cliente</label>
-                          <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar cliente..." [(ngModel)]="model.Usuario">
+                          <ng-select name="almacen" (change)="clienteSelect()"  [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar cliente..." [(ngModel)]="model.Usuario">
                           </ng-select>
                       </div>
                   </div>
-                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="form-group">
-                      <label class="font-weight-bold">Forma de pago</label>
-                        <ng-select name="almacen" [items]="formasPago" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar forma de pago..." [(ngModel)]="model.FormaPago">
-                        </ng-select>
-                    </div>
-                  </div>
+                  
                   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                       <label class="font-weight-bold">Contrato</label>
-                        <ng-select name="almacen" [items]="contratos" [hideSelected]="true" bindLabel="ClaveContrato" bindValue="ID" [searchable]="true" placeholder="Seleccionar contrato..." [(ngModel)]="model.Contrato">
+                        <ng-select name="almacen" (change)="getPagos()" [disabled]="!model.Fecha"  [items]="contratos" [hideSelected]="true" bindLabel="ClaveContrato" bindValue="ID" [searchable]="true" placeholder="Seleccionar contrato..." [(ngModel)]="model.ID_Contrato">
                         </ng-select>
                     </div>
               </div>
           </div>
           <div class="row">
+              
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                  <div class="form-group">
-                    <label for="nombre">Fecha</label>
-                    <input #Fecha="ngModel" type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.Fecha" [ngModelOptions]="{standalone: true}"
-                    [ngClass]="{'form-control-danger': Fecha.invalid && (Fecha.dirty || Fecha.touched || (userForm.submitted && !userForm.valid)),
-                                'form-control-success': Fecha.valid && (Fecha.dirty || Fecha.touched)}" required>
-                </div>
-                <div *ngIf="Fecha.invalid && (Fecha.dirty || Fecha.touched || userForm.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
-                    <span class="messages" *ngIf="Fecha.errors">
-                                    <small class="text-danger error">Fecha es requerido.</small>
-                            </span>
+                <div class="form-group">
+                  <label class="font-weight-bold">Forma de pago</label>
+                    <ng-select name="almacen" [items]="formasPago" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar forma de pago..." [(ngModel)]="model.FormaPago">
+                    </ng-select>
                 </div>
               </div>
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -211,7 +212,7 @@
           <div class="row mt-5">
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <div class="form-group">
-                      <button type="button" class="btn btn-primary" (click)="onShowNewProduct(templateProd)">Aplicar</button>
+                      <button type="button" class="btn btn-primary" (click)="aplicarImporte()">Aplicar</button>
                   </div>
               </div>
           </div>
@@ -230,11 +231,14 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr *ngFor="let item of productos; let i=index;">
+                      <tr *ngFor="let item of pagos; let i=index;">
                           <td>{{ item.ID }}</td>
                           <td>{{ item.Descripcion }}</td>
-                          <td>{{ item.Cantidad }}</td>
-                          <td>{{ item.CostoTotal }}</td>
+                          <td>{{ item.fecha | date: 'dd-MM-yyyy' }}</td>
+                          <td>{{ item.importeTotal - item.importePagado }}</td>
+                          <td>{{ item.gastoCobranza }}</td>
+                          <td>{{ item.importeTotal }}</td>
+                          <td>{{ item.resta }}</td>
                       </tr>
                   </tbody>
                   <tfoot>
@@ -245,7 +249,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" (click)="modalRef.hide()">Cerrar</button>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button type="submit" class="btn btn-primary" >Guardar Cambios</button>
     </div>
 </form>
 </ng-template>

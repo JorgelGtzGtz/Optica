@@ -44,6 +44,7 @@ export class ContratosComponent implements OnInit {
     backdrop: true,
     ignoreBackdropClick: true,
   };
+  handelPeriodo: boolean = false;
 
   constructor(private modalService: BsModalService, private _userService:UsersService, private toastr: ToastrService, private _contratoService: ContratosService) { }
 
@@ -52,10 +53,14 @@ export class ContratosComponent implements OnInit {
     this.getCombos();
   }
 
+  handlePeriodos(){
+    this.handelPeriodo = false;
+  }
+
   onSubmit(FormData) {
     console.log(this.model)
     if (FormData.valid) {
-      if (this.corrido.length > 0){
+      if (this.handelPeriodo){
         this.model.Restante = this.model.ImportePago;
         this.model.ocupaAnticipo = this.anticipoDisabled;
         this.model.ocupaCE = this.contraEntregaDisabled;
@@ -188,6 +193,7 @@ export class ContratosComponent implements OnInit {
       this.model.DiaCobro = 0;
 
     }
+    this.handelPeriodo = false;
   }
 
   onDiaSemanaChange(){
@@ -248,6 +254,7 @@ export class ContratosComponent implements OnInit {
           }
           saldo -= this.model.ImportePago;
         }
+        this.handelPeriodo = true;
         console.log(this.corrido)
       }else{
         this.toastr.error('Agregue detalles.', 'Agregue almenos un producto!');

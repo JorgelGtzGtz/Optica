@@ -34,6 +34,7 @@ namespace Optica.Core.Services
         List<Almacene> GetAlmacenes();
         List<MetodosPago> GetMetodosPago();
         List<Contrato> GetContratos();
+        List<Contrato> GetContratosDeUsuario(int id);
         List<Almacene> GetAlmacenesDeSucursal(int id);
         List<Paciente> GetPacientes();
         List<TiposEntradaSalida> GetTiposEntradaSalidas(string tipo = "Entrada");
@@ -272,6 +273,13 @@ namespace Optica.Core.Services
         {
             Sql query = new Sql()
                 .Select("*").From("Contratos").Where("Estatus = 1");
+            return _contratosRepository.GetByFilter(query);
+        }
+
+        public List<Contrato> GetContratosDeUsuario(int id)
+        {
+            Sql query = new Sql(@"select * from [dbo].[Contratos]
+                                  Where ID_Cliente = @0 and Estatus = 1", id);
             return _contratosRepository.GetByFilter(query);
         }
 

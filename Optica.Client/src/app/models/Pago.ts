@@ -7,7 +7,7 @@ export class Pago {
     Observaciones: string;
     Status: boolean;
     Usuario: number;
-    Contrato: number;
-    Sucursal: number;
+    ID_Contrato: number;
+    ID_Sucursal: number;
     FormaPago: number;
 }
