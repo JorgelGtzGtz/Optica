@@ -21,7 +21,7 @@
             <div class="col">
               <div class="form-group">
                 <label class="font-weight-bold">Cliente</label>
-                <ng-select name="almacen" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idAlmacen">
+                <ng-select name="clientes" (change)="getContratos()" [items]="clientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar almacen..." [(ngModel)]="idCliente">
                 </ng-select>
               </div>
             </div>
@@ -35,14 +35,14 @@
             <div class="col">
               <div class="form-group">
                 <label class="font-weight-bold">Contrato</label>
-                <ng-select name="status" [items]="formasPago" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar forma de pago..." [(ngModel)]="status">
+                <ng-select name="status" [disabled]="!idCliente" [items]="contratos" [hideSelected]="true" bindLabel="ClaveContrato" bindValue="ID" [searchable]="true" placeholder="Seleccionar forma de pago..." [(ngModel)]="idContrato">
                 </ng-select>
               </div>
             </div>
             <div class="col-lg-4">
               <div class="form-group text-right">
                 <br>
-                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="test()">
+                <button type="button" class="btn btn-success waves-effect waves-light m-r-5 m-t-5" (click)="setContrato()">
                   <i class="fa fa-search "></i> <span> Buscar</span> </button>
               </div>
             </div>
@@ -51,31 +51,28 @@
           <div class="row mt-5">
             <div class="col" *ngIf="contratoSelect">
               <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
                   <div class="form-group">
                     <label for="nombre">Contrato</label>
                     <input type="text" class="form-control" placeholder="Contrato" [(ngModel)]="model.ID" [ngModelOptions]="{standalone: true}" disabled>
                   </div>
                 </div>
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                  <div class="form-group">
-                    <label for="nombre">Fecha</label>
-                    <input type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.Fecha" [ngModelOptions]="{standalone: true}" disabled>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <div class="form-group">
-                    <label class="font-weight-bold">Sucursal</label>
-                    <input type="date" class="form-control" placeholder="Sucursal" [(ngModel)]="model.ID_Sucursal" [ngModelOptions]="{standalone: true}" disabled>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
                   <div class="form-group">
                     <label for="basic_checkbox_2">Folio alterno</label>
                     <input type="text" class="form-control" [(ngModel)]="model.Clave" [ngModelOptions]="{standalone: true}" disabled>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                  <div class="form-group">
+                    <label for="nombre">Fecha</label>
+                    <input type="text" class="form-control" placeholder="Fecha" [(ngModel)]="fec" [ngModelOptions]="{standalone: true}" disabled>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                  <div class="form-group">
+                    <label class="font-weight-bold">Sucursal</label>
+                    <input type="text" class="form-control" placeholder="Sucursal" [(ngModel)]="sucursal" [ngModelOptions]="{standalone: true}" disabled>
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -84,46 +81,13 @@
                     <input type="text" value="Vigente" name="status" class="form-control" disabled>
                   </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <div class="form-group">
-                    <label class="font-weight-bold">Clientes</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.ID_Cliente" [ngModelOptions]="{standalone: true}" disabled>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row my-5">
-                <div class="col">
-                  <table class="table table-bordered table-hover">
-                    <thead>
-                      <tr>
-                        <th>Clave</th>
-                        <th>Descripcion</th>
-                        <th>P. Contado</th>
-                        <th>P. Credito</th>
-                        <th>Paciente</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let item of detalles; let i=index;">
-                        <td>{{ item.Clave }}</td>
-                        <td>{{ item.Descripcion }}</td>
-                        <td>{{ item.PContado }}</td>
-                        <td>{{ item.PCredito }}</td>
-                        <td>{{ item.Paciente }}</td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                  </table>
-                </div>
               </div>
 
               <div class="row my-2">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <label class="font-weight-bold">Frecuencia del pago</label>
-                    <input type="text" class="form-control" [(ngModel)]="model.Frecuencia" [ngModelOptions]="{standalone: true}" disabled>
+                    <input type="text" class="form-control" [(ngModel)]="frecuencia" [ngModelOptions]="{standalone: true}" disabled>
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -135,7 +99,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                   <div class="form-group">
                     <label class="font-weight-bold">Dias de la semana</label>
-                    <input type="number" class="form-control" [(ngModel)]="model.DiaCobro" [ngModelOptions]="{standalone: true}" disabled>
+                    <input type="text" class="form-control" [(ngModel)]="dia" [ngModelOptions]="{standalone: true}" disabled>
                   </div>
                 </div>
               </div>
@@ -146,7 +110,7 @@
                     <div class="col">
                       <div class="form-group">
                         <label  class="font-weight-bold">Anticipo</label>
-                        <input type="text" class="form-control"  [(ngModel)]="model.Anticipo" [ngModelOptions]="{standalone: true}" disabled>
+                        <input type="text" class="form-control"  [(ngModel)]="model.anticipo" [ngModelOptions]="{standalone: true}" disabled>
                       </div>
                     </div>
                   </div>
@@ -156,15 +120,7 @@
                     <div class="col">
                       <div class="form-group">
                         <label>Fecha contraentrega</label>
-                        <input type="date" class="form-control" placeholder="Fecha" [(ngModel)]="model.fechaEspEnt" [ngModelOptions]="{standalone: true}" disabled>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <div class="form-group">
-                        <label class="font-weight-bold">Gasto Cobro</label>
-                        <input  type="number" class="form-control" [(ngModel)]="model.Contraentrega" [ngModelOptions]="{standalone: true}" disabled>
+                        <input type="text" class="form-control" placeholder="dd/mm/aaaa" [(ngModel)]="fecContraEntrega" [ngModelOptions]="{standalone: true}" disabled>
                       </div>
                     </div>
                   </div>
@@ -174,22 +130,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <div class="form-group">
                         <label for="nombre">Fecha inicial</label>
-                        <input type="date" class="form-control" [(ngModel)]="model.FechaInicial" [ngModelOptions]="{standalone: true}" disabled>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <div class="form-group">
-                        <label for="basic_checkbox_2">Importe prestamo</label>
-                        <input type="number" min="100" step="100" class="form-control" [(ngModel)]="model.ImportePrestamo" [ngModelOptions]="{standalone: true}" disabled>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <div class="form-group">
-                        <label for="basic_checkbox_2">Importe del pago</label>
-                        <input type="text" class="form-control" [(ngModel)]="model.ImportePago" [ngModelOptions]="{standalone: true}" disabled>
+                        <input type="text" class="form-control" [(ngModel)]="fecInicial" [ngModelOptions]="{standalone: true}" disabled>
                       </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -199,7 +140,6 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -221,24 +161,21 @@
                    <div class="col" *ngIf="selectedTab === 'Corrida Original'">
                      <div class="row my-5">
                        <div class="col">
-                        <h3>Corrida Original</h3>
                          <table class="table table-bordered table-hover">
                            <thead>
                              <tr>
-                               <th>Clave</th>
+                               <th>Fecha venc.</th>
                                <th>Descripcion</th>
-                               <th>P. Contado</th>
-                               <th>P. Credito</th>
-                               <th>Paciente</th>
+                               <th>Importe</th>
+                               <th>Saldo</th>
                              </tr>
                            </thead>
                            <tbody>
-                             <tr *ngFor="let item of detalles; let i=index;">
-                               <td>{{ item.Clave }}</td>
+                             <tr *ngFor="let item of corridaOriginal; let i=index;">
+                               <td>{{ item.fecha | date: 'dd-MM-yyyy' }}</td>
                                <td>{{ item.Descripcion }}</td>
-                               <td>{{ item.PContado }}</td>
-                               <td>{{ item.PCredito }}</td>
-                               <td>{{ item.Paciente }}</td>
+                               <td>{{ item.importe }}</td>
+                               <td>{{ item.Saldo }}</td>
                              </tr>
                            </tbody>
                            <tfoot>
@@ -250,24 +187,25 @@
                    <div class="col" *ngIf="selectedTab === 'Edo. Cuenta'">
                     <div class="row my-5">
                       <div class="col">
-                        <h3>Edo. Cuenta</h3>
                         <table class="table table-bordered table-hover">
                           <thead>
                             <tr>
-                              <th>Clave</th>
+                              <th>Fecha venc.</th>
                               <th>Descripcion</th>
-                              <th>P. Contado</th>
-                              <th>P. Credito</th>
-                              <th>Paciente</th>
+                              <th>Importe total</th>
+                              <th>Importe pagado</th>
+                              <th>Importe restante</th>
+                              <th>Status</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of detalles; let i=index;">
-                              <td>{{ item.Clave }}</td>
+                            <tr *ngFor="let item of estadoCuenta; let i=index;">
+                              <td>{{ item.fecha | date: 'dd-MM-yyyy' }}</td>
                               <td>{{ item.Descripcion }}</td>
-                              <td>{{ item.PContado }}</td>
-                              <td>{{ item.PCredito }}</td>
-                              <td>{{ item.Paciente }}</td>
+                              <td>{{ item.importeTotal }}</td>
+                              <td>{{ item.importePagado }}</td>
+                              <td>{{ item.resta }}</td>
+                              <td>{{ getEstadoDesc(item.Status) }}</td>
                             </tr>
                           </tbody>
                           <tfoot>
@@ -279,24 +217,23 @@
                    <div class="col" *ngIf="selectedTab === 'Pagos'">
                     <div class="row my-5">
                       <div class="col">
-                        <h3>Pagos</h3>
                         <table class="table table-bordered table-hover">
                           <thead>
                             <tr>
-                              <th>Clave</th>
-                              <th>Descripcion</th>
-                              <th>P. Contado</th>
-                              <th>P. Credito</th>
-                              <th>Paciente</th>
+                              <th>ID Pago</th>
+                              <th>Fecha</th>
+                              <th>Forma pago</th>
+                              <th>Lugar</th>
+                              <th>Importe</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of detalles; let i=index;">
-                              <td>{{ item.Clave }}</td>
-                              <td>{{ item.Descripcion }}</td>
-                              <td>{{ item.PContado }}</td>
-                              <td>{{ item.PCredito }}</td>
-                              <td>{{ item.Paciente }}</td>
+                            <tr *ngFor="let item of pagos; let i=index;">
+                              <td>{{ item.ID }}</td>
+                              <td>{{ item.Fecha | date: 'dd-MM-yyyy' }}</td>
+                              <td>{{ obtenerDescripcionFormaDePago(item.FormaPago) }}</td>
+                              <td>{{ item.Lugar}}</td>
+                              <td>{{ item.Importe }}</td>
                             </tr>
                           </tbody>
                           <tfoot>
@@ -308,24 +245,23 @@
                    <div class="col" *ngIf="selectedTab === 'Detalle Pagos'">
                     <div class="row my-5">
                       <div class="col">
-                        <h3>Detalle Pagos</h3>
                         <table class="table table-bordered table-hover">
                           <thead>
                             <tr>
-                              <th>Clave</th>
+                              <th>Fecha</th>
                               <th>Descripcion</th>
-                              <th>P. Contado</th>
-                              <th>P. Credito</th>
-                              <th>Paciente</th>
+                              <th>Imp. pagare</th>
+                              <th>Imp. Gasto</th>
+                              <th>Importe total</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of detalles; let i=index;">
-                              <td>{{ item.Clave }}</td>
+                            <tr *ngFor="let item of detallePagos; let i=index;">
+                              <td>{{ item.Fecha | date: 'dd-MM-yyyy' }}</td>
                               <td>{{ item.Descripcion }}</td>
-                              <td>{{ item.PContado }}</td>
-                              <td>{{ item.PCredito }}</td>
-                              <td>{{ item.Paciente }}</td>
+                              <td>{{ item.ImporteOriginal }}</td>
+                              <td>{{ item.ImporteGasto }}</td>
+                              <td>{{ item.Importe }}</td>
                             </tr>
                           </tbody>
                           <tfoot>
@@ -341,7 +277,6 @@
             </div>
           </div>
 
-         
 
         </div>
         <!-- /.box-body -->

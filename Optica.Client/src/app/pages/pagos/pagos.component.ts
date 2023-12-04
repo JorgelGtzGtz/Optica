@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { error } from 'console';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Contrato } from 'src/app/models/Contrato';

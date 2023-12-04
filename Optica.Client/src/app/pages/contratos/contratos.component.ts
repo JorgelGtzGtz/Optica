@@ -61,7 +61,7 @@ export class ContratosComponent implements OnInit {
     console.log(this.model)
     if (FormData.valid) {
       if (this.handelPeriodo){
-        this.model.Restante = this.model.ImportePago;
+        this.model.Restante = this.model.ImportePrestamo;
         this.model.ocupaAnticipo = this.anticipoDisabled;
         this.model.ocupaCE = this.contraEntregaDisabled;
         this.model.gastoCob = this.gastoCobroDisabled;
@@ -185,8 +185,8 @@ export class ContratosComponent implements OnInit {
   }
 
   onFrecuenciaChange() {
-    this.model.Frecuencia = this.frecuenciasPagos.indexOf(this.frecuanciaSelect) + 1;
-    if (this.model.Frecuencia == 1){
+    this.model.frecuencia = this.frecuenciasPagos.indexOf(this.frecuanciaSelect) + 1;
+    if (this.model.frecuencia == 1){
       this.diaSemanaDisabled = false;
     }else{
       this.diaSemanaDisabled = true;
@@ -212,7 +212,7 @@ export class ContratosComponent implements OnInit {
     this.detalles.forEach(detalle => {
       this.model.Total += detalle.PCredito;
     })
-    this.model.ImportePrestamo = this.model.Total - this.model.Anticipo - this.model.Contraentrega
+    this.model.ImportePrestamo = this.model.Total - this.model.anticipo - this.model.Contraentrega
     this.model.ImportePago = this.model.ImportePrestamo / this.model.Plazo
   }
 
@@ -229,7 +229,7 @@ export class ContratosComponent implements OnInit {
       if (this.detalles.length > 0){
         this.corrido = [];
         let saldo = this.model.ImportePrestamo;
-        let fechaInicial = new Date(this.model.FechaInicial);
+        let fechaInicial = new Date(this.model.fechaInicial);
         for (let i = 0; i < this.model.Plazo; i++) {
           const fecha = new Date(fechaInicial);
           const anio = fecha.getFullYear();

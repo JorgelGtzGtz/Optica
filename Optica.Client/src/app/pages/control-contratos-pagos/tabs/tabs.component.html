@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col" *ngFor="let tab of tabs" (click)="selectTab(tab)">
-    {{ tab }}
+  <div class="col d-flex justify-content-center" *ngFor="let tab of tabs" (click)="selectTab(tab)" [ngClass]="{'selected-tab': sselectedTab === tab}">
+    <p style="cursor: pointer;" >{{tab}}</p>
   </div>
 </div>
