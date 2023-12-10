@@ -17,6 +17,7 @@ namespace Optica.Core.Services
         bool ProcesarVenta(int id, int idUsuario, out string Message);
         bool ProcesarEntrada(int id, int idUsuario, out string Message);
         bool ProcesarSalida(int id, int idUsuario, out string Message);
+        public List<dynamic> GetKardexProducto(int producto, int almacen);
     }
 
     public class KardexService : IKardexService
@@ -382,5 +383,13 @@ namespace Optica.Core.Services
             }
             return result;
         }
+
+        public List<dynamic> GetKardexProducto(int producto, int almacen)
+        {
+            Sql query = new Sql(@"select kp.Fecha, kp.Cantidad, kp.CantidadTotal, kp.CantidadDisponibleTotal, kp.CantidadTotalAlmacen, kp.CantidadDisponibleAlmacen, kp.Costo, kp.CostoPromedio, tes.Tipo, tes.Descripcion from kardexproductos as kp inner join tiposentradasalida as tes on kp.ID_TipoEntradaSalida = tes.ID where ID_Producto = @0 and ID_Almacen = @1;", producto, almacen);
+            List<dynamic> productos = _kardexProductosRepository.GetByDynamicFilter(query);
+            return productos;
+        }
+
     }
 }

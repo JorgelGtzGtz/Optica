@@ -105,7 +105,6 @@
                                 <button type="button" *ngIf="item.Estatus === 'C' || item.Estatus === 'P'" class="btn btn-info btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-eye"></i> Mostrar</button>
                                 <button type="button" *ngIf="item.Estatus === 'G'" class="btn btn-warning btn-xs m-lg-1" (click)="onShow(item.ID, template)"><i class="fa fa-edit"></i> Editar</button>
                                 <button type="button" *ngIf="item.Estatus === 'G' || item.Estatus === 'P'" class="btn btn-danger btn-xs m-lg-1" (click)="onCancelar(item)"><i class="fa fa-trash"></i> Cancelar</button>
-                                <button type="button" class="btn label-inverse btn-xs m-lg-1" (click)="onImprimir(item.ID)"><i class="fa fa-print"></i> Imprimir</button>
                               </td>
                           </tr>
                       </tbody>

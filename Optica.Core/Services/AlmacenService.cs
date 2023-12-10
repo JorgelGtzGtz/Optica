@@ -35,6 +35,8 @@ namespace Optica.Core.Services
             return _almaceneRepository.GetAll("Almacenes").ToList();
         }
 
+        
+
         public List<dynamic> GetAlmacenesFiltro(string nombre = null)
         {
             string filter = " Where ";

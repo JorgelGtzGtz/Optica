@@ -16,6 +16,7 @@ export class ContratosService {
   private _getPacientes = `${this._url}/Pacientes`;
   private _getPaciente = `${this._url}/Paciente`;
   private _getDiagnosticos = `${this._url}/Diagnosticos`;
+  private _getAlmacenes = `${this._url}/Almacene`;
   private _getProducto = `${this._url}/Producto`;
   private _guardar = `${this._url}/Guardar`;
 
@@ -49,6 +50,14 @@ export class ContratosService {
 
   getPacientes(id: number): Observable<any>  {
     return this._http.get<any>(`${this._getPacientes}/${id}`, { headers: this._userService.header})
+      .pipe(
+        tap(data => data),
+        catchError(this.handleError)
+      );
+  }
+
+  getAlmacenes(id: number): Observable<any>  {
+    return this._http.get<any>(`${this._getAlmacenes}/${id}`, { headers: this._userService.header})
       .pipe(
         tap(data => data),
         catchError(this.handleError)

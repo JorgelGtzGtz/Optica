@@ -39,11 +39,10 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <div class="form-group">
                                 <label class="font-weight-bold">Sucursal<span class="text-danger">*</span></label>
-                                <ng-select name="Sucursal" bindLabel="Nombre" bindValue="ID"  [items]="sucursales" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Sucursal..." 
+                                <ng-select (ngModelChange)="setAlamacenes($event)" name="Sucursal" bindLabel="Nombre" bindValue="ID"  [items]="sucursales" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Sucursal..." 
                                            [(ngModel)]="model.ID_Sucursal" #Sucursal="ngModel" 
                                            [ngClass]="{'form-control-danger': Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || contratosFrom.submitted)}" required>
                                 </ng-select>
@@ -55,6 +54,23 @@
                             </div>
 
                         </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <div class="form-group">
+                                <label class="font-weight-bold">Almacen<span class="text-danger">*</span></label>
+                                <ng-select [disabled]="!model.ID_Sucursal" name="Almacen" bindLabel="Nombre" bindValue="ID"  [items]="almacenes" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Almacen..." 
+                                           [(ngModel)]="model.ID_Almacen" #Almacen="ngModel" 
+                                           [ngClass]="{'form-control-danger': Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || contratosFrom.submitted)}" required>
+                                </ng-select>
+                            </div>
+                            <div *ngIf="Sucursal.invalid && (Sucursal.dirty || Sucursal.touched || contratosFrom.submitted)" class="w-100" style="margin-top: -10px; margin-bottom: 1rem">
+                                <span class="messages" *ngIf="Sucursal.errors">
+                                    <small class="text-danger error">Sucursal es requerida.</small>
+                                </span>
+                            </div>
+
+                        </div>
+
                     </div>
 
                     <div class="row">
@@ -73,7 +89,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <label class="font-weight-bold">Clientes<span class="text-danger">*</span></label>
-                                <ng-select (ngModelChange)="($event != null) ? this.clienteDisabled = false : this.clienteDisabled = true" name="Clientes" bindLabel="Nombre" bindValue="ID"  [items]="clientes" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Cliente..." 
+                                <ng-select [disabled]="detallesActives"  (ngModelChange)="($event != null) ? this.clienteDisabled = false : this.clienteDisabled = true" name="Clientes" bindLabel="Nombre" bindValue="ID"  [items]="clientes" [hideSelected]="true" [searchable]="true" placeholder="Seleccionar Cliente..." 
                                            [(ngModel)]="model.ID_Cliente" #Clientes="ngModel" 
                                            [ngClass]="{'form-control-danger': Clientes.invalid && (Clientes.dirty || Clientes.touched || contratosFrom.submitted)}" required>
                                 </ng-select>
@@ -101,18 +117,22 @@
                                     <tr>
                                         <th>Clave</th>
                                         <th>Descripcion</th>
-                                        <th>P. Contado</th>
-                                        <th>P. Credito</th>
                                         <th>Paciente</th>
+                                        <th>P. Credito</th>
+                                        <th>P. Contado</th>
+                                        <th>Cantidad</th>
+                                        <th>Venta</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of detalles; let i=index;">
                                         <td>{{ item.Clave }}</td>
                                         <td>{{ item.Descripcion }}</td>
-                                        <td>{{ item.PContado }}</td>
-                                        <td>{{ item.PCredito }}</td>
                                         <td>{{ item.Paciente }}</td>
+                                        <td>{{ item.PCredito }}</td>
+                                        <td>{{ item.Precio }}</td>
+                                        <td>{{ item.Cantidad }}</td>
+                                        <td>{{ item.VentaDetalle }}</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
@@ -160,13 +180,14 @@
 
                     <div class="row my-2">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mt-4">
-                            <div class="row">
+                            <div class="row justify-content-center">
                                 <div class="col">
                                     <div class="form-group">
                                         <input type="checkbox" id="basic_checkbox_2" class="filled-in" checked="false" [(ngModel)]="anticipoDisabled" [ngModelOptions]="{standalone: true}">
                                         <label for="basic_checkbox_2" style="font-size: 10px;">Anticipo</label>
                                     </div>
                                 </div>
+                                
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -372,7 +393,7 @@
       </div>
       <div class="modal-body">
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div class="col">
               <div class="form-group">
                   <label>Paciente <span class="text-danger">*</span></label>
                   <ng-select (ngModelChange)="newPaciente($event)" name="producto" [items]="pacientes" [hideSelected]="true" bindLabel="Nombre" bindValue="ID" [searchable]="true" placeholder="Seleccionar Paciente..." [(ngModel)]="modelProducto.ID_Paciente" #producto="ngModel" required></ng-select>
@@ -380,23 +401,31 @@
           </div>
       </div>
           <div class="row justify-content-center">
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="col">
                   <div class="form-group">
                       <label>Producto <span class="text-danger">*</span></label>
-                      <ng-select (ngModelChange)="newProducto($event)" name="producto" [items]="productos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="modelProducto.ID_Producto" #producto="ngModel" required></ng-select>
+                      <ng-select (ngModelChange)="newProducto($event)" name="producto" [items]="productos" [hideSelected]="true" bindLabel="Descripcion" bindValue="ID" [searchable]="true" placeholder="Seleccionar Producto..." [(ngModel)]="modelProducto.Producto" #producto="ngModel" required></ng-select>
                   </div>
               </div>
           </div>
           <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="col">
+                <div class="form-group">
+                    <label>Cantidad <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" (change)="handelCantidad()" [(ngModel)]="modelProducto.Cantidad" [ngModelOptions]="{standalone: true}" placeholder="Cantidad....">
+                </div>
+            </div>
+        </div>
+          <div class="row justify-content-center">
+            <div class="col">
                 <div class="form-group">
                     <label>Diagnostico <span class="text-danger">*</span></label>
-                    <ng-select name="diagnosticos" [items]="diagnosticos" [hideSelected]="true" bindLabel="Fecha" bindValue="ID" [searchable]="true" placeholder="Seleccionar Diagnostico..." [(ngModel)]="modelProducto.ID_Diagnostico" #diagnostico="ngModel" required [disabled]="diagnosticoDisabled"></ng-select>
+                    <ng-select name="diagnosticos" [items]="diagnosticos" [hideSelected]="true" bindLabel="Diagnosticotxt" bindValue="ID" [searchable]="true" placeholder="Seleccionar Diagnostico..." [(ngModel)]="modelProducto.ID_Diagnostico" #diagnostico="ngModel" required [disabled]="diagnosticoDisabled"></ng-select>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div class="col">
             <div class="form-group">
               <label for="nombre">Observaciones</label>
               <textarea name="observaciones" #observaciones="ngModel" rows="5" class="form-control" placeholder="Observaciones..." [(ngModel)]="model.Observaciones"></textarea>
@@ -404,21 +433,29 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div class="col">
             <div class="form-group">
               <label for="basic_checkbox_2" >Precio contado</label>
-              <input type="text" class="form-control"  [(ngModel)]="modelProducto.PContado" [ngModelOptions]="{standalone: true}" placeholder="Precio Contado..." disabled>
+              <input type="text" class="form-control"  [(ngModel)]="modelProducto.Precio" [ngModelOptions]="{standalone: true}" placeholder="Precio Contado..." disabled>
             </div>
               
           </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="col">
           <div class="form-group">
             <label for="basic_checkbox_2" >Precio credito</label>
             <input type="text" class="form-control"  [(ngModel)]="modelProducto.PCredito" [ngModelOptions]="{standalone: true}" placeholder="Precio Credito..." disabled>
           </div>
             
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col">
+          <div class="form-group">
+            <label for="basic_checkbox_2" >Venta</label>
+            <input type="text" class="form-control"  [(ngModel)]="modelProducto.VentaDetalle" [ngModelOptions]="{standalone: true}" placeholder="Venta..." disabled>
+          </div>
         </div>
     </div>
       </div>

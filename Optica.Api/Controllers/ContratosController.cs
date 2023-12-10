@@ -18,13 +18,29 @@ using System.Web.Http;
 
 namespace Optica.Api.Controllers
 {
+
+    public class DiagnosticoString
+    {
+        public int ID { get; set; }
+        public string Diagnosticotxt { get; set; }
+
+
+        public DiagnosticoString(Diagnostico diagnostico)
+        {
+            ID = diagnostico.ID;
+            Diagnosticotxt = diagnostico.Paciente + " - " + diagnostico.Fecha.ToString("dd/MM/yyyy") + " - " + diagnostico.Sucursal;
+        }
+    }
+
+
     [RoutePrefix("api/Contrato")]
     public class ContratoController : BaseApiController
     {
         private readonly IListaCombosService _listaCombosService;
         private readonly IContratoService _contratosService;
 
-        public ContratoController(IListaCombosService listaCombosService, IContratoService contratosService)
+
+        public ContratoController( IListaCombosService listaCombosService, IContratoService contratosService)
         {
             _listaCombosService = listaCombosService;
             _contratosService = contratosService;
@@ -94,7 +110,10 @@ namespace Optica.Api.Controllers
                 try
                 {
                     var diagnosticos = _listaCombosService.GetDiagnosticoDePaciente(id);
-                    response = request.CreateResponse(HttpStatusCode.OK, new { diagnosticos });
+                    var nuevaLista = diagnosticos.Select(diagnostico => new DiagnosticoString(diagnostico)).ToList();
+
+
+                    response = request.CreateResponse(HttpStatusCode.OK, new { nuevaLista });
                 }
                 catch (Exception ex)
                 {
@@ -162,6 +181,33 @@ namespace Optica.Api.Controllers
             });
         }
 
+        [Route("Almacene/{id}")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetAlmacenes(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var result = _contratosService.GetAlmacenesDeSucursal(id);
+                    response = request.CreateResponse(HttpStatusCode.OK, result);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
 
         [Route("Combos")]
         public async Task<HttpResponseMessage> GetCombos(HttpRequestMessage request)
@@ -202,7 +248,8 @@ namespace Optica.Api.Controllers
                 {
                     var contrato = data["data"].ToObject<Contrato>();
                     var detalles = data["detalles"].ToObject<List<corridaOriginal>>();
-                    var result = _contratosService.InsertUpdateContrato(contrato, detalles, out message);
+                    var detallesContrato = data["detallesContrato"].ToObject<List<DetalleContrato>>();
+                    var result = _contratosService.InsertUpdateContrato(contrato, detalles, detallesContrato, out message);
                     response = request.CreateResponse(HttpStatusCode.OK);
                 }
                 catch (Exception ex)

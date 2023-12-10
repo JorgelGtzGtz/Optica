@@ -16,7 +16,14 @@ namespace Optica.Core.Services
         public List<pagare> GetPagos(int idContrato, DateTime fecha);
         public decimal? GetImporteSugerido(List<pagare> pagares, DateTime fecha);
         public List<pagare> AplicarImporte(decimal importe, DateTime fecha, int idContrato);
+        public Contrato GetContrato(int idContrato);
         public bool InsertUpdatePago(Pago Pago, List<pagare> Pagares, out string Message);
+        public List<corridaOriginal> getCorridaOriginal(int idContrato);
+        public List<pagare> getEstadoCuenta(int idContrato);
+        public List<Pago> GetPagosContrato(int idContrato);
+        public List<dynamic> GetDetallePagos(int idContrato);
+        public Sucursale GetSucursal(int idSucursal);
+
     }
 
     public class PagosService : IPagosService
@@ -26,15 +33,30 @@ namespace Optica.Core.Services
         private readonly ISucursalRepository _SucursalesRepository;
         private readonly IPagosRepository _PagosRepository;
         private readonly IPagosDetalleRepository _PagosDetalleRepository;
+        private readonly ISucursalRepository _SucursalRepository;
 
 
-        public PagosService(IPagosDetalleRepository PagosDetalleRepository, IPagosRepository PagosRepository, IPagaresRepository pagaresRepository, ISucursalRepository SucursalesRepository, IContratosRepository contratosRepository)
+
+        public PagosService(ISucursalRepository SucursalRepository, IPagosDetalleRepository PagosDetalleRepository, IPagosRepository PagosRepository, IPagaresRepository pagaresRepository, ISucursalRepository SucursalesRepository, IContratosRepository contratosRepository)
         {
             _pagaresRepository = pagaresRepository;
             _ContratosRepository = contratosRepository;
             _SucursalesRepository = SucursalesRepository;
             _PagosRepository = PagosRepository;
             _PagosDetalleRepository = PagosDetalleRepository;
+            _SucursalRepository = SucursalRepository;
+        }
+
+        public Contrato GetContrato(int idContrato)
+        {
+            Contrato contrato = _ContratosRepository.Get(idContrato);
+            return contrato;
+        }
+
+        public Sucursale GetSucursal(int idSucursal)
+        {
+            Sucursale sucursal = _SucursalRepository.Get(idSucursal);
+            return sucursal;
         }
 
         public List<pagare> GetPagos(int idContrato, DateTime fecha)
@@ -51,7 +73,6 @@ namespace Optica.Core.Services
                     if (pagare.fecha == fecha)
                     {
                         reult.Add(pagare);
-
                     }
                     else
                     {
@@ -63,6 +84,34 @@ namespace Optica.Core.Services
                 }
             }
             return reult;
+        }
+
+        public List<corridaOriginal> getCorridaOriginal(int idContrato)
+        {
+            Sql query = new Sql(@"select * from corridaOriginal where claveContrato = @0;", idContrato);
+            List<corridaOriginal> reult = _pagaresRepository.GetCorridaOriginala(query);
+            return reult;
+        }
+
+        public List<pagare> getEstadoCuenta(int idContrato)
+        {
+            Sql query = new Sql(@"select * from pagares where claveContrato = @0;", idContrato);
+            List<pagare> pagares = _pagaresRepository.GetPagares(query);
+            return pagares;
+        }
+
+        public List<Pago> GetPagosContrato(int idContrato)
+        {
+            Sql query = new Sql(@"select * from pagos where ID_Contrato = @0;", idContrato);
+            List<Pago> pagares = _pagaresRepository.GetPagos(query);
+            return pagares;
+        }
+
+        public List<dynamic> GetDetallePagos(int idContrato)
+        {
+            Sql query = new Sql(@"select pa.Fecha, p.Descripcion, p.ImporteOriginal, pd.ImporteGasto, pd.Importe from PagosDetalle as pd inner join pagares as p on pd.ID_Pagare = p.ID inner join pagos as pa on pd.ID_Pago = pa.ID where pd.ID_Contrato = @0;", idContrato);
+            List<dynamic> pagares = _pagaresRepository.GetByDynamicFilter(query);
+            return pagares;
         }
 
         public decimal? GetImporteSugerido(List<pagare> pagares, DateTime fecha)
@@ -142,6 +191,8 @@ namespace Optica.Core.Services
             return result;
         }
 
+
+
         public bool InsertUpdatePago(Pago Pago, List<pagare> Pxagares, out string Message)
         {
             try
@@ -172,6 +223,7 @@ namespace Optica.Core.Services
                                 if (impTemporal <= nuevoImporte)
                                 {
                                     impDetalle = impTemporal;
+                                    impTemporal -= impTemporal;
                                 }
                                 else
                                 {
@@ -181,7 +233,7 @@ namespace Optica.Core.Services
                                 impPagare = impDetalle;
                                 impGasto = 0;
                                 contrato.Abonos = contrato.Abonos + impDetalle;
-                                contrato.Restante = contrato.Restante - impDetalle;
+                                contrato.Restante -= impDetalle;
                                 pagare.importePagado = pagare.importePagado + impDetalle;
                                 pagare.resta = pagare.resta - impDetalle;
                                 pagare.fechaUltimoPago = Pago.Fecha;
@@ -208,6 +260,7 @@ namespace Optica.Core.Services
                                     pagare.gastoCobranza = sucursal.ImpCobranza;
                                     pagare.importeTotal = pagare.importeOriginal + pagare.gastoCobranza;
                                     contrato.Restante += pagare.gastoCobranza;
+                                    //agregar al monto
                                 }
                                 else
                                 {

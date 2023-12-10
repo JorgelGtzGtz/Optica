@@ -240,6 +240,7 @@ namespace Optica.Core.Services
                                   Where ID_Paciente = @0 ", id);
             return _diagnosticoRepository.GetByFilter(query);
         }
+        
 
         public List<Proveedore> GetProveedores()
         {

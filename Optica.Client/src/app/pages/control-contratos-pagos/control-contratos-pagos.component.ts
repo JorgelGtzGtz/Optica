@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Contrato } from 'src/app/models/Contrato';
+import { Pago } from 'src/app/models/Pago';
 import { PagosService } from 'src/app/services/pagos/pagos.service';
 
 @Component({
@@ -11,6 +13,7 @@ import { PagosService } from 'src/app/services/pagos/pagos.service';
 export class ControlContratosPagosComponent implements OnInit {
 
   model: Contrato = new Contrato();
+  modelPago: Pago = new Pago();
   idCliente: number;
   idContrato: number;
   estatus: number;
@@ -31,7 +34,7 @@ export class ControlContratosPagosComponent implements OnInit {
   sucursal: any;
 
 
-  constructor(private _pagosSerice: PagosService, private toastr: ToastrService) { }
+  constructor(private modalService: BsModalService, private _pagosSerice: PagosService, private toastr: ToastrService) { }
 
   test() {
     this.contratoSelect = !this.contratoSelect
@@ -74,7 +77,6 @@ export class ControlContratosPagosComponent implements OnInit {
       this._pagosSerice.getDetallePagos(this.idContrato)
         .subscribe(
           data => {
-            console.log(data)
             this.detallePagos = data;
           }
         );
@@ -186,6 +188,79 @@ export class ControlContratosPagosComponent implements OnInit {
           this.formaPago = data.metodospago
         },
         error => this.toastr.error(error.message, 'Error!'));
+    
   }
+
+  //Pago
+  config = {
+    backdrop: true,
+    ignoreBackdropClick: true,
+  };
+  modalRef: BsModalRef;
+  importeAplicado: boolean = false;
+
+  onShow(template: TemplateRef<any>) {
+    this.modelPago = new Pago();
+    this.contratoSelect = false;
+    this.modalRef = this.modalService.show(template, this.config);
+  }
+
+  clienteSelect(){
+    this.handelPago();
+    this._pagosSerice.getContratos(this.modelPago.Usuario)
+    .subscribe(
+      data => {
+        console.log(data)
+        this.contratos = data
+      },
+        error => this.toastr.error(error.message, 'Error!')
+    );
+  }
+
+  aplicarImporte(){
+    this._pagosSerice.aplicarImporte(this.modelPago.ID_Contrato, this.modelPago.Importe, this.model.Fecha)
+    .subscribe(
+      data => {
+        console.log(data)
+        this.pagos = data
+      },
+        error => this.toastr.error(error.message, 'Error!')
+    );
+  }
+
+  onSubmit(){
+
+    const data = {
+      data: this.model,
+      detalles: this.pagos
+    }
+
+    this._pagosSerice.pagoContrato(data).subscribe(
+      data =>{
+        this.toastr.success('Pago realizado con exito.', 'Guardado!');
+        this.pagos = [];
+          this.modalRef.hide();
+          //this.onBuscar();
+      }
+    );
+  }
+
+  handelPago(){
+    this.importeAplicado = false;
+  }
+
+  
+
+  getPagos(){
+    this._pagosSerice.getPagos(this.modelPago.ID_Contrato, this.modelPago.Fecha)
+      .subscribe(
+        data => {
+          console.log(data)
+          this.pagos = data
+        },
+        error => this.toastr.error(error.message, 'Error!') );
+
+  }
+
 
 }

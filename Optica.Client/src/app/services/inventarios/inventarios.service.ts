@@ -13,6 +13,7 @@ export class InventariosService {
   private _getLista = `${this._url}/Lista`;
   private _getCombos = `${this._url}/Combos`;
   private _getGetProducto = `${this._url}/GetProducto`;
+  private _getGetKardexProducto = `${this._url}/GetKardexProducto`;
 
   constructor(public _http: HttpClient, private _userService: UsersService) {
     this._userService.loadStorage();
@@ -28,6 +29,14 @@ export class InventariosService {
 
   getProducto(id: number): Observable<any>  {
     return this._http.get<any>(`${this._getGetProducto}/${id}`, { headers: this._userService.header})
+      .pipe(
+        tap(data => data),
+        catchError(this.handleError)
+      );
+  }
+
+  getKardexProducto(producto: number, almacen: number): Observable<any>  {
+    return this._http.get<any>(`${this._getGetKardexProducto}/${producto}/${almacen}`, { headers: this._userService.header})
       .pipe(
         tap(data => data),
         catchError(this.handleError)

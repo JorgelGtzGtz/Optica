@@ -7,5 +7,12 @@ export class ContratoDetalle{
     public PCredito: number | null;
     public ID_Paciente: number;
     public ID_Diagnostico: number;
-    public ID_Producto: number;
+    public Producto: number;
+    public Contrato: number;
+    public Cantidad: number;
+    public Costo: number;
+    public CostoTotal: number;
+    public Precio: number;
+    public VentaDetalle: number = 0;
+
 }

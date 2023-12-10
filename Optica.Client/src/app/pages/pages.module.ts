@@ -42,6 +42,7 @@ import { PagosComponent } from './pagos/pagos.component';
 import { MetodosPagoComponent } from './metodos-pago/metodos-pago.component';
 import { ControlContratosPagosComponent } from './control-contratos-pagos/control-contratos-pagos.component';
 import { TabsComponent } from './control-contratos-pagos/tabs/tabs.component';
+import { KardexComponent } from './kardex/kardex.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { TabsComponent } from './control-contratos-pagos/tabs/tabs.component';
         MetodosPagoComponent,
         ControlContratosPagosComponent,
         TabsComponent,
+        KardexComponent,
         // ClientesComponent,
         // ModelosComponent,
         // ProductosComponent,

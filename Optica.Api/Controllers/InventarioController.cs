@@ -17,11 +17,14 @@ namespace Optica.Api.Controllers
     {
         private readonly IProductosService _productoService;
         private readonly IListaCombosService _listaCombosService;
+        private readonly IKardexService _kardexService;
 
-        public InventarioController(IProductosService productoService, IListaCombosService listaCombosService)
+        public InventarioController(IProductosService productoService, IListaCombosService listaCombosService, IKardexService kardexService)
         {
             _productoService = productoService;
             _listaCombosService = listaCombosService;
+            _kardexService = kardexService;
+
         }
 
         [HttpPost]
@@ -67,6 +70,33 @@ namespace Optica.Api.Controllers
                 {
                     var model = _productoService.GetProducto(id);
                     response = request.CreateResponse(HttpStatusCode.OK, new { producto = model});
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
+        [Route("GetKardexProducto/{producto:int=0}/{almacen:int=0}")]
+        public async Task<HttpResponseMessage> GetKardexProducto(HttpRequestMessage request, int producto, int almacen)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var movimientos = _kardexService.GetKardexProducto(producto, almacen);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, movimientos);
                 }
                 catch (Exception ex)
                 {

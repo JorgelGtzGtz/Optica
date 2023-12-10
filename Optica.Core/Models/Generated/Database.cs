@@ -237,7 +237,7 @@ namespace dbconnection
 		[Column] public int ID { get; set; }
 		[Column] public string Clave { get; set; }
 		[Column] public string ClaveContrato { get; set; }
-		[Column] public DateTime? Fecha { get; set; }
+		[Column] public DateTime Fecha { get; set; }
 		[Column] public int? Plazo { get; set; }
 		[Column] public int? DiaCobro { get; set; }
 		[Column] public decimal? Total { get; set; }
@@ -259,24 +259,7 @@ namespace dbconnection
 		[Column] public decimal? importePrestamo { get; set; }
 		[Column] public decimal? importePago { get; set; }
 		[Column] public DateTime? fechaInicial { get; set; }
-	}
-    
-	[TableName("dbo.ContratosDetalle")]
-	[PrimaryKey("ID")]
-	[ExplicitColumns]
-    public partial class ContratosDetalle : dbconnectionDB.Record<ContratosDetalle>  
-    {
-		[Column] public int ID { get; set; }
-		[Column] public string ClaveContrato { get; set; }
-		[Column] public decimal? Costo { get; set; }
-		[Column] public decimal? Precio { get; set; }
-		[Column] public decimal? TotalAbono { get; set; }
-		[Column] public decimal? Descuento { get; set; }
-		[Column] public decimal? Restante { get; set; }
-		[Column] public int ID_Producto { get; set; }
-		[Column] public int ID_Paciente { get; set; }
-		[Column] public int ID_Diagnostico { get; set; }
-		[Column] public int ID_Contrato { get; set; }
+		[Column] public int ID_Almacen { get; set; }
 	}
     
 	[TableName("dbo.Destinos")]
@@ -315,6 +298,8 @@ namespace dbconnection
 		[Column] public string OI_adicion { get; set; }
 		[Column] public string Dist_interpupilar { get; set; }
 		[Column] public string Altura_oblea { get; set; }
+		[Column] public string Paciente { get; set; }
+		[Column] public string Sucursal { get; set; }
 	}
     
 	[TableName("dbo.DocumentosCobranza")]
@@ -337,7 +322,7 @@ namespace dbconnection
     public partial class ExistenciasAlmacen : dbconnectionDB.Record<ExistenciasAlmacen>  
     {
 		[Column] public int ID { get; set; }
-		[Column] public int Disponible { get; set; }
+		[Column] public int? Disponible { get; set; }
 		[Column] public int Cantidad { get; set; }
 		[Column] public int ID_Almacen { get; set; }
 		[Column] public int ID_Producto { get; set; }
@@ -381,7 +366,7 @@ namespace dbconnection
 		[Column] public DateTime Fecha { get; set; }
 		[Column] public int Cantidad { get; set; }
 		[Column] public int CantidadTotal { get; set; }
-		[Column] public int? CantidadDisponibleTotal { get; set; }
+		[Column] public int CantidadDisponibleTotal { get; set; }
 		[Column] public int CantidadTotalAlmacen { get; set; }
 		[Column] public int? CantidadDisponibleAlmacen { get; set; }
 		[Column] public decimal Costo { get; set; }
@@ -564,7 +549,7 @@ namespace dbconnection
 		[Column] public int ID { get; set; }
 		[Column] public string Clave { get; set; }
 		[Column] public string Descripcion { get; set; }
-		[Column] public int? Cantidad { get; set; }
+		[Column] public int Cantidad { get; set; }
 		[Column] public decimal? Costo { get; set; }
 		[Column] public decimal? Precio { get; set; }
 		[Column] public decimal? PrecioPP { get; set; }
@@ -824,6 +809,21 @@ namespace dbconnection
 		[Column] public string Descripcion { get; set; }
 		[Column] public decimal importe { get; set; }
 		[Column] public decimal Saldo { get; set; }
+	}
+    
+	[TableName("hiram74_sistemas.DetalleContrato")]
+	[PrimaryKey("ID")]
+	[ExplicitColumns]
+    public partial class DetalleContrato : dbconnectionDB.Record<DetalleContrato>  
+    {
+		[Column] public int ID { get; set; }
+		[Column] public int producto { get; set; }
+		[Column] public int contrato { get; set; }
+		[Column] public int cantidad { get; set; }
+		[Column] public decimal costo { get; set; }
+		[Column] public decimal costoTotal { get; set; }
+		[Column] public decimal precio { get; set; }
+		[Column] public decimal ventaDetalle { get; set; }
 	}
     
 	[TableName("hiram74_sistemas.pagares")]

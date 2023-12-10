@@ -28,6 +28,7 @@ import { ContratosComponent } from './contratos/contratos.component';
 import { PagosComponent } from './pagos/pagos.component';
 import { MetodosPagoComponent } from './metodos-pago/metodos-pago.component';
 import { ControlContratosPagosComponent } from './control-contratos-pagos/control-contratos-pagos.component';
+import { KardexComponent } from './kardex/kardex.component';
 
 const routes: Routes = [
   {
@@ -141,6 +142,10 @@ const routes: Routes = [
   {
     path: 'metodospago',
     component: MetodosPagoComponent
+  },
+  {
+    path: 'kardex',
+    component: KardexComponent
   },
   // {
   //   path: 'clientes',

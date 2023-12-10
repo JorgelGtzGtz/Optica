@@ -23,11 +23,14 @@ namespace Optica.Core.Services
     {
         private readonly IDiagnosticoRepository _diagnosticoRepository;
         private readonly ILogRepository _logRepository;
-        
+        private readonly IPacientesRepository _PacientesRepository;
+        private readonly ISucursalRepository _SucursalesRepository;
 
-        public DiagnosticosService(IDiagnosticoRepository diagnosticoRepository, ILogRepository logRepository) {
+        public DiagnosticosService(IDiagnosticoRepository diagnosticoRepository, ILogRepository logRepository, ISucursalRepository SucursalesRepository, IPacientesRepository pacientesRepository) {
             _diagnosticoRepository = diagnosticoRepository;
             _logRepository = logRepository;
+            _PacientesRepository = pacientesRepository;
+            _SucursalesRepository = SucursalesRepository;
         }
 
         public Diagnostico GetDiagnostico(int id) {
@@ -75,9 +78,9 @@ namespace Optica.Core.Services
             bool result = false;
             try
             {
-
+                model.Sucursal = _SucursalesRepository.Get(model.ID_Sucursal).Abreviacion;
+                model.Paciente = _PacientesRepository.Get(model.ID_Paciente).Nombre;
                 int id = _diagnosticoRepository.InsertOrUpdate<int>(model);
-
                 Log log = new Log();
                 log.Tipo = "Diagnostico";
                 log.ID_Referencia = id;

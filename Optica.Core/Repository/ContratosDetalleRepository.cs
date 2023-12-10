@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Optica.Core.Repository
 {
-    public interface IContratosDetalleRepository : IRepositoryBase<ContratosDetalle>
+    public interface IContratosDetalleRepository : IRepositoryBase<DetalleContrato>
     {
     }
 
-    public class ContratosDetalleRepository : RepositoryBase<ContratosDetalle>, IContratosDetalleRepository
+    public class ContratosDetalleRepository : RepositoryBase<DetalleContrato>, IContratosDetalleRepository
     {
         public ContratosDetalleRepository(IDbFactory dbFactory) : base(dbFactory)
         {

@@ -39,7 +39,9 @@ export class ContratosComponent implements OnInit {
   frecuanciaSelect: string;
   diaSemanaSelect: string;
   total: number = 0;
+  detallesActives: boolean = false;
   corrido: any[] = [];
+  almacenes: any[] = [];
   config = {
     backdrop: true,
     ignoreBackdropClick: true,
@@ -57,8 +59,11 @@ export class ContratosComponent implements OnInit {
     this.handelPeriodo = false;
   }
 
+  handleDetalles(){
+    this.detallesActives = true;
+  }
+
   onSubmit(FormData) {
-    console.log(this.model)
     if (FormData.valid) {
       if (this.handelPeriodo){
         this.model.Restante = this.model.ImportePrestamo;
@@ -69,9 +74,9 @@ export class ContratosComponent implements OnInit {
 
         const data = {
           data: this.model,
-          detalles: this.corrido
+          detalles: this.corrido,
+          detallesContrato: this.detalles
         }
-        console.log(data)
 
         this._contratoService.guardar(data)
         .subscribe(
@@ -79,10 +84,11 @@ export class ContratosComponent implements OnInit {
             this.toastr.success('Contrato guardado con exito.', 'Guardado!');
             this.detalles = [];
             this.corrido = [];
-            FormData.resetForm();
             this.model = new Contrato();
             this.setFechaActual();
             this.getID();
+            this.detallesActives = false;
+            FormData.resetForm();
           }
         );
       }else{
@@ -92,13 +98,24 @@ export class ContratosComponent implements OnInit {
     }
   }
 
+  setAlamacenes(selectedSucursal: any) {
+    this._contratoService.getAlmacenes(selectedSucursal)
+    .subscribe(
+      data=>{
+        this.almacenes = data;
+      }
+    );
+  }
+
   onSubmitDetalle(FormData){
     if (FormData.valid){
-      this._contratoService.getProducto(this.modelProducto.ID_Producto)
+      this._contratoService.getProducto(this.modelProducto.Producto)
       .subscribe(
         data => {
           this.modelProducto.Clave = data.producto.Clave
           this.modelProducto.Descripcion = data.producto.Descripcion
+          this.modelProducto.Costo = data.producto.Costo
+          this.modelProducto.Precio = data.producto.Precio
         }
       );
 
@@ -108,7 +125,8 @@ export class ContratosComponent implements OnInit {
           this.modelProducto.Paciente = data.paciente.Nombre
         }
       );
-      
+
+      this.handleDetalles();
       this.detalles.push(this.modelProducto);
       this.calcularTotal();
       this.toastr.success('Producto agregado con exito.', 'Agregado!');
@@ -129,7 +147,7 @@ export class ContratosComponent implements OnInit {
     this._contratoService.getDiagnosticos(value)
     .subscribe(
       data => {
-        this.diagnosticos = data.diagnosticos;
+        this.diagnosticos = data.nuevaLista;
         this.diagnosticoDisabled = false;
       }
     );
@@ -139,10 +157,21 @@ export class ContratosComponent implements OnInit {
     this._contratoService.getProducto(value)
     .subscribe(
       data => {
-        this.modelProducto.PContado = data.producto.Precio
+        this.modelProducto.Precio = data.producto.Precio
         this.modelProducto.PCredito = data.producto.PrecioCred
+        this.modelProducto.Cantidad = 1;
+        this.modelProducto.VentaDetalle = this.modelProducto.Cantidad * this.modelProducto.Precio;
       }
     );
+  }
+
+  handelCantidad(){
+    if (this.modelProducto.Cantidad <= 0) {
+      this.modelProducto.Cantidad = 1;
+    }
+    if (this.modelProducto.Precio){
+      this.modelProducto.VentaDetalle = this.modelProducto.Cantidad * this.modelProducto.Precio;
+    }
   }
 
   onShowNewProduct(template: TemplateRef<any>){
@@ -178,7 +207,6 @@ export class ContratosComponent implements OnInit {
     this._contratoService.getLastContrato()
     .subscribe(
       data => {
-        console.log(data)
         this.model.ID = data+1;
       }
     );
@@ -225,7 +253,7 @@ export class ContratosComponent implements OnInit {
       Semanal: "Semana"
     }
 
-    if (true) {
+    if (FormData) {
       if (this.detalles.length > 0){
         this.corrido = [];
         let saldo = this.model.ImportePrestamo;

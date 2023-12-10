@@ -128,6 +128,7 @@ namespace Optica.Api.Controllers
                 return await Task.FromResult(response);
             });
         }
+
         [HttpGet]
         [Route("AplicarImporte/{importe?}/{fecha?}/{id:int=0}")]
         public async Task<HttpResponseMessage> AplicarImporte(HttpRequestMessage request, decimal importe, DateTime fecha, int id)
@@ -184,8 +185,8 @@ namespace Optica.Api.Controllers
             });
         }
 
-        [Route("Guardar")]
-        public async Task<HttpResponseMessage> Guardar(HttpRequestMessage request, [FromBody] JObject data)
+        [Route("GetContrato/{id:int=0}")]
+        public async Task<HttpResponseMessage> GetContrato(HttpRequestMessage request, int id)
         {
             return await CreateHttpResponseAsync(request, async () =>
             {
@@ -193,10 +194,144 @@ namespace Optica.Api.Controllers
                 string message = String.Empty;
                 try
                 {
-                    var contrato = data["data"].ToObject<Contrato>();
-                    var detalles = data["detalles"].ToObject<List<corridaOriginal>>();
-                    //var result = _contratosService.InsertUpdateContrato(contrato, detalles, out message);
-                    response = request.CreateResponse(HttpStatusCode.OK);
+                    var contratos = _pagosService.GetContrato(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, contratos);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
+        [Route("GetSucursal/{id:int=0}")]
+        public async Task<HttpResponseMessage> GetSucursal(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var contratos = _pagosService.GetSucursal(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, contratos);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
+        [Route("GetCorridaOriginal/{id:int=0}")]
+        public async Task<HttpResponseMessage> GetCorridaOriginal(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var corridaOriginal = _pagosService.getCorridaOriginal(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, corridaOriginal);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
+        [Route("GetEstadoCuenta/{id:int=0}")]
+        public async Task<HttpResponseMessage> GetEstadoCuenta(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var estadoCuenta = _pagosService.getEstadoCuenta(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, estadoCuenta);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
+        [Route("GetPagosContrato/{id:int=0}")]
+        public async Task<HttpResponseMessage> GetPagosContrato(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var pagos = _pagosService.GetPagosContrato(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, pagos);
+                }
+                catch (Exception ex)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest,
+                    new
+                    {
+                        error = "ERROR",
+                        message = ex.Message
+                    });
+                }
+
+                return await Task.FromResult(response);
+            });
+        }
+
+        [Route("GetDetallePagos/{id:int=0}")]
+        public async Task<HttpResponseMessage> GetDetallePagos(HttpRequestMessage request, int id)
+        {
+            return await CreateHttpResponseAsync(request, async () =>
+            {
+                HttpResponseMessage response = null;
+                string message = String.Empty;
+                try
+                {
+                    var pagos = _pagosService.GetDetallePagos(id);
+
+                    response = request.CreateResponse(HttpStatusCode.OK, pagos);
                 }
                 catch (Exception ex)
                 {

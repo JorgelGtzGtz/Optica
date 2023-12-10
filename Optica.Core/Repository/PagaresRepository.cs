@@ -14,6 +14,8 @@ namespace Optica.Core.Repository
     {
         public List<dynamic> GetByDynamicFilter(Sql sql);
         public List<pagare> GetPagares(Sql query);
+        public List<corridaOriginal> GetCorridaOriginala(Sql query);
+        public List<Pago> GetPagos(Sql sql);
     }
 
     public class PagaresRepository : RepositoryBase<pagare>, IPagaresRepository
@@ -31,5 +33,16 @@ namespace Optica.Core.Repository
         {
             return this.Context.Fetch<pagare>(sql);
         }
+
+        public List<Pago> GetPagos(Sql sql)
+        {
+            return this.Context.Fetch<Pago>(sql);
+        }
+
+        public List<corridaOriginal> GetCorridaOriginala(Sql sql)
+        {
+            return this.Context.Fetch<corridaOriginal>(sql);
+        }
+
     }
 }
